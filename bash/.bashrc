@@ -106,7 +106,13 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-export PATH="${PATH}:${HOME}/opt/dev/tools/depot_tools"
+#export PATH="${PATH}:${HOME}/opt/dev/tools/depot_tools"
+additionalLibDirs=("${HOME}/opt/dev/sdks/sfml/lib" "${HOME}/opt/dev/sdks/skia/lib")
+
+for libDir in ${additionalLibDirs[*]}
+do
+	export LD_LIBRARY_PATH="${libDir}:${LD_LIBRARY_PATH}"
+done
 
 EDITOR=gvim; export EDITOR
 PAGER=most; export PAGER
