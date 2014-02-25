@@ -1,0 +1,115 @@
+#Fri Feb 21 15:57:45 EET 2014
+/instance/org.eclipse.cdt.ui/semanticHighlighting.localVariable.color=207,191,173
+/instance/org.eclipse.cdt.ui/pp_default=255,0,128
+/instance/org.eclipse.cdt.ui/nameStyle.method.prefix=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.class.color=135,206,250
+/instance/org.eclipse.cdt.ui/asm_label=207,191,173
+/instance/org.eclipse.cdt.ui/semanticHighlighting.functionDeclaration.color=207,191,173
+@org.eclipse.cdt.ui=5.6.0.201306112328
+/instance/org.eclipse.cdt.ui/semanticHighlighting.methodDeclaration.enabled=true
+/instance/org.eclipse.cdt.ui/nameStyle.variable.suffix=
+/instance/org.eclipse.cdt.ui/nameStyle.setter.wordDelimiter=
+/instance/org.eclipse.cdt.ui/nameStyle.constant.wordDelimiter=_
+/instance/org.eclipse.cdt.ui/includeStyle.subfolder=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="false" blank_line_before\="false" keep_together\="false" relative_path\="false"/>
+/instance/org.eclipse.ui/KEY_CONFIGURATION_ID=org.eclipse.cdt.ui.visualstudio
+/instance/org.eclipse.cdt.ui/nameStyle.variable.prefix=
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.test.suffix=_test.cpp
+/instance/org.eclipse.cdt.ui/c_multi_line_comment=205,139,0
+/instance/org.eclipse.cdt.ui/includeStyle.related=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style blank_line_before\="false" keep_together\="false"/>
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.test.wordDelimiter=
+/instance/org.eclipse.cdt.ui/nameStyle.variable.wordDelimiter=
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.test.prefix=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.templateParameter.color=207,191,173
+/instance/org.eclipse.cdt.ui/semanticHighlighting.enumerator.italic=false
+/instance/org.eclipse.cdt.ui/includeStyle.inOtherProject=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="false" blank_line_before\="false" keep_together\="false" relative_path\="false"/>
+/instance/org.eclipse.cdt.ui/nameStyle.getter.wordDelimiter=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.macroDefinition.enabled=true
+@org.eclipse.ui.workbench=3.105.100.v20130802-1650
+/instance/org.eclipse.cdt.ui/nameStyle.method.wordDelimiter=
+file_export_version=3.0
+@org.eclipse.cdt.core=5.5.0.201306112328
+/instance/org.eclipse.cdt.ui/semanticHighlighting.function.enabled=true
+/instance/org.eclipse.cdt.ui/pp_directive=128,139,237
+/instance/org.eclipse.cdt.ui/includeStyle.sameFolder=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="false" blank_line_before\="false" keep_together\="false" relative_path\="false"/>
+/instance/org.eclipse.cdt.ui/semanticHighlighting.class.enabled=true
+/instance/org.eclipse.cdt.ui/includeStyle.inSameProject=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="false" blank_line_before\="false" keep_together\="false" relative_path\="false"/>
+/instance/org.eclipse.cdt.ui/semanticHighlighting.method.enabled=true
+/instance/org.eclipse.cdt.ui/semanticHighlighting.namespace.color=135,250,196
+/instance/org.eclipse.cdt.ui/includeStyle.systemWithExtension=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="true" blank_line_before\="false" keep_together\="true" order\="1" relative_path\="false"/>
+/instance/org.eclipse.cdt.ui/hoverModifiers=org.eclipse.cdt.ui.BestMatchHover;0;org.eclipse.cdt.debug.internal.ui.editors.DebugTextHover;\!0;org.eclipse.cdt.ui.ProblemHover;\!0;org.eclipse.cdt.ui.CDocHover;\!0;org.eclipse.cdt.ui.CMacroExpansionHover;\!0;org.eclipse.cdt.ui.CSourceHover;Shift;org.eclipse.cdt.ui.AnnotationHover;\!0;
+/instance/org.eclipse.cdt.ui/c_braces=207,191,173
+/instance/org.eclipse.cdt.ui/includeStyle.other=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style blank_line_before\="true" keep_together\="true" order\="3"/>
+/instance/org.eclipse.cdt.ui/semanticHighlighting.namespace.enabled=true
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.header.suffix=.h
+/instance/org.eclipse.cdt.ui/semanticHighlighting.staticField.color=207,191,173
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.source.wordDelimiter=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.enumerator.color=135,250,196
+/instance/org.eclipse.cdt.ui/includeStyle.external=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="false" blank_line_before\="false" keep_together\="false" relative_path\="false"/>
+\!/=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.class.bold=true
+/instance/org.eclipse.cdt.ui/semanticHighlighting.namespace.bold=true
+/instance/org.eclipse.cdt.ui/includeStyle.partner=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="false" blank_line_before\="true" keep_together\="true" order\="0" relative_path\="false"/>
+/instance/org.eclipse.cdt.ui/markOccurrences=false
+/instance/org.eclipse.cdt.ui/semanticHighlighting.method.color=135,206,250
+/instance/org.eclipse.cdt.ui/semanticHighlighting.staticField.italic=false
+/instance/org.eclipse.cdt.ui/c_numbers=255,205,139
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.header.prefix=
+/instance/org.eclipse.cdt.ui/c_numbers_bold=true
+/instance/org.eclipse.cdt.ui/semanticHighlighting.staticMethod.color=135,206,250
+@org.eclipse.ui.editors=3.8.100.v20130513-1637
+/instance/org.eclipse.cdt.ui/c_string=255,205,139
+/instance/org.eclipse.cdt.ui/c_type=128,139,237
+/instance/org.eclipse.cdt.ui/hoverModifierMasks=org.eclipse.cdt.ui.BestMatchHover;0;org.eclipse.cdt.debug.internal.ui.editors.DebugTextHover;0;org.eclipse.cdt.ui.ProblemHover;0;org.eclipse.cdt.ui.CDocHover;0;org.eclipse.cdt.ui.CMacroExpansionHover;0;org.eclipse.cdt.ui.CSourceHover;131072;org.eclipse.cdt.ui.AnnotationHover;0;
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.header.wordDelimiter=
+/instance/org.eclipse.cdt.ui/sourceHoverBackgroundColor=255,255,255
+/instance/org.eclipse.cdt.ui/asm_directive=128,139,237
+/instance/org.eclipse.cdt.ui/nameStyle.constant.suffix=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.field.enabled=true
+/instance/org.eclipse.cdt.ui/c_default=207,191,173
+/instance/org.eclipse.cdt.ui/sourceHoverBackgroundColor.SystemDefault=false
+/instance/org.eclipse.cdt.ui/nameStyle.setter.suffix=
+/instance/org.eclipse.cdt.core/doctool/workspace.default=org.eclipse.cdt.ui.doxygen
+/instance/org.eclipse.cdt.ui/c_keyword=128,139,237
+/instance/org.eclipse.cdt.ui/content_assist_parameters_foreground=207,191,173
+/instance/org.eclipse.cdt.ui/c_operators=207,191,173
+/instance/org.eclipse.cdt.ui/nameStyle.constant.prefix=
+/instance/org.eclipse.cdt.ui/content_assist_proposals_foreground=207,191,173
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.source.suffix=.cpp
+/instance/org.eclipse.cdt.ui/formatter_profile=_custom
+/instance/org.eclipse.cdt.ui/nameStyle.field.suffix=
+/instance/org.eclipse.cdt.ui/c_comment_task_tag=255,139,255
+/instance/org.eclipse.cdt.ui/nameStyle.field.wordDelimiter=
+/instance/org.eclipse.cdt.ui/nameStyle.setter.prefix=set
+/instance/org.eclipse.cdt.ui/semanticHighlighting.function.color=135,206,250
+/instance/org.eclipse.cdt.ui/includeStyle.systemWithoutExtension=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style angle_brackets\="true" blank_line_before\="false" keep_together\="true" order\="2" relative_path\="false"/>
+/instance/org.eclipse.cdt.ui/spelling_locale_initialized=true
+/instance/org.eclipse.cdt.ui/nameStyle.cpp.source.prefix=
+/instance/org.eclipse.cdt.ui/nameStyle.getter.suffix=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.typedef.color=135,206,250
+/instance/org.eclipse.cdt.ui/nameStyle.field.prefix=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.staticMethod.bold=true
+/instance/org.eclipse.cdt.ui/semanticHighlighting.staticMethod.italic=false
+/instance/org.eclipse.cdt.ui/semanticHighlighting.methodDeclaration.color=207,191,173
+/instance/org.eclipse.cdt.ui/content_assist_proposals_timeout=5000
+/instance/org.eclipse.cdt.ui/pp_default_bold=true
+/instance/org.eclipse.cdt.ui/nameStyle.getter.prefix=get
+/instance/org.eclipse.cdt.ui/semanticHighlighting.localVariable.enabled=true
+/instance/org.eclipse.cdt.ui/content_assist_parameters_background=31,31,39
+/instance/org.eclipse.cdt.ui/pp_header=255,205,139
+/instance/org.eclipse.ui.editors/org.eclipse.cdt.ui.occurrenceIndicationColor=97,97,97
+/instance/org.eclipse.cdt.ui/semanticHighlighting.typedef.enabled=true
+/instance/org.eclipse.cdt.ui/nameStyle.getter.prefixForBoolean=is
+/instance/org.eclipse.cdt.ui/semanticHighlighting.functionDeclaration.enabled=true
+/instance/org.eclipse.cdt.ui/scalability.detect=false
+/instance/org.eclipse.ui.workbench/org.eclipse.ui.commands=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<org.eclipse.ui.commands>\r\n<activeKeyConfiguration keyConfigurationId\="org.eclipse.cdt.ui.visualstudio"/>\r\n<keyBinding commandId\="org.eclipse.ui.edit.text.shiftRight" contextId\="org.eclipse.cdt.ui.cEditorScope" keyConfigurationId\="org.eclipse.cdt.ui.visualstudio" keySequence\="ALT+CTRL+ARROW_RIGHT"/>\r\n<keyBinding commandId\="org.eclipse.ui.edit.text.shiftLeft" contextId\="org.eclipse.cdt.ui.cEditorScope" keyConfigurationId\="org.eclipse.cdt.ui.visualstudio" keySequence\="ALT+CTRL+ARROW_LEFT"/>\r\n<keyBinding contextId\="org.eclipse.cdt.ui.cEditorScope" keyConfigurationId\="org.eclipse.ui.defaultAcceleratorConfiguration" keySequence\="SHIFT+TAB"/>\r\n<keyBinding contextId\="org.eclipse.cdt.ui.cEditorScope" keyConfigurationId\="org.eclipse.ui.defaultAcceleratorConfiguration" keySequence\="SHIFT+TAB"/>\r\n</org.eclipse.ui.commands>
+/instance/org.eclipse.cdt.ui/inactiveCodeColor=97,97,97
+/instance/org.eclipse.cdt.ui/nameStyle.method.suffix=
+/instance/org.eclipse.cdt.ui/semanticHighlighting.macroDefinition.bold=true
+/instance/org.eclipse.cdt.ui/content_assist_proposals_background=31,31,39
+/instance/org.eclipse.cdt.ui/semanticHighlighting.enumerator.bold=true
+/instance/org.eclipse.cdt.ui/semanticHighlighting.macroDefinition.color=255,0,128
+@org.eclipse.ui=3.105.0.v20130802-1650
+/instance/org.eclipse.cdt.ui/semanticHighlighting.field.color=207,191,173
+/instance/org.eclipse.cdt.ui/includeStyle.system=<?xml version\="1.0" encoding\="UTF-8"?>\r\n<style blank_line_before\="true" keep_together\="true" order\="1"/>
+/instance/org.eclipse.cdt.ui/semanticHighlighting.typedef.bold=true
+/instance/org.eclipse.cdt.ui/c_single_line_comment=205,139,0

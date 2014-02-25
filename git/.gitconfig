@@ -1,28 +1,38 @@
 [user]
-	name = Adi Hodos\n\
-
-    email = adi.hodos@gmail.com
+	name = Adi Hodos
+	email = adi.hodos@outlook.com
 [core]
-    pager = most
-    autocrlf = input
-    editor = gvim -f
+	pager = less
+	autocrlf = input
+	editor = notepad
 [color]
-    ui = always
-
+	ui = always
 [help]
-    format = web
-
+	format = web
 [diff]
-    tool = meld
-
-[difftool]
-    prompt = false
-
-[merge]
-    tool = meld
-    trustExitCode = false
-    keepBackup = false
-
+	tool = winmerge
+#	guitool = kdiff3
 [github]
-    user = adi.hodos@gmail.com
-    token = 08e8b4227fffcdc6c54b90c4324543fb
+	user = adi.hodos@gmail.com
+	token = 08e8b4227fffcdc6c54b90c4324543fb
+[difftool "winmerge"]
+	cmd = winmergeu -e -u -maximize -dl \"Working copy\" -dr \"Repository copy\" \"$REMOTE\" \"$LOCAL\"
+[difftool "code_compare"]
+	cmd = codecompare -W -T1=\"Working copy\" -T2=\"Repository copy\" \"$REMOTE\" \"$LOCAL\"
+[difftool "diffmerge"]
+	cmd = sgdm -nosplash -ro2 -t1=\"Current file\" -t2=\"Original file\" \"$REMOTE\" \"$LOCAL\"
+[merge]
+	tool = winmerge
+	prompt = false
+	trustExitCode = false
+	keepBackup = false
+[mergetool "diffmerge"]
+	cmd = sgdm -nosplash --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+[mergetool "winmerge"]
+	cmd = winmergeu -e -u -maximize -dl \"Mine\" -dr \"Theirs\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
+[mergetool "code_compare"]
+	cmd = codecompare -ENVIRONMENT=standalone -SC=none -MF=\"$LOCAL\" -TF=\"$REMOTE\" -RF=\"$MERGED\"
+[difftool]
+	prompt = false
+[credential]
+	helper = !\\\"C:/Program Files (x86)/GitExtensions/GitCredentialWinStore/git-credential-winstore.exe\\\"
