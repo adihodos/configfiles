@@ -1,0 +1,169 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2011 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+\documentclass[14pt,a4paper,sans]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% moderncv themes
+\moderncvstyle{classic}                        % style options are 'casual' (default) and 'classic' 
+\moderncvcolor{green}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+%\renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[romanian]{babel}                   % replace by the encoding you are using
+%\usepackage{CJKutf8}                         % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+\setlength{\hintscolumnwidth}{2.5cm}           % if you want to change the width of the column with the dates
+
+% personal data
+\firstname{Adrian}
+\familyname{Hodo\c{s}}
+\title{Curriculum vitae}                     % optional, remove the line if not wanted
+%\address{street and number}{postcode city}    % optional, remove the line if not wanted
+\mobile{+(0040)~0749~205428}                     % optional, remove the line if not wanted
+%\phone{+2~(345)~678~901}                      % optional, remove the line if not wanted
+%\fax{+3~(456)~789~012}                        % optional, remove the line if not wanted
+\email{adi.hodos@outlook.com}                 % optional, remove the line if not
+% wanted \homepage{cooltrainer.org}                 % optional, remove the line if not wanted
+%\extrainfo{additional information}            % optional, remove the line if not wanted
+%\photo[64pt][0.4pt]{picture}                  % '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{Some quote (optional)}                 % optional, remove the line if not wanted
+
+% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume
+%\makeatletter
+%\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+%\makeatother
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%\begin{CJK*}{UTF8}{gbsn}                     % to typeset your resume in Chinese using CJK
+\maketitle
+
+\section{Work experience}
+
+\cventry{June 2014 - Present day}{Software developer}{SC AROBS Transilvania Software SRL}
+{T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item maintaining, improving and expanding functionality, bug fixing for an internal tool used at Continental Corporation ADAS (Advanced Driver Assistance Systems)
+\end{itemize}}
+
+\cventry{April 2013 - June 2014}{Software developer}{Cadsoft SRL}
+{T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item implemented from scratch a renderer (using DirectX 11.0) that is used in
+almost every product of Cadsoft to produce images of geometric objects in a Revit
+project.
+\item maintaining, improving and expanding functionality for existing products,
+bug fixing, porting of existing code to the latest Revit editions (RoomBook,
+BuildingBook, AreaBook).
+\item I was involved in a pilot project to design and implement a
+distributed computing solution for the company's Revit addons.
+\end{itemize}}
+
+\cventry{July 2010 - March 2013}{Software developer}{On my own}{T\^{i}rgu
+Mure\c{s}, Mure\c{s}} {}{I've worked on a bunch of personal projects, mainly
+using C++.}{}
+
+\cventry{January 2008 - July 2010}{Software developer}{SC Amplusnet SRL}
+{T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item development of new software products according to the issued specifications
+\item maintaining, improving and expanding functionality for existing products
+\item fixing of bugs reported by the QA team or by clients
+\item I was involved in the development of these products : 
+    Application Blocker (parental control software), 
+    Cyclope Employee Surveillance (client and server), 
+    Stealth Keylogger, IP Hider.
+\end{itemize}}
+
+\section{Education}
+\cventry{2007-2012}{Computer science}{Petru Maior University}
+{T\^{i}rgu Mure\c{s}, Mure\c{s}}{}{}  % arguments 3 to 6 can be left empty
+
+\section{Other studies}
+\cventry{Nov. 2012 - Feb. 2013}{Coursera}{}{}{}{Heterogeneous Parallel Programming
+ - \url{https://www.coursera.org/course/hetero}.\newline
+Online parallel programming course (GPU programming using NVIDIA's CUDA API). 
+The topics covered were : parallel execution model, memory models and GPU 
+architecture, parallel algorithms and patterns (stencil, scan, 
+tiled convolution, reduction), overlapping data transfer with computation.
+}
+
+\cventry{Feb. 2013 - May 2013}{Udacity}{}{}{}{Introduction to parallel
+programming - \url{https://www.udacity.com/course/cs344}.\newline
+Online parallel programming course (GPU programming using NVIDIA's CUDA API).
+Topics covered in this course included : GPU programming model and architecture, 
+parallel algorithms and patterns (scan, stencil, tiling, histogram, reduction, 
+binning, parallel sorting algorithms), optimization techniques for GPU programming.
+}
+
+\section{Programming skills}
+\cventry{}{Programming languages}{}{}{}{
+    \begin{itemize}
+        \item C, C++ - medium
+        \item Python, LUA - beginner, I have not used them for a while
+        \item C\#, JAVA - beginner
+        \item Haskell - beginner but I plan to study it thoroughly, its nice.
+    \end{itemize}
+}
+\cventry{}{Technologies/libraries/tools}{}{}{}{
+    \begin{itemize}
+        \item generic and object oriented programming
+        \item STL, Windows SDK, MFC, Qt, SQL, Boost, Google Testing Framework
+        \item Intel Thread Building Blocks
+        \item DirectX, HLSL, PIX debugger
+        \item some experience with OpenGL and GLSL
+        \item CUDA, Nvidia Nsight
+    \end{itemize}
+}
+\cventry{}{Personal projects}{}{}{}{
+    \begin{itemize}
+        \item Simple 3D graphics engine, using DirectX (work in progress).
+        You can access the source code at 
+        \url{https://bitbucket.org/adrianhodos/xray}.
+    \end{itemize}
+}
+%\cventry{C/C++}{Avansat}{}{}{}{}
+%\cventry{Python,LUA}{Mediu}{}{}{}{}
+%\subsection{Tehnologii/Libr\u{a}rii folosite}
+%\cventry{}{}{}{}{}{
+%\begin{itemize}
+%    \item programare generica, programare orientat\u{a} obiect
+%\end{itemize}}
+
+\section{Foreign languages}
+\cvitem{English}{very good}
+
+\section{Skills}
+\cvitem{}{
+\begin{itemize}
+    \item self-taught
+    \item I love to learn new things and I always seek to improve my professional
+    skills
+    \item punctual, motivated, optimistic
+\end{itemize}}
+
+\section{Interests}
+\cvitem{}{
+\begin{itemize}
+\item parallel programming
+\item real time rendering and ray tracing
+\item mathematics
+\end{itemize}}
+
+%\clearpage\end{CJK*}                         % if you are typesetting your resume in Chinese using CJK; the \clearpage is required for fancyhdr to work correctly with CJK, though it kills the page numbering by making \lastpage undefined
+\end{document}
