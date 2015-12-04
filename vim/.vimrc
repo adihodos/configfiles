@@ -155,3 +155,8 @@ autocmd BufNewFile,BufRead *.h set filetype=cpp
 " end mine
 "
 "
+
+if (has("unix"))
+map <silent> <F11>
+\    :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
+endif
