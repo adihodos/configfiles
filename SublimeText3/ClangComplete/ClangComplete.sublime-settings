@@ -1,0 +1,37 @@
+{
+    // Additional compiler options that are always added to the completion
+    // parser
+    "additional_options": ["-Wno-c++11-narrowing", "-D__STRICT_ANSI__", "-DQT_NO_DEBUG", "-isystem", "/usr/lib/llvm-3.7/bin/../lib/clang/3.7.0/include/"],
+    // The cmake build directory where ClangCompletion will look for the
+    // compiler flags
+    "build_dir": "build",
+    // If a valid build directory cannot be found then the default options
+    // will be used instead
+    "default_options": ["-std=c++14", "-isystem", "/usr/lib/llvm-3.7/bin/../lib/clang/3.7.0/include"],
+    // Additional paths that are searched when doing completion for include
+    // directives. Generally, it should always be the default include paths
+    // set by the compiler. To see the default search paths for the compiler
+    // type `echo | `gcc -print-prog-name=cc1plus` -v -E` into the command
+    // line.
+    "default_include_paths":
+    [
+        "/usr/include/c++/5",
+        "/usr/include/x86_64-linux-gnu/c++/5",
+        "/usr/include/c++/5/backward",
+        "/usr/lib/gcc/x86_64-linux-gnu/5/include",
+        "/usr/local/include",
+        "/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+        "/usr/include/x86_64-linux-gnu",
+        "/usr/include",
+        "/usr/lib/llvm-3.7/bin/../lib/clang/3.7.0/include",
+        "/usr/bin/../lib/gcc/x86_64-linux-gnu/5.2.1/../../../../include/c++/5.2.1",
+        "/usr/bin/../lib/gcc/x86_64-linux-gnu/5.2.1/../../../../include/x86_64-linux-gnu/c++/5.2.1",
+        "/usr/bin/../lib/gcc/x86_64-linux-gnu/5.2.1/../../../../include/c++/5.2.1/backward",
+        "/home/ahodos/opt/dev/sdks/stlsoft-1.9.124/include"
+    ],
+    // How long ClangComplete will wait for completions. This helps prevent
+    // clang from blocking the gui thread.
+    "timeout": 200,
+    // Suppress sublime's completion suggestions
+    "inhibit_sublime_completions": true
+}
