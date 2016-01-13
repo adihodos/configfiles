@@ -1,0 +1,453 @@
+{
+    // Turn on logs in console
+    "debug_enabled": false,
+
+    // If true, pressing enter on the last comment line of a group cause a
+    // new comment line insertion. To break this sequence, you have to press
+    // Shift+Enter or Down
+    "continuation_on_last_comment": true,
+
+    // Enable/Disable internal commands completion
+    "completion_enabled": true,
+
+    // Add aliases to completions suggestions
+    "completion_use_aliases": true,
+
+    // Change the way snippet are gerenated. Possibles values:
+    //    - "default": current preferred (may be one of the following values)
+    //    - "pedagogic": optional arguments generate an englobing tab stop
+    //    - "remove_optional": assumed optional is not optionnal
+    "completion_snippet_format": "default",
+
+    // "Comment nearest entity command" uses this value to locate the "nearest" function.
+    // If the value is 3, the plugin prefers go up to 2*3-1=5 lines up, instead of
+    // 2 lines down.
+    "distance_for_bottom_line_over_top_line": 3,
+
+    // Preferred command prefix ("@" is more common and shouldn't be change except if you use QT Doc: "\\")
+    "doxygen_command_prefix": "\\",
+
+    // Doxygen allows to specify parameters directions (in, out).
+    // Set it to "true" to discard this information
+    "doxygen_discard_param_directions": false,
+
+    // Prefix before of paragraph:
+    //     - "\t"      move to next column
+    //     - "\n"      move to a new line
+    //     - "\n    "  move to a new line with an indentation
+    //     - " "       add a space
+    // - Currently unaffected commands: @par, @todo, @xrefitem
+    "doxygen_paragraph_prefix": "\t",
+
+    // Same as "doxygen_paragraph_prefix" for JsDoc (Drupal uses "\n  ")
+    "jsdoc_paragraph_prefix": "\t",
+
+    // If true "template <typename T1> void Bar(T1 x);" will not generate a @tparam
+    // as T1 appear as type in parameters list
+    "remove_template_used_as_type": false,
+
+    // Behaviour for "@brief": remove / preserve
+    "brief_mode": "preserve",
+
+    // Minimum spaces between columns (default is [1, 2]).
+    // CANNOT BE EMPTY.
+    //
+    // First number  is for first column
+    // Second number is for second column
+    // ...
+    // Last number is applied to all next columns
+    //
+    // For example, a value of [1, 2] might look like this:
+    //
+    //              +-- At least 1 space here (but according "tabs" it's more)
+    // /**          V    V--- At least 2 spaces here
+    //  * @param[in]  foo       Lorem ipsum dolor sit amet.
+    //  * @param[out] long_bar  Nullam fringilla feugiat pretium. Quisque
+    //  */
+    "min_spaces_between_columns": [ 1, 2 ],
+
+    // Default tabs size in documentation block (last value is repeated if needed).
+    // You can use [ 0 ] to treat tabs as spaces (and disable alignment)
+    // CANNOT BE EMPTY.
+    //
+    // example with value [ 13, 6, 8, 8, 8, 8 ]
+    //    /**
+    //     * @param[in]  a     { parameter_description }
+    //     * 123456789012      12345678...and continue because there is no more tab
+    //     *             123456
+    //     */
+    "preferred_tabs_sizes": [ 12, 6, 8, 8, 8, 8 ],
+
+    // "preferred_line_length" (the value used on wrap command) is based on
+    // SublimeText "rulers" parameter (default: 80 if empty). There is no
+    // DoxyDoxygen specific parameter.
+
+    // line width may be reduce to "max_line_reducing" characters to attempt to
+    // respect the rulers
+    "max_line_reducing": 12,
+
+    // Matching ratio to consider two keys similar.
+    // It's a value from 0 to 1.
+    //    - 1   is exact match,
+    //    - 0.6 is close match.
+    //
+    // Take this example:
+    //    /** @param  misstake  Name in comment has two 'ss'
+    //     */
+    //    void function(int mistake);
+    //
+    // With "merge_matching_ratio" set to 0.6, on update, as "misstake" similar
+    // to "mistake", the comment become without prompt:
+    //    /* @param  mistake    Name in comment has two 'ss'
+    //     */
+    //    void function(int mistake);
+    "merge_matching_ratio": 0.6,
+
+    // Styles for new comments (you should only activate one per language, first is best)
+    "preferred_comments_styles": [
+        [
+            "/**",
+            " *"
+        ],
+        [
+            "/*----------------------------------------------------------------------*//**",
+            " *"
+        ],
+        [
+            "//---------------------------------------------------------------------------",
+            "///"
+        ],
+        [
+            "##",
+            "##"
+        ],
+        [
+            "#----------------------------------------------------------------------------",
+            "##"
+        ]
+    ],
+
+    // Commands that should be present in documentation comment block
+    //    - Commands must be prefixed with '@' not '\'
+    //    - Commands are in the python format() style (see https://docs.python.org/3/library/string.html#formatspec for details)
+    //    - Args may include current date using "now" or "utc_now" (see example below)
+    //    - Args may include path information using "file_base_name", "file_full_name", "file_name", "file_path",
+    //    - Hidden command "_brief" may be used enter description without prefix
+    //
+    //            SHOULD NOT BE OVERLOAD BY USER (use 'block_layout' instead)
+    //            SHOULD NOT BE OVERLOAD BY USER (use 'block_layout' instead)
+    //            SHOULD NOT BE OVERLOAD BY USER (use 'block_layout' instead)
+    "block_layout_default": {
+        "ApiDoc": [
+            "",
+            "@api",
+            "@apiName",
+            "@apiGroup",
+            "",
+            "@apiParam",
+            "",
+            "@apiSuccess",
+            ""
+        ],
+
+        "Doxygen": [
+            "",
+            // QT Doc Style ("\\") may replace "@" but it's NOT necessary
+
+            //"@memberof {file_base_name}",
+            //"@copyright 2014-{now:%Y} {user_name}",   // fixed date from "current"
+            //"@author {user_name}",                    // fixed author name
+            //"@author",                                // author name have to be entered manually
+            //"@date {now:%Y-%m-%dT%H:%M:%S%z}",        // iso format
+            //"@date {now:%d-%b-%Y}",                   // dd-mon-YYYY format
+            "@brief",
+            "",
+            // "@details",
+            // "",
+            "@param",
+            "",
+            "@tparam",
+            "",
+            "@return",
+            //"",
+            //"@throws",
+            ""
+        ],
+
+        "GoogleClosure": [
+            "",
+            "@_brief",
+            "",
+            "@type",
+            "",
+            "@param",
+            "",
+            "@return",
+            ""
+        ],
+
+        // HeaderDoc requiere to install a DoxyDoxygen_Contrib_Header
+        "HeaderDoc": [
+            "",
+            "@_brief",
+            "",
+            "@var",
+            "@const",
+            "",
+            "@param",
+            "",
+            "@return",
+            ""
+        ],
+
+        "JavaDoc": [
+            "",
+            // JavaDoc requiere the following order
+            "@_brief",
+            //"@author",
+            //"",
+            //"@version",
+            "",
+            "@param",
+            "",
+            "@return",
+            "",
+            "@throws",
+            ""
+            //"@see",
+            //"@since",
+            //"@serial",
+            //"@deprecated",
+        ],
+
+        "JsDoc": [
+            "",
+            "@_brief",
+            "",
+            "@type",
+            "@class",
+            "@method",
+            //"",
+            "@param",
+            //"",
+            "@return",
+            ""
+        ],
+
+        "PhpDoc": [
+            "",
+            "@_brief",
+            "",
+            "@var",
+            "",
+            "@param",
+            "",
+            "@return",
+            ""
+        ],
+
+        "Sphinx": [
+            "",
+            "@_brief",
+            "",
+            ":param",
+            ":type",
+            "",
+            ":returns:",
+            ":rtype:",
+            "",
+            ":raises",
+            ""
+        ],
+
+        "XmlDoc": [
+            "<summary>",
+            "",
+            "<paramref",
+            "<param",
+            "",
+            "<returns>",
+            "",
+            "<exception"
+        ],
+
+        "YuiDoc": [
+            "",
+            "@_brief",
+            "",
+            "@type",
+            "@class",
+            "@method",
+            "@param",
+            "@return",
+            ""
+        ]
+    },
+
+    // Used to overload 'block_layout_default' values
+    //
+    // Same format as 'block_layout_default'. Values can be:
+    //    - an array of string (see 'block_layout_default')
+    //    - an array of dictionnaries
+    //
+    // If you choose dictionnaries should have 2 keys:
+    //     - "tags" (same format as if it's an array of string)
+    //     - "context" similar format as sublime text rule
+    //          - "key": may be one of:
+    //              - "kind"
+    //              - "name"
+    //              - "nb_params"
+    //          - "operator": may be one of:
+    //              - "regex_match"
+    //              - "equal"
+    //              - "not_equal"
+    //              - "greater_than"
+    //              - "lower_than  "
+    //              - "regex_contains"
+    //
+    "block_layout": {
+    //     "Doxygen": [
+    //         // Fill description for a class
+    //         {
+    //             "tags": [
+    //                 "@brief            I'm a class"
+    //             ],
+    //             "context": [
+    //                 { "key": "kind",      "operator": "equal",          "operand": "class" },
+    //             ]
+    //         },
+    //
+    //         {
+    //             "tags": [
+    //                 "@brief            File header",
+    //                 "",
+    //             ],
+    //             "context": [
+    //                 { "key": "row",      "operator": "equal",          "operand": "0" },
+    //                 { "key": "kind",     "operator": "equal",          "operand": "" },
+    //             ]
+    //         },
+    //
+    //         // Fill description item starting with '_'
+    //         {
+    //             "tags": [
+    //                 "@brief            I'm a private item"
+    //             ],
+    //             "context": [
+    //                 { "key": "name",      "operator": "regex_match",    "operand": "^_.*$" },   // re.match(operand, key)
+    //             ]
+    //         },
+    //
+    //         // Compact style if there's less than one parameter
+    //         {
+    //             "tags": [
+    //                 "@brief",
+    //                 "@param",
+    //                 "@tparam",
+    //                 "@return",
+    //                 ""
+    //             ],
+    //             "context": [
+    //                 { "key": "nb_params", "operator": "lower_than",     "operand": "2" }
+    //             ]
+    //         }
+    //     ]
+    },
+
+    // For each Sublime Text language, give the preferred parser and documentation style
+    "profiles": [
+        {
+            "languages":  [ "c++", "c", "cuda-c++" ],
+            "parsers":    [ "LanguageCpp" ],
+            "doc_styles": [ "Doxygen" ],
+            "preferred_comments_styles": [
+                [
+                    "///",
+                    "///"
+                ]
+            ]
+        },
+        {
+            "languages":  [ "cs" ],
+            "parsers":    [ "LanguageCSharp" ],
+            "doc_styles": [ "XmlDoc" ], // or "Doxygen"
+            "preferred_comments_styles": [
+                [
+                    "///",
+                    "///"
+                ]
+            ]
+        },
+        {
+            "languages":  [ "erlang" ],
+            "parsers":    [ "LanguageGeneric" ],
+            "doc_styles": [ "ApiDoc" ]
+        },
+        {
+            "languages":  [ "java" ],
+            "parsers":    [ "LanguageJava" ],
+            "doc_styles": [ "JavaDoc" ] // or "Doxygen", "ApiDoc"
+        },
+        {
+            "languages":  [ "groovy", "apex" ],
+            "parsers":    [ "LanguageJava", "LanguageGeneric" ],
+            "doc_styles": [ "JavaDoc" ] // or "Doxygen"
+        },
+        {
+            "languages":  [ "js" ],
+            "parsers":    [ "LanguageJavaScript" ],
+            "doc_styles": [ "JsDoc", "GoogleClosure" ] // or "YuiDoc", "Doxygen", "ApiDoc"... according your preference
+        },
+        {
+            "languages":  [ "objc", "objc++", "matlab", "pascal", "ocaml", "sql" ],
+            "parsers":    [ "LanguageGeneric" ],
+            "doc_styles": [ "Doxygen" ]
+        },
+        {
+            "languages":  [ "perl" ],
+            "parsers":    [ "LanguageGeneric" ],
+            "doc_styles": [ "ApiDoc" ]
+        },
+        {
+            "languages":  [ "php" ],
+            "parsers":    [ "LanguagePhp" ],
+            "doc_styles": [ "PhpDoc" ] // or "ApiDoc"
+        },
+        {
+            "languages":  [ "python" ],
+            "parsers":    [ "LanguagePython" ],
+            "doc_styles": [ "Doxygen" ] // or "ApiDoc", "Sphinx" (but consider Breathe's Doc)
+        },
+        {
+            "languages":  [ "ruby" ],
+            "parsers":    [ "LanguagePython", "LanguageGeneric" ],
+            "doc_styles": [ "Doxygen" ] // or "ApiDoc"
+        },
+        {
+            "languages":  [ "rust" ],
+            "parsers":    [ "LanguageRust" ],
+            "doc_styles": [ "Doxygen" ]
+        },
+        {
+            "languages":  [ "swift" ],
+            "parsers":    [ "LanguageSwift" ],
+            "doc_styles": [ "Doxygen" ]
+        }
+    ],
+
+    // DoxyDoxygen can also type from name.
+    "notations_map": [
+        {
+            "regexp": "[$_]?(?:is|has)($|[A-Z_]).*$", // names starting with "is" or "has" are assumed to be booleans (prefixes "$"" or "_" are ignored)
+            "type": "~boolean~"
+        },
+        {
+            "regexp": "(?:cb|callback|done|next|fn)$", // callback, cb, done, fn, and next are assumed to be functions
+            "type": "Function"
+        }
+    ],
+
+    // Python annotation may be everything.
+    // Set this parameters to "true" to allow to use those values as parameter types.
+    "python_func_annotations_are_types": true
+}

@@ -2,5 +2,7 @@
     "gutter": true,
     "highlight_line": true,
     "line_numbers": true,
-    "margin": 4
+    "margin": 4,
+    "word_wrap": false,
+    "rulers": [0, 80]
 }
