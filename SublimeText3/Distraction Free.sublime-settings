@@ -2,7 +2,10 @@
     "gutter": true,
     "highlight_line": true,
     "line_numbers": true,
+    "line_padding_bottom": 1,
+    "line_padding_top": 1,
     "margin": 4,
-    "word_wrap": false,
-    "rulers": [0, 80]
+    "draw_minimap_border": true,
+    "always_show_minimap_viewport": true,
+    "word_wrap" : "false"
 }

@@ -36,10 +36,11 @@
 		"*.jar",
 		"*.zip"
 	],
-	"bold_folder_labels": false,
-	"caret_style": "smooth",
+	"bold_folder_labels": true,
+	"caret_extra_width": 1,
+	"caret_style": "phase",
 	"close_windows_when_empty": false,
-	"color_scheme": "Packages/Colorsublime - Themes/Active4D.tmTheme",
+	"color_scheme": "Packages/Theme - Spacegray/base16-ocean.dark.tmTheme",
 	"copy_with_empty_selection": true,
 	"create_window_at_startup": true,
 	"default_encoding": "UTF-8",
@@ -93,13 +94,13 @@
 	"font_face": "Fira Code Retina",
 	"font_options":
 	[
-		"gray_antialias"
+		"directwrite"
 	],
-	"font_size": 14,
+	"font_size": 15,
 	"gpu_window_buffer": "auto",
 	"gutter": true,
 	"highlight_line": true,
-	"highlight_modified_tabs": false,
+	"highlight_modified_tabs": true,
 	"hot_exit": true,
 	"ignored_packages":
 	[
@@ -113,8 +114,8 @@
 	"indent_to_bracket": false,
 	"index_files": true,
 	"line_numbers": true,
-	"line_padding_bottom": 0,
-	"line_padding_top": 0,
+	"line_padding_bottom": 1,
+	"line_padding_top": 1,
 	"margin": 4,
 	"match_brackets": true,
 	"match_brackets_angle": true,
@@ -140,15 +141,18 @@
 	"show_panel_on_build": true,
 	"show_tab_close_buttons": true,
 	"smart_indent": true,
+	"soda_folder_icons": true,
 	"spell_check": false,
 	"tab_completion": true,
 	"tab_size": 4,
+	"theme": "Spacegray.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"tree_animation_enabled": true,
 	"trim_automatic_white_space": true,
-	"trim_trailing_white_space_on_save": true,
+	"trim_trailing_white_space_on_save": false,
 	"use_simple_full_screen": false,
 	"use_tab_stops": true,
+	"wide_caret": true,
 	"word_separators": "./\\()\"'-:,.;<>~!@#$%^&*|+=[]{}`~?",
 	"word_wrap": "false",
 	"wrap_width": 0
