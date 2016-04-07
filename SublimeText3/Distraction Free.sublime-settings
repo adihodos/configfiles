@@ -7,5 +7,6 @@
     "margin": 4,
     "draw_minimap_border": true,
     "always_show_minimap_viewport": true,
-    "word_wrap" : "false"
+    "word_wrap" : "false",
+    "rulers": [0, 80]
 }
