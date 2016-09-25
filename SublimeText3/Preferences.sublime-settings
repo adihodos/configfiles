@@ -40,7 +40,7 @@
 	"caret_extra_width": 1,
 	"caret_style": "phase",
 	"close_windows_when_empty": false,
-	"color_scheme": "Packages/Theme - Spacegray/base16-ocean.dark.tmTheme",
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
 	"copy_with_empty_selection": true,
 	"create_window_at_startup": true,
 	"default_encoding": "UTF-8",
@@ -91,12 +91,12 @@
 		".hg",
 		"CVS"
 	],
-	"font_face": "Fira Code Retina",
+	"font_face": "Roboto Mono Medium",
 	"font_options":
 	[
-		"directwrite"
+		"subpixel_antialias"
 	],
-	"font_size": 15,
+	"font_size": 14,
 	"gpu_window_buffer": "auto",
 	"gutter": true,
 	"highlight_line": true,
@@ -104,6 +104,7 @@
 	"hot_exit": true,
 	"ignored_packages":
 	[
+		"C++",
 		"Vintage"
 	],
 	"indent_guide_options":
@@ -144,7 +145,7 @@
 	"soda_folder_icons": true,
 	"spell_check": false,
 	"tab_completion": true,
-	"tab_size": 4,
+	"tab_size": 2,
 	"theme": "Spacegray.sublime-theme",
 	"translate_tabs_to_spaces": true,
 	"tree_animation_enabled": true,
