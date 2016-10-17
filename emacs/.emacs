@@ -15,16 +15,6 @@
 ;;(define-key c++-mode-map  [(tab)] 'company-complete)
 
 ;; Available C style:
-;; “gnu”: The default style for GNU projects
-;; “k&r”: What Kernighan and Ritchie, the authors of C used in their book
-;; “bsd”: What BSD developers use, aka “Allman style” after Eric Allman.
-;; “whitesmith”: Popularized by the examples that came with Whitesmiths C, an early commercial C compiler.
-;; “stroustrup”: What Stroustrup, the author of C++ used in his book
-;; “ellemtel”: Popular C++ coding standards as defined by “Programming in C++, Rules and Recommendations,” Erik Nyquist and Mats Henricson, Ellemtel
-;; “linux”: What the Linux developers use for kernel development
-;; “python”: What Python developers use for extension modules
-;; “java”: The default style for java-mode (see below)
-;; “user”: When you want to define your own style
 ;;(setq
 ;; c-default-style "ellemtel" ;; set style to "linux"
 ;; )
@@ -64,7 +54,7 @@
 (load-theme 'leuven t)
 (show-paren-mode t)
 
-(set-frame-font "Fira Code Retina-15")
+(set-frame-font "Roboto Mono Thin-15")
 
 ;;(global-set-key "\C-cw"
 ;;                (lambda ()
@@ -77,16 +67,16 @@
 ;;(require 'column-marker)
 ;; (add-hook 'prog-mode-hook (lambda () (interactive) (column-marker-1 80)))
 
-(require 'fill-column-indicator)
-(setq fci-rule-width 1)
-(setq fci-rule-color "OrangeRed")
-(add-hook 'after-change-major-mode-hook 'fci-mode)
+;;(require 'fill-column-indicator)
+;;(setq fci-rule-width 1)
+;;(setq fci-rule-color "OrangeRed")
+;;(add-hook 'after-change-major-mode-hook 'fci-mode)
 
-(require 'helm)
-(require 'helm-projectile)
-(require 'projectile)
-(add-hook 'c-mode-hook 'projectile-mode)
-(add-hook 'c++-mode-hook 'projectile-mode)
+;;(require 'helm)
+;;(require 'helm-projectile)
+;;(require 'projectile)
+;;(add-hook 'c-mode-hook 'projectile-mode)
+;;(add-hook 'c++-mode-hook 'projectile-mode)
 
 ;; GLSL
 (autoload 'glsl-mode "glsl-mode" nil t)
@@ -102,10 +92,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("1160f5fc215738551fce39a67b2bcf312ed07ef3568d15d53c87baa4fd1f4d4e" default)))
  '(fringe-mode 0 nil (fringe))
  '(package-selected-packages
    (quote
-    (cmake-mode smooth-scrolling clang-format irony helm-projectile glsl-mode fill-column-indicator company))))
+    (boron-theme atom-one-dark-theme cmake-mode smooth-scrolling clang-format irony helm-projectile glsl-mode fill-column-indicator company))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -114,37 +107,44 @@
  )
 
 (require 'clang-format)
-(define-key c-mode-base-map (kbd "C-S-f") 'clang-format-buffer)
+;;(require 'clang-format)
+(global-set-key (kbd "C-c i") 'clang-format-region)
+(global-set-key (kbd "C-c u") 'clang-format-buffer)
+(setq clang-format-style-option "webkit")
+;(define-key c-mode-base-map (kbd "C-S-f") 'clang-format-buffer)
 
 (add-hook 'c++-mode-hook
           (lambda () (add-hook 'before-save-hook (lambda () (clang-format-buffer)) nil 'local)))
 
+(add-hook 'c-mode-hook
+          (lambda () (add-hook 'before-save-hook (lambda () (clang-format-buffer)) nil 'local)))
+
 (require 'smooth-scrolling)
-(require 'cmake-mode)
+;;(require 'cmake-mode)
 
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'objc-mode-hook 'irony-mode)
+;;(add-hook 'c++-mode-hook 'irony-mode)
+;;(add-hook 'c-mode-hook 'irony-mode)
+;;(add-hook 'objc-mode-hook 'irony-mode)
 
-(add-hook 'c++-mode-hook 'company-mode)
-(add-hook 'c-mode-hook 'company-mode)
+;;(add-hook 'c++-mode-hook 'company-mode)
+;;(add-hook 'c-mode-hook 'company-mode)
 
 ;; replace the `completion-at-point' and `complete-symbol' bindings in
 ;; irony-mode's buffers by irony-mode's function
-(defun my-irony-mode-hook ()
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async))
-(add-hook 'irony-mode-hook 'my-irony-mode-hook)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+;;(defun my-irony-mode-hook ()
+;;  (define-key irony-mode-map [remap completion-at-point]
+;;    'irony-completion-at-point-async)
+;;  (define-key irony-mode-map [remap complete-symbol]
+;;    'irony-completion-at-point-async))
+;;(add-hook 'irony-mode-hook 'my-irony-mode-hook)
+;;(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
-(eval-after-load 'company
-'(add-to-list 'company-backends 'company-irony))
+;;(eval-after-load 'company
+;;'(add-to-list 'company-backends 'company-irony))
 ;; (optional) adds CC special commands to `company-begin-commands' in order to
 ;; trigger completion at interesting places, such as after scope operator
 ;;     std::|
-(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
+;;(add-hook 'irony-mode-hook 'company-irony-setup-begin-commands)
 
 ;;(add-to-list 'irony-cdb-search-directory-list "build")
 ;;(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
