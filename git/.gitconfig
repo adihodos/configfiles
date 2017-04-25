@@ -1,16 +1,16 @@
 [user]
-	name = Adi Hodos
-	email = adi.hodos@outlook.com
+	name = Adrian Hodos
+	email = adi.hodos@gmail.com
 [core]
 	pager = less
 	autocrlf = input
-	editor = notepad
+	editor = gvim -f
 [color]
 	ui = always
 [help]
 	format = web
 [diff]
-	tool = winmerge
+	tool = code_compare
 #	guitool = kdiff3
 [github]
 	user = adi.hodos@gmail.com
@@ -22,7 +22,7 @@
 [difftool "diffmerge"]
 	cmd = sgdm -nosplash -ro2 -t1=\"Current file\" -t2=\"Original file\" \"$REMOTE\" \"$LOCAL\"
 [merge]
-	tool = winmerge
+	tool = code_compare
 	prompt = false
 	trustExitCode = false
 	keepBackup = false
@@ -31,7 +31,7 @@
 [mergetool "winmerge"]
 	cmd = winmergeu -e -u -maximize -dl \"Mine\" -dr \"Theirs\" \"$LOCAL\" \"$REMOTE\" \"$MERGED\"
 [mergetool "code_compare"]
-	cmd = codecompare -ENVIRONMENT=standalone -SC=none -MF=\"$LOCAL\" -TF=\"$REMOTE\" -RF=\"$MERGED\"
+	cmd = codecompare /ENVIRONMENT=standalone /SC=none /MF=\"$LOCAL\" /TF=\"$REMOTE\" /RF=\"$MERGED\"
 [difftool]
 	prompt = false
 [credential]

@@ -1,15 +1,11 @@
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/vimfiles/bundle/Vundle.vim/
-let path='~/vimfiles/bundle'
-call vundle#begin(path)
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-" let Vundle manage Vundle
-" required! 
-Plugin 'gmarik/vundle'
-" My Bundles here:
-"
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
 
 Plugin 'Molokai'
 Plugin 'FX-HLSL'
@@ -40,6 +36,7 @@ Plugin 'git://git.wincent.com/command-t.git'
 
 call vundle#end()
 filetype plugin indent on     " required!
+
 "
 " Brief help
 " :BundleList          - list configured bundles
@@ -126,7 +123,8 @@ let c_syntax_for_h = 1
 "let c_comment_date_time = 1
 
 if has("win32")
-  set guifont=Consolas:h14
+  "set guifont=Consolas:h14
+  set guifont=Iosevka:h16
 elseif has("unix")
   set guifont=Source\ Code\ Pro\ 14
   "set guifont=Envy\ Code\ R\ 10
