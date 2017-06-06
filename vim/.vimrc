@@ -1,30 +1,11 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+set nocompatible               " be iMproved
+filetype off                   " required!
 
-" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-Plugin 'tpope/vim-fugitive'
-" plugin from http://vim-scripts.org/vim/scripts.html
-Plugin 'L9'
-" Git plugin not hosted on GitHub
-Plugin 'git://git.wincent.com/command-t.git'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Avoid a name conflict with L9
-"Plugin 'user/L9', {'name': 'newL9'}
-
-" All of your Plugins must be added before the following line
+Plugin 'gmarik/Vundle.vim'
 
 Plugin 'Molokai'
 Plugin 'FX-HLSL'
@@ -37,23 +18,34 @@ Plugin 'DoxyGen-Syntax'
 Plugin 'sexy-railscasts'
 Plugin 'railscasts'
 Plugin 'Railscasts-Theme-GUIand256color'
+Plugin 'clang-complete'
 Plugin 'Zen-Color-Scheme'
 Plugin 'DarkZen-Color-Scheme'
 
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
+" original repos on github
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim'}
+"Plugin 'tpope/vim-rails.git'
+" vim-scripts repos
+Plugin 'L9'
+Plugin 'FuzzyFinder'
+" non github repos
+Plugin 'git://git.wincent.com/command-t.git'
+" ...
+
+call vundle#end()
+filetype plugin indent on     " required!
+
 "
 " Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
 "
 " see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
+" NOTE: comments after Plugin command are not allowed..
 
 " mine
 
@@ -131,10 +123,10 @@ let c_syntax_for_h = 1
 "let c_comment_date_time = 1
 
 if has("win32")
-  set guifont=Consolas:h14
+  "set guifont=Consolas:h14
+  set guifont=Iosevka:h16
 elseif has("unix")
-  "set guifont=Liberation\ Mono\ 14
-  set guifont=Source\ Code\ Pro\ 14
+  set guifont=Iosevka\ 16
   "set guifont=Envy\ Code\ R\ 10
   "set guifont=Consolas\ 14
 endif
@@ -155,8 +147,3 @@ autocmd BufNewFile,BufRead *.h set filetype=cpp
 " end mine
 "
 "
-
-if (has("unix"))
-map <silent> <F11>
-\    :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
-endif
