@@ -1,0 +1,23 @@
+"*":
+  "atom-ide-ui":
+    "atom-ide-code-format":
+      formatOnSave: true
+  core:
+    autoHideMenuBar: true
+    telemetryConsent: "no"
+  editor:
+    fontFamily: "Iosevka"
+    fontSize: 18
+    showIndentGuide: true
+    tabType: "soft"
+  "exception-reporting":
+    userId: "9e46de52-ad85-4c53-a43d-ffb48170f3bb"
+  "platformio-ide-terminal":
+    style:
+      theme: "one-dark"
+  racer:
+    racerBinPath: "/usr/bin/racer"
+    rustSrcPath: "/usr/src/rust/src/"
+".rust.source":
+  editor:
+    tabLength: 2

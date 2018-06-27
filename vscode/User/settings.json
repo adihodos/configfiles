@@ -1,5 +1,5 @@
 {
-    "workbench.iconTheme": "material-icon-theme",
+    "workbench.iconTheme": "vscode-icons",
     "[cpp]": {
         "editor.quickSuggestions": false
     },
@@ -8,7 +8,8 @@
     },
     "workbench.colorTheme": "Atom One Dark",
     "editor.fontFamily": "Iosevka",
-    "editor.fontSize": 24,
+    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
+    "editor.fontSize": 18,
     "editor.tabSize": 2,
     "editor.rulers": [
         80
@@ -17,7 +18,17 @@
     "editor.fontLigatures": true,
     "editor.renderLineHighlight": "all",
     "editor.formatOnSave": true,
-    "C_Cpp.clang_format_formatOnSave": true,
     "window.menuBarVisibility": "toggle",
-    "workbench.activityBar.visible": true
+    "workbench.activityBar.visible": true,
+    "window.zoomLevel": 0,
+    "cmake-tools-helper.cmake_download_path": "/home/ahodos/.vscode/extensions/maddouri.cmake-tools-helper-0.2.1/cmake_download",
+    "rust.mode": "rls",
+    "vsicons.dontShowNewVersionMessage": true,
+    "rust.rustup": {
+        "nightlyToolchain": "nightly-x86_64-unknown-linux-gnu",
+        "toolchain": "stable-x86_64-unknown-linux-gnu"
+    },
+    "rust.rls": {
+        "useRustfmt": true
+    }
 }
