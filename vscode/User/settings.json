@@ -7,9 +7,10 @@
         "editor.quickSuggestions": false
     },
     // "workbench.colorTheme": "Atom One Dark",
-    "editor.fontFamily": "Iosevka SS08",
+    // "editor.fontFamily": "Iosevka SS08",
+    "editor.fontFamily": "Victor Mono",
     // "C_Cpp.clang_format_path": "/usr/bin/clang-format",
-    "editor.fontSize": 20,
+    "editor.fontSize": 18,
     "editor.tabSize": 2,
     "editor.rulers": [
         80
@@ -26,5 +27,10 @@
     "rust-client.channel": "stable",
     "workbench.colorTheme": "Community Material Theme Darker",
     "rust-analyzer.highlightingOn": true,
+    "lldb.showDisassembly": "never",
+    "lldb.launch.sourceLanguages": [
+        "cpp",
+        "rust"
+    ],
     // "rust-analyzer.rainbowHighlightingOn": true,
 }
