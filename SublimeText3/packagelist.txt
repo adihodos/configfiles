@@ -1,0 +1,11 @@
+Guna
+LSP
+DoxyDoxygen
+BetterBookmarks
+SidebarEnhancements
+Shader syntax
+CMAKE
+File Icons
+Terminus
+
+

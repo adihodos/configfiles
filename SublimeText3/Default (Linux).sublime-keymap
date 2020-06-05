@@ -1,0 +1,34 @@
+[
+	{ "keys": ["ctrl+shift+`"], "command": "show_panel", "args": {"panel": "console", "toggle": true} },
+    // Toggle the default shell in panel
+    { "keys": ["ctrl+`"], "command": "toggle_terminus_panel" },
+
+    // Open a terminal tab at current file directory
+    {
+        "keys": ["ctrl+alt+`"], "command": "terminus_open", "args": {
+            "cwd": "${file_path:${folder}}"
+        }
+    },
+    // Go To Definition
+    {"keys": ["f12"], "command": "lsp_symbol_definition", "context": [{"key": "setting.lsp_active"}]},
+
+    // Go To Type Definition
+    {"keys": ["ctrl+f12"], "command": "lsp_symbol_type_definition", "context": [{"key": "setting.lsp_active"}]},
+
+    // Go To Declaration
+    {"keys": ["alt+f12"], "command": "lsp_symbol_declaration", "context": [{"key": "setting.lsp_active"}]},
+
+    // Go To Implementation
+    // {"keys": ["UNBOUND"], "command": "lsp_symbol_implementation", "context": [{"key": "setting.lsp_active"}]},
+
+    // Rename Symbol
+    // { "keys": ["UNBOUND"], "command": "lsp_symbol_rename", "context": [{"key": "setting.lsp_active"}]},
+
+    // Format Document
+    {"keys": ["ctrl+k,ctrl+d"], "command": "lsp_format_document", "context": [{"key": "setting.lsp_active"}]},
+
+    // Format Selection
+    {"keys": ["ctrl+k,ctrl+f"], "command": "lsp_format_document_range", "context": [{"key": "setting.lsp_active"}]},
+    // Document Symbols (a replacement for ST's "Goto Symbol")
+    {"keys": ["ctrl+r"], "command": "lsp_document_symbols", "context": [{"key": "setting.lsp_active"}]},
+]
