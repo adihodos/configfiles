@@ -1,0 +1,23 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+n ctrl+right",
+        "command": "workbench.action.navigateRight",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+n ctrl+left",
+        "command": "workbench.action.navigateLeft",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+n ctrl+up",
+        "command": "workbench.action.navigateUp",
+        "when": "editorTextFocus"
+    },
+    {
+        "key": "ctrl+n ctrl+down",
+        "command": "workbench.action.navigateDown",
+        "when": "editorTextFocus"
+    }
+]
