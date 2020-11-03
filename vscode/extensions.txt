@@ -1,0 +1,12 @@
+- Rust analyzer
+- better TOML
+- C/C++ support
+- Clangd
+- change-case
+- Bracket Pair Colorizer
+- Shader Languages
+- GitLens
+- LatexWorkshop
+- Material Icon Theme
+- MinTheme
+- Atom One themes
