@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Hodos Adrian"
+      user-mail-address "adi.hodos@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -21,8 +21,10 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+(setq doom-font (font-spec :family "Iosevka SS03" :size 16 :weight 'medium)
+      doom-variable-pitch-font (font-spec :family "sans" :size 12))
 
-;; There are two ways to load a theme. Both assume the theme is installed and
+;; There are two ways to load a theme Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
 (setq doom-theme 'base16-sandcastle)
@@ -53,7 +55,7 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
-(after! lsp (setq lsp-enable-completion-at-point t))
+(after! lsp (setq lsp-completion-enable t))
 (after! rustic
   (setq rustic-lsp-server 'rust-analyzer
         rustic-analyzer-command '("rust-analyzer")))
