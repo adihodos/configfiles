@@ -263,6 +263,15 @@ if executable('clangd')
         \ })
 endif
 
+if executable('rust-analyzer')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rust-analyzer',
+        \ 'cmd': {server_info->['rust-analyzer']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
+endif
+
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
@@ -272,6 +281,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
+	nmap <buffer> <leader>fd <plug>(lsp-document-format)
+	nmap <buffer> <leader>fr <plug>(lsp-document-range-format)
     nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
