@@ -281,6 +281,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gr <plug>(lsp-references)
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
+	nmap <buffer> gPd <plug>(lsp-peek-definition)
+	nmap <buffer> gF <plug>(lsp-document-format)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
 	nmap <buffer> <leader>fd <plug>(lsp-document-format)
 	nmap <buffer> <leader>fr <plug>(lsp-document-range-format)
