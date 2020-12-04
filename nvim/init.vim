@@ -1,474 +1,374 @@
-" Fish doesn't play all that well with others
-set shell=/bin/bash
-let mapleader = "\<Space>"
+"{{ Custom variables
+let g:is_win = has('win32') || has('win64')
+let g:is_linux = has('unix') && !has('macunix')
+let g:is_mac = has('macunix')
+"}}
 
-" =============================================================================
-" # PLUGINS
-" =============================================================================
-" Load vundle
-set nocompatible
-filetype off
-set rtp+=~/dev/others/base16/templates/vim/
-call plug#begin()
+"{{ Builtin variables
+" Disable Python2 support
+let g:loaded_python_provider=0
 
-" Load plugins
-" VIM enhancements
-Plug 'ciaranm/securemodelines'
-Plug 'editorconfig/editorconfig-vim'
-Plug 'justinmk/vim-sneak'
+let g:did_install_default_menus = 1  " do not load menu
 
-" GUI enhancements
-Plug 'itchyny/lightline.vim'
-Plug 'machakann/vim-highlightedyank'
-Plug 'andymass/vim-matchup'
-Plug 'chriskempson/base16-vim'
+" Path to Python 3 interpreter (must be an absolute path), make startup
+" faster. See https://neovim.io/doc/user/provider.html.
+if executable('python')
+   if g:is_win
+    let g:python3_host_prog=substitute(exepath('python'), '.exe$', '', 'g')
+  elseif g:is_linux || g:is_mac
+    let g:python3_host_prog=exepath('python')
+  endif
+else
+  echoerr 'Python 3 executable not found! You must install Python 3 and set its PATH correctly!'
+endif
 
-" Fuzzy finder
-Plug 'airblade/vim-rooter'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+"}}
 
-" Semantic language support
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+function! Get_titlestr() abort
+  let l:title_str = ''
+  if g:is_linux
+      let l:title_str = hostname() . '  '
+  endif
+  let l:title_str = l:title_str . expand('%:p:~') . '  '
+  if &buflisted
+    let l:title_str = l:title_str . strftime('%Y-%m-%d %H:%M',getftime(expand('%')))
+  endif
 
-" Syntactic language support
-Plug 'cespare/vim-toml'
-Plug 'stephpy/vim-yaml'
-Plug 'rust-lang/rust.vim'
-Plug 'rhysd/vim-clang-format'
-"Plug 'fatih/vim-go'
-Plug 'dag/vim-fish'
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
+  return l:title_str
+endfunction
+
+call plug#begin('~/.vim/plugged')
+
+" Collection of common configurations for the Nvim LSP client
+Plug 'neovim/nvim-lspconfig'
+
+" Extensions to built-in LSP, for example, providing type inlay hints
+Plug 'tjdevries/lsp_extensions.nvim'
+
+" Autocompletion framework for built-in LSP
+Plug 'nvim-lua/completion-nvim'
+
+" Diagnostic navigation and settings for built-in LSP
+Plug 'nvim-lua/diagnostic-nvim'
+
+"{{ UI: Color, theme etc.
+" A list of colorscheme plugin you may want to try. Find what suits you.
+Plug 'lifepillar/vim-gruvbox8'
+Plug 'srcery-colors/srcery-vim'
+Plug 'ajmwagar/vim-deus'
+Plug 'YorickPeterse/happy_hacking.vim'
+Plug 'lifepillar/vim-solarized8'
+" Do not try other monokai-tasty and monokai-pro anymore, they
+" all have bad DiffDelete highlight issues.
+Plug 'sickill/vim-monokai'
+Plug 'rakr/vim-one'
+Plug 'kaicataldo/material.vim'
+Plug 'joshdick/onedark.vim'
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'jsit/toast.vim'
+
+if !exists('g:started_by_firenvim')
+  " colorful status line and theme
+  Plug 'vim-airline/vim-airline'
+  Plug 'vim-airline/vim-airline-themes'
+  Plug 'mhinz/vim-startify'
+endif
+"}}
+
+"{{ Plugin to deal with URL
+" Highlight URLs inside vim
+Plug 'itchyny/vim-highlighturl'
+
+" For Windows and Mac, we can open an URL in the browser. For Linux, it may
+" not be possible since we maybe in a server which disables GUI.
+if g:is_win || g:is_mac
+  " open URL in browser
+  Plug 'tyru/open-browser.vim'
+endif
+"}}
+
+Plug 'sbdchd/neoformat'
 
 call plug#end()
 
-if has('nvim')
-    set guicursor=n-v-c:block-Cursor/lCursor-blinkon0,i-ci:ver25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor
-    set inccommand=nosplit
-    noremap <C-q> :confirm qall<CR>
+syntax enable
+filetype plugin indent on
+
+" Set completeopt to have a better completion experience
+" :help completeopt
+" menuone: popup even when there's only one match
+" noinsert: Do not insert text until a selection is made
+" noselect: Do not select, force user to select one from the menu
+set completeopt=menuone,noinsert,noselect
+
+" Avoid showing extra messages when using completion
+set shortmess+=c
+
+" Configure LSP
+" https://github.com/neovim/nvim-lspconfig#rust_analyzer
+
+lua <<EOF
+local on_attach = function(client)
+	require'completion'.on_attach(client)
+	require'diagnostic'.on_attach(client)
 end
 
-" deal with colors
-if !has('gui_running')
-  set t_Co=256
-endif
-if (match($TERM, "-256color") != -1) && (match($TERM, "screen-256color") == -1)
-  " screen does not (yet) support truecolor
-  set termguicolors
-endif
-set background=dark
-let base16colorspace=256
-let g:base16_shell_path="~/dev/others/base16/templates/shell/scripts/"
-colorscheme base16-eighties
-syntax on
-hi Normal ctermbg=NONE
-" Brighter comments
-call Base16hi("Comment", g:base16_gui09, "", g:base16_cterm09, "", "", "")
+require'lspconfig'.rust_analyzer.setup({
+{on_attach = on_attach }
+})
 
-" Plugin settings
-let g:secure_modelines_allowed_items = [
-                \ "textwidth",   "tw",
-                \ "softtabstop", "sts",
-                \ "tabstop",     "ts",
-                \ "shiftwidth",  "sw",
-                \ "expandtab",   "et",   "noexpandtab", "noet",
-                \ "filetype",    "ft",
-                \ "foldmethod",  "fdm",
-                \ "readonly",    "ro",   "noreadonly", "noro",
-                \ "rightleft",   "rl",   "norightleft", "norl",
-                \ "colorcolumn"
-                \ ]
+EOF
 
-" Lightline
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component_function': {
-      \   'filename': 'LightlineFilename',
-      \   'cocstatus': 'coc#status'
-      \ },
-      \ }
-function! LightlineFilename()
-  return expand('%:t') !=# '' ? @% : '[No Name]'
-endfunction
+" Trigger completion with <Tab>
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ completion#trigger_completion()
 
-" Use auocmd to force lightline update.
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+" Code navigation shortcuts
+nnoremap <silent> <c-]> <cmd>lua vim.lsp.buf.definition()<CR>
+nnoremap <silent> K     <cmd>lua vim.lsp.buf.hover()<CR>
+nnoremap <silent> gD    <cmd>lua vim.lsp.buf.implementation()<CR>
+nnoremap <silent> <c-k> <cmd>lua vim.lsp.buf.signature_help()<CR>
+nnoremap <silent> 1gD   <cmd>lua vim.lsp.buf.type_definition()<CR>
+nnoremap <silent> gr    <cmd>lua vim.lsp.buf.references()<CR>
+nnoremap <silent> g0    <cmd>lua vim.lsp.buf.document_symbol()<CR>
+nnoremap <silent> gW    <cmd>lua vim.lsp.buf.workspace_symbol()<CR>
+nnoremap <silent> gd    <cmd>lua vim.lsp.buf.declaration()<CR>
+nnoremap <silent> ga    <cmd>lua vim.lsp.buf.code_action()<CR>
 
-" from http://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-if executable('ag')
-	set grepprg=ag\ --nogroup\ --nocolor
-endif
-if executable('rg')
-	set grepprg=rg\ --no-heading\ --vimgrep
-	set grepformat=%f:%l:%c:%m
-endif
+" Visualize diagnostics
+let g:diagnostic_enable_virtual_text = 1
+let g:diagnostic_trimmed_virtual_text = '40'
+" Don't show diagnostics while in insert mode
+let g:diagnostic_insert_delay = 1
 
-" Javascript
-let javaScript_fold=0
-
-" Java
-let java_ignore_javadoc=1
-
-" Latex
-let g:latex_indent_enabled = 1
-let g:latex_fold_envs = 0
-let g:latex_fold_sections = []
-
-" Open hotkeys
-map <C-p> :Files<CR>
-nmap <leader>; :Buffers<CR>
-
-" Quick-save
-nmap <leader>w :w<CR>
-
-" Don't confirm .lvimrc
-let g:localvimrc_ask = 0
-
-" racer + rust
-" https://github.com/rust-lang/rust.vim/issues/192
-let g:rustfmt_autosave = 1
-let g:rustfmt_emit_files = 1
-let g:rustfmt_fail_silently = 0
-let g:rust_clip_command = 'xclip -selection clipboard'
-"let g:racer_cmd = "/usr/bin/racer"
-"let g:racer_experimental_completer = 1
-let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
-
-" Completion
-" Better display for messages
-set cmdheight=2
-" You will have bad experience for diagnostic messages when it's default 4000.
+" Set updatetime for CursorHold
+" 300ms of no cursor movement to trigger CursorHold
 set updatetime=300
+" Show diagnostic popup on cursor hold
+"autocmd CursorHold * lua vim.lsp.util.show_line_diagnostics()
 
-" Golang
-let g:go_play_open_browser = 0
-let g:go_fmt_fail_silently = 1
-let g:go_fmt_command = "goimports"
-let g:go_bin_path = expand("~/dev/go/bin")
-
-" =============================================================================
-" # Editor settings
-" =============================================================================
-filetype plugin indent on
-set autoindent
-set timeoutlen=300 " http://stackoverflow.com/questions/2158516/delay-before-o-opens-a-new-line
-set encoding=utf-8
-set scrolloff=2
-set noshowmode
-set hidden
-set nowrap
-set nojoinspaces
-let g:sneak#s_next = 1
-let g:vim_markdown_new_list_item_indent = 0
-let g:vim_markdown_auto_insert_bullets = 0
-let g:vim_markdown_frontmatter = 1
-set printfont=:h10
-set printencoding=utf-8
-set printoptions=paper:letter
-" Always draw sign column. Prevent buffer moving when adding/deleting sign.
+" Goto previous/next diagnostic warning/error
+nnoremap <silent> g[ <cmd>PrevDiagnosticCycle<cr>
+nnoremap <silent> g] <cmd>NextDiagnosticCycle<cr>
+" have a fixed column for the diagnostics to appear in
+" this removes the jitter when warnings/errors flow in
 set signcolumn=yes
 
-" Settings needed for .lvimrc
-set exrc
-set secure
-
-" Sane splits
-set splitright
-set splitbelow
-
-" Permanent undo
-set undodir=~/.vimdid
-set undofile
-
-" Decent wildmenu
-set wildmenu
-set wildmode=list:longest
-set wildignore=.hg,.svn,*~,*.png,*.jpg,*.gif,*.settings,Thumbs.db,*.min.js,*.swp,publish/*,intermediate/*,*.o,*.hi,Zend,vendor
-
-" Use wide tabs
-set shiftwidth=8
-set softtabstop=8
-set tabstop=8
-set noexpandtab
-
-" Wrapping options
-set formatoptions=tc " wrap text and comments using textwidth
-set formatoptions+=r " continue comments when pressing ENTER in I mode
-set formatoptions+=q " enable formatting of comments with gq
-set formatoptions+=n " detect lists for formatting
-set formatoptions+=b " auto-wrap in insert mode, and do not wrap old long lines
-
-" Proper search
-set incsearch
-set ignorecase
-set smartcase
-set gdefault
-
-" Search results centered please
-nnoremap <silent> n nzz
-nnoremap <silent> N Nzz
-nnoremap <silent> * *zz
-nnoremap <silent> # #zz
-nnoremap <silent> g* g*zz
-
-" Very magic by default
-nnoremap ? ?\v
-nnoremap / /\v
-cnoremap %s/ %sm/
-
-" =============================================================================
-" # GUI settings
-" =============================================================================
-set guioptions-=T " Remove toolbar
-set vb t_vb= " No more beeps
-set backspace=2 " Backspace over newlines
-set nofoldenable
-set ttyfast
-" https://github.com/vim/vim/issues/1735#issuecomment-383353563
-set lazyredraw
-set synmaxcol=500
-set laststatus=2
-set relativenumber " Relative line numbers
-set number " Also show current absolute line
-set diffopt+=iwhite " No whitespace in vimdiff
-" Make diffing better: https://vimways.org/2018/the-power-of-diff/
-set diffopt+=algorithm:patience
-set diffopt+=indent-heuristic
-set colorcolumn=80 " and give me a colored column
-set showcmd " Show (partial) command in status line.
-set mouse=a " Enable mouse usage (all modes) in terminals
-set shortmess+=c " don't give |ins-completion-menu| messages.
-
-" Show those damn hidden characters
-" Verbose: set listchars=nbsp:¬,eol:¶,extends:»,precedes:«,trail:•
-set listchars=nbsp:¬,extends:»,precedes:«,trail:•
-
-" =============================================================================
-" # Keyboard shortcuts
-" =============================================================================
-" ; as :
-nnoremap ; :
-
-" Ctrl+c and Ctrl+j as Esc
-" Ctrl-j is a little awkward unfortunately:
-" https://github.com/neovim/neovim/issues/5916
-" So we also map Ctrl+k
-inoremap <C-j> <Esc>
-
-nnoremap <C-k> <Esc>
-inoremap <C-k> <Esc>
-vnoremap <C-k> <Esc>
-snoremap <C-k> <Esc>
-xnoremap <C-k> <Esc>
-cnoremap <C-k> <Esc>
-onoremap <C-k> <Esc>
-lnoremap <C-k> <Esc>
-tnoremap <C-k> <Esc>
-
-nnoremap <C-c> <Esc>
-inoremap <C-c> <Esc>
-vnoremap <C-c> <Esc>
-snoremap <C-c> <Esc>
-xnoremap <C-c> <Esc>
-cnoremap <C-c> <Esc>
-onoremap <C-c> <Esc>
-lnoremap <C-c> <Esc>
-tnoremap <C-c> <Esc>
-
-" Ctrl+h to stop searching
-vnoremap <C-h> :nohlsearch<cr>
-nnoremap <C-h> :nohlsearch<cr>
-
-" Suspend with Ctrl+f
-inoremap <C-f> :sus<cr>
-vnoremap <C-f> :sus<cr>
-nnoremap <C-f> :sus<cr>
-
-" Jump to start and end of line using the home row keys
-map H ^
-map L $
-
-" Neat X clipboard integration
-" ,p will paste clipboard into buffer
-" ,c will copy entire buffer into clipboard
-noremap <leader>p :read !xsel --clipboard --output<cr>
-noremap <leader>c :w !xsel -ib<cr><cr>
-
-" <leader>s for Rg search
-noremap <leader>s :Rg
-let g:fzf_layout = { 'down': '~20%' }
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-  \   <bang>0 ? fzf#vim#with_preview('up:60%')
-  \           : fzf#vim#with_preview('right:50%:hidden', '?'),
-  \   <bang>0)
-
-function! s:list_cmd()
-  let base = fnamemodify(expand('%'), ':h:.:S')
-  return base == '.' ? 'fd --type file --follow' : printf('fd --type file --follow | proximity-sort %s', shellescape(expand('%')))
-endfunction
-
-command! -bang -nargs=? -complete=dir Files
-  \ call fzf#vim#files(<q-args>, {'source': s:list_cmd(),
-  \                               'options': '--tiebreak=index'}, <bang>0)
-
-
-" Open new file adjacent to current file
-nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-" No arrow keys --- force yourself to use the home row
-nnoremap <up> <nop>
-nnoremap <down> <nop>
-inoremap <up> <nop>
-inoremap <down> <nop>
-inoremap <left> <nop>
-inoremap <right> <nop>
-
-" Left and right can switch buffers
-nnoremap <left> :bp<CR>
-nnoremap <right> :bn<CR>
-
-" Move by line
-nnoremap j gj
-nnoremap k gk
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" 'Smart' nevigation
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
+" Enable type inlay hints
+autocmd CursorMoved,InsertLeave,BufEnter,BufWinEnter,TabEnter,BufWritePost *
+\ lua require'lsp_extensions'.inlay_hints{ prefix = ':', highlight = "Comment" }
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-" Use <c-.> to trigger completion.
-inoremap <silent><expr> <c-.> coc#refresh()
+" Split window below/right when creating horizontal/vertical windows
+set splitbelow splitright
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
-" position. Coc only does snippet and additional edit on confirm.
-if exists('*complete_info')
-  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-else
-  imap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Time in milliseconds to wait for a mapped sequence to complete,
+" see https://unix.stackexchange.com/q/36882/221410 for more info
+set timeoutlen=1000
+
+set updatetime=1000  " For CursorHold events
+
+" Clipboard settings, always use clipboard for all delete, yank, change, put
+" operation, see https://stackoverflow.com/q/30691466/6064933
+if !empty(provider#clipboard#Executable())
+  set clipboard+=unnamedplus
 endif
 
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+" Disable creating swapfiles, see https://stackoverflow.com/q/821902/6064933
+set noswapfile
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+" Set up backup directory
+let g:backupdir=expand(stdpath('data') . '/backup')
+if !isdirectory(g:backupdir)
+   call mkdir(g:backupdir, 'p')
+endif
+let &backupdir=g:backupdir
 
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+set backupcopy=yes  " copy the original file to backupdir and overwrite it
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
+" General tab settings
+set tabstop=4       " number of visual spaces per TAB
+set softtabstop=4   " number of spaces in tab when editing
+set shiftwidth=4    " number of spaces to use for autoindent
+set expandtab       " expand tab to spaces so that tabs are spaces
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" Set matching pairs of characters and highlight matching brackets
+set matchpairs+=<:>,「:」,『:』,【:】,“:”,‘:’,《:》
 
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+set number relativenumber  " Show line number and relative line number
 
-" Introduce function text object
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
+" Ignore case in general, but become case-sensitive when uppercase is present
+set ignorecase smartcase
 
-" Use <TAB> for selections ranges.
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
+" File and script encoding settings for vim
+set fileencoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
 
-" Find symbol of current document.
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+" Break line at predefined characters
+set linebreak
+" Character to show before the lines that have been soft-wrapped
+set showbreak=↪
 
-" Search workspace symbols.
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+" List all matches and complete till longest common string
+set wildmode=list:longest
 
-" Implement methods for trait
-nnoremap <silent> <space>i  :call CocActionAsync('codeAction', '', 'Implement missing members')<cr>
+set cursorline  " Show current line where the cursor is
 
-" Show actions available at this location
-nnoremap <silent> <space>a  :CocAction<cr>
+" Minimum lines to keep above and below cursor when scrolling
+set scrolloff=3
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use mouse to select and resize windows, etc.
+set mouse=nic  " Enable mouse in several mode
+set mousemodel=popup  " Set the behaviour of mouse
 
-" <leader><leader> toggles between buffers
-nnoremap <leader><leader> <c-^>
+" Do not show mode on command line since vim-airline can show it
+set noshowmode
 
-" <leader>, shows/hides hidden characters
-nnoremap <leader>, :set invlist<cr>
+set fileformats=unix,dos  " Fileformats to use for new files
 
-" <leader>q shows stats
-nnoremap <leader>q g<c-g>
+set inccommand=nosplit  " Show the result of substitution in real time for preview
 
-" Keymap for replacing up to next _ or -
-noremap <leader>m ct_
+" Ignore certain files and folders when globbing
+set wildignore+=*.o,*.obj,*.bin,*.dll,*.exe
+set wildignore+=*/.git/*,*/.svn/*,*/__pycache__/*,*/build/**
+set wildignore+=*.jpg,*.png,*.jpeg,*.bmp,*.gif,*.tiff,*.svg,*.ico
+set wildignore+=*.pyc
+set wildignore+=*.DS_Store
+set wildignore+=*.aux,*.bbl,*.blg,*.brf,*.fls,*.fdb_latexmk,*.synctex.gz
+set wildignorecase  " ignore file and dir name cases in cmd-completion
 
-" I can type :help on my own, thanks.
-map <F1> <Esc>
-imap <F1> <Esc>
+" Ask for confirmation when handling unsaved or read-only files
+set confirm
 
+set visualbell noerrorbells  " Do not use visual and errorbells
+set history=500  " The number of command and search history to keep
 
-" =============================================================================
-" # Autocommands
-" =============================================================================
+" Use list mode and customized listchars
+set list listchars=tab:▸\ ,extends:❯,precedes:❮,nbsp:+
 
-" Prevent accidental writes to buffers that shouldn't be edited
-autocmd BufRead *.orig set readonly
-autocmd BufRead *.pacnew set readonly
+" Auto-write the file based on some condition
+set autowrite
 
-" Leave paste mode when leaving insert mode
-autocmd InsertLeave * set nopaste
+" Show hostname, full path of file and last-mod time on the window title. The
+" meaning of the format str for strftime can be found in
+" http://man7.org/linux/man-pages/man3/strftime.3.html. The function to get
+" lastmod time is drawn from https://stackoverflow.com/q/8426736/6064933
+set title
+set titlestring=
+set titlestring=%{Get_titlestr()}
 
-" Jump to last edit position on opening file
-if has("autocmd")
-  " https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
-  au BufReadPost * if expand('%:p') !~# '\m/\.git/' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+" Persistent undo even after you close a file and re-open it
+set undofile
+
+" Do not show "match xx of xx" and other messages during auto-completion
+set shortmess+=c
+
+" Completion behaviour
+" set completeopt+=noinsert  " Auto select the first completion entry
+set completeopt+=menuone  " Show menu even if there is only one item
+set completeopt-=preview  " Disable the preview window
+set pumheight=10  " Maximum number of items to show in popup menu
+
+" Do not add two spaces after a period when joining lines or formatting texts,
+" see https://stackoverflow.com/q/4760428/6064933
+set nojoinspaces
+
+set synmaxcol=200  " Text after this column number is not highlighted
+set nostartofline
+
+" External program to use for grep command
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+  set grepformat=%f:%l:%c:%m
 endif
 
-" Follow Rust code style rules
-au Filetype rust source ~/.config/nvim/scripts/spacetab.vim
-au Filetype rust set colorcolumn=100
+" Highlight groups for cursor color
+augroup cursor_color
+  autocmd!
+  autocmd ColorScheme * highlight Cursor cterm=bold gui=bold guibg=cyan guifg=black
+  autocmd ColorScheme * highlight Cursor2 guifg=red guibg=red
+augroup END
 
-" Help filetype detection
-autocmd BufRead *.plot set filetype=gnuplot
-autocmd BufRead *.md set filetype=markdown
-autocmd BufRead *.lds set filetype=ld
-autocmd BufRead *.tex set filetype=tex
-autocmd BufRead *.trm set filetype=c
-autocmd BufRead *.xlsx.axlsx set filetype=ruby
+" Set up cursor color and shape in various mode, ref:
+" https://github.com/neovim/neovim/wiki/FAQ#how-to-change-cursor-color-in-the-terminal
+set guicursor=n-v-c:block-Cursor/lCursor,i-ci-ve:ver25-Cursor2/lCursor2,r-cr:hor20,o:hor20
 
-" Script plugins
-autocmd Filetype html,xml,xsl,php source ~/.config/nvim/scripts/closetag.vim
+set signcolumn=auto:2
 
-" =============================================================================
-" # Footer
-" =============================================================================
+"{{ UI: Status line, look
+"""""""""""""""""""""""""""vim-airline setting""""""""""""""""""""""""""""""
+" Set airline theme to a random one if it exists
+let s:candidate_airlinetheme = ['ayu_mirage', 'lucius', 'ayu_dark', 'base16_bright',
+      \ 'base16_adwaita', 'jellybeans', 'luna', 'raven', 'term', 'base16_summerfruit']
+let s:idx = 0
+let s:theme = s:candidate_airlinetheme[s:idx]
 
-" nvim
-if has('nvim')
-	runtime! plugin/python_setup.vim
+let g:airline_theme='neodark'
+
+" Tabline settings
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
+
+" Show buffer number for easier switching between buffer,
+" see https://github.com/vim-airline/vim-airline/issues/1149
+let g:airline#extensions#tabline#buffer_nr_show = 1
+
+" Buffer number display format
+let g:airline#extensions#tabline#buffer_nr_format = '%s. '
+
+" Whether to show function or other tags on status line
+let g:airline#extensions#vista#enabled = 1
+let g:airline#extensions#gutentags#enabled = 1
+
+" Do not show search index in statusline since it is shown on command line
+let g:airline#extensions#anzu#enabled = 0
+
+" Enable vim-airline extension for vim-lsp
+let g:airline#extensions#lsp#enabled = 1
+
+" Skip empty sections if there are nothing to show,
+" extracted from https://vi.stackexchange.com/a/9637/15292
+let g:airline_skip_empty_sections = 1
+
+" Whether to use powerline symbols, see https://vi.stackexchange.com/q/3359/15292
+let g:airline_powerline_fonts = 0
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
 endif
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.spell = 'Ꞩ'
+
+" Only show git hunks which are non-zero
+let g:airline#extensions#hunks#non_zero_only = 1
+
+" Speed up airline
+let g:airline_highlighting_cache = 1
+
+""""""""""""""""""""""""""""vim-startify settings""""""""""""""""""""""""""""
+" Do not change working directory when opening files.
+let g:startify_change_to_dir = 0
+let g:startify_fortune_use_unicode = 1
+
+"}}
+
+set guifont=Iosevka\ SS03:h16
+colorscheme neodark
+
+augroup fmt
+  autocmd!
+  autocmd BufWritePre * undojoin | Neoformat
+augroup END
+
+" Disable tab to spaces conversion
+let g:neoformat_basic_format_retab = 0
+
+" Enable trimmming of trailing whitespace
+let g:neoformat_basic_format_trim = 1

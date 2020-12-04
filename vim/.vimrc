@@ -1,4 +1,33 @@
+" 
+" xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+" 
 set nocompatible
+
+"{{ Custom variables
+let g:is_win = has('win32') || has('win64')
+let g:is_linux = has('unix') && !has('macunix')
+let g:is_mac = has('macunix')
+"}}
+
+"{{ Builtin variables
+" Disable Python2 support
+let g:loaded_python_provider=0
+
+let g:did_install_default_menus = 1  " do not load menu
+
+" Path to Python 3 interpreter (must be an absolute path), make startup
+" faster. See https://neovim.io/doc/user/provider.html.
+if executable('python')
+   if g:is_win
+    let g:python3_host_prog=substitute(exepath('python'), '.exe$', '', 'g')
+  elseif g:is_linux || g:is_mac
+    let g:python3_host_prog=exepath('python')
+  endif
+else
+  echoerr 'Python 3 executable not found! You must install Python 3 and set its PATH correctly!'
+endif
+
+"}}
 
 " Specify a directory for plugins
 " - For Neovim: stdpath('data') . '/plugged'
@@ -80,7 +109,12 @@ set guioptions=gR
 set background=dark
 set t_Co=256
 set ff=unix
-set guifont=IBM\ Plex\ Mono\ 14
+if g:is_win
+	set guifont=Iosevka\ SS03:h14
+else
+	set guifont=IBM\ Plex\ Mono\ 14
+endif	
+
 colorscheme neodark
 
 syntax enable
@@ -100,7 +134,6 @@ set splitbelow splitright
 " Disable creating swapfiles, see https://stackoverflow.com/q/821902/6064933
 set noswapfile
 
-
 set backupcopy=yes  " copy the original file to backupdir and overwrite it
 
 " General tab settings
@@ -108,7 +141,7 @@ set tabstop=4       " number of visual spaces per TAB
 set softtabstop=4   " number of spaces in tab when editing
 set shiftwidth=4    " number of spaces to use for autoindent
 " Set matching pairs of characters and highlight matching brackets
-set matchpairs+=<:>,「:」,『:』,【:】,“:”,‘:’,《:》
+set matchpairs+="<:>,「:」,『:』,【:】,“:”,‘:’,《:》"
 
 set number relativenumber  " Show line number and relative line number
 
@@ -230,6 +263,15 @@ if executable('clangd')
         \ })
 endif
 
+if executable('rust-analyzer')
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'rust-analyzer',
+        \ 'cmd': {server_info->['rust-analyzer']},
+        \ 'workspace_config': {'rust': {'clippy_preference': 'on'}},
+        \ 'whitelist': ['rust'],
+        \ })
+endif
+
 function! s:on_lsp_buffer_enabled() abort
     setlocal omnifunc=lsp#complete
     setlocal signcolumn=yes
@@ -239,6 +281,8 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
+	nmap <buffer> <leader>fd <plug>(lsp-document-format)
+	nmap <buffer> <leader>fr <plug>(lsp-document-range-format)
     nmap <buffer> [g <Plug>(lsp-previous-diagnostic)
     nmap <buffer> ]g <Plug>(lsp-next-diagnostic)
     nmap <buffer> K <plug>(lsp-hover)
