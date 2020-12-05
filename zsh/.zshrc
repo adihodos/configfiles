@@ -89,6 +89,7 @@ else
   export EDITOR='mvim'
 fi
 
+export PAGER='most'
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
