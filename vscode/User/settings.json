@@ -1,17 +1,14 @@
 {
-    "workbench.iconTheme": "vscode-great-icons",
+    "workbench.iconTheme": "eq-material-theme-icons-darker",
     "[cpp]": {
         "editor.quickSuggestions": false
     },
     "[c]": {
         "editor.quickSuggestions": false
     },
-    "C_Cpp.clang_format_path": "/usr/bin/clang-format",
-    "C_Cpp.default.cppStandard": "c++17",
-    "C_Cpp.clang_format_style": "file",
     //
     // editor
-    "editor.fontFamily": "'Iosevka SS06', 'Roboto Mono'",
+    "editor.fontFamily": "'Iosevka SS03 Medium', 'Roboto Mono'",
     "editor.fontSize": 16,
     "editor.tabSize": 4,
     "editor.insertSpaces": false,
@@ -28,7 +25,7 @@
     "window.menuBarVisibility": "toggle",
     "workbench.activityBar.visible": true,
     "window.zoomLevel": 0,
-    "workbench.colorTheme": "One Dark Pro",
+    "workbench.colorTheme": "Community Material Theme Darker",
     "lldb.showDisassembly": "never",
     "lldb.launch.sourceLanguages": [
         "cpp",
