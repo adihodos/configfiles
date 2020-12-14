@@ -152,6 +152,8 @@ set ignorecase smartcase
 set linebreak
 " Character to show before the lines that have been soft-wrapped
 set showbreak=↪
+set hlsearch    " highlight all search results
+set incsearch   " show incremental search results as you type
 
 " List all matches and complete till longest common string
 set wildmode=list:longest
@@ -316,3 +318,5 @@ set signcolumn=yes
 set encoding=utf-8
 set fileencoding=utf-8
 nmap <F8> :TagbarToggle<CR>
+
+
