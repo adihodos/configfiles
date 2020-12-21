@@ -113,7 +113,9 @@ set ff=unix
 if g:is_win
 	set guifont=Iosevka\ SS03:h14
 else
-	set guifont=IBM\ Plex\ Mono\ 14
+	"set guifont=IBM\ Plex\ Mono\ 14
+	"set guifont=Roboto\ Mono\ Regular\ 14
+	set guifont=Iosevka\ SS03\ Regular\ 12
 endif	
 
 colorscheme neodark
@@ -281,6 +283,8 @@ function! s:on_lsp_buffer_enabled() abort
     if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
     nmap <buffer> gd <plug>(lsp-definition)
     nmap <buffer> gr <plug>(lsp-references)
+	nmap <buffer> grn <plug>(lsp-next-reference)
+	nmap <buffer> grp <plug>(lsp-previous-reference)
     nmap <buffer> gi <plug>(lsp-implementation)
     nmap <buffer> gt <plug>(lsp-type-definition)
 	nmap <buffer> gPd <plug>(lsp-peek-definition)
