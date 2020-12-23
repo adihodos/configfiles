@@ -20,15 +20,16 @@
     "editor.cursorBlinking": "phase",
     "editor.fontLigatures": false,
     "editor.renderLineHighlight": "all",
-    "editor.formatOnSave": true,
     "files.eol": "\n",
     "window.menuBarVisibility": "toggle",
     "workbench.activityBar.visible": true,
     "window.zoomLevel": 0,
-    "workbench.colorTheme": "Community Material Theme Darker",
+    "workbench.colorTheme": "One Dark Pro",
     "lldb.showDisassembly": "never",
     "lldb.launch.sourceLanguages": [
         "cpp",
         "rust"
     ],
+    "rust-analyzer.serverPath": "~/.cargo/bin/rust-analyzer",
+    "editor.formatOnSave": true
 }
