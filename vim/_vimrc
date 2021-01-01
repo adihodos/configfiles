@@ -118,7 +118,7 @@ else
 	set guifont=Iosevka\ SS03\ Regular\ 12
 endif	
 
-colorscheme neodark
+colorscheme material
 
 syntax enable
 filetype plugin indent on
@@ -289,6 +289,10 @@ function! s:on_lsp_buffer_enabled() abort
     nmap <buffer> gt <plug>(lsp-type-definition)
 	nmap <buffer> gPd <plug>(lsp-peek-definition)
 	nmap <buffer> gF <plug>(lsp-document-format)
+	nmap <buffer> gWn <plug>(lsp-next-warning)
+	nmap <buffer> gWp <plug>(lsp-previous-warning)
+	nmap <buffer> gEn <plug>(lsp-next-error)
+	nmap <buffer> gEp <plug>(lsp-previous-error)
     nmap <buffer> <leader>rn <plug>(lsp-rename)
 	nmap <buffer> <leader>fd <plug>(lsp-document-format)
 	nmap <buffer> <leader>fr <plug>(lsp-document-range-format)
