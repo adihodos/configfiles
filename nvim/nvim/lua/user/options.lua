@@ -37,7 +37,8 @@ local options = {
   sidescrolloff = 8,
   -- guifont = "Iosevka SS03:h16",               -- the font used in graphical neovim applications
   -- guifont = "BlexMono NFM:h14",               -- the font used in graphical neovim applications
-  guifont = "VictorMono NFM:h14",               -- the font used in graphical neovim applications
+  --guifont = {"VictorMono NFM", ":h16"},               -- the font used in graphical neovim applications
+	guifont = {"JetBrainsMono Nerd Font Mono", ":h14"},
   title = true,
   -- colorcolumn = "80",
   colorcolumn = "120",
@@ -49,6 +50,7 @@ local options = {
 -- vim.opt.fillchars.eob = " "
 -- vim.opt.fillchars = vim.opt.fillchars + "vertleft: "
 -- vim.opt.fillchars = vim.opt.fillchars + "vertright: "
+-- vim.opt.guifont = {"JetBrainsMono Nerd Font Mono", ":h20"}
 vim.opt.fillchars = vim.opt.fillchars + 'eob: '
 vim.opt.fillchars:append {
   stl = ' ',
