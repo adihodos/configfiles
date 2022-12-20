@@ -31,10 +31,11 @@ configs.setup {
   context_commentstring = {
     enable = true,
     enable_autocmd = false,
+    disable = { "rust" }
   },
   autotag = {
     enable = true,
-    disable = { "xml", "markdown" },
+    disable = { "xml", "markdown", "rust" },
   },
   rainbow = {
     enable = true,
@@ -50,7 +51,7 @@ configs.setup {
       -- "Salmon",
       -- "LawnGreen",
     },
-    disable = { "html" },
+    disable = { "html", "rust" },
   },
   playground = {
     enable = true,
@@ -85,6 +86,7 @@ configs.setup {
         ["aF"] = "@frame.outer",
         ["iF"] = "@frame.inner",
       },
+      disable = { "rust" }
     },
     move = {
       enable = true,

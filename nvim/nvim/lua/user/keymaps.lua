@@ -128,6 +128,14 @@ keymap("n", "<Leader>lp", "<Cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn
 keymap("n", "<Leader>dr", "<Cmd>lua require'dap'.repl.open()<CR>", opts)
 keymap("n", "<Leader>dl", "<Cmd>lua require'dap'.run_last()<CR>", opts)
 
+local builtin = require('telescope.builtin')
+
+
+-- vim.keymap.set('n', '<leader>ftr', builtin.lsp_references, {})
+-- vim.keymap.set('n', '<leader>fti', builtin.lsp_implementations, {})
+-- vim.keymap.set('n', '<leader>ftd', builtin.lsp_definitions, {})
+-- vim.keymap.set('n', '<leader>ftt', builtin.lsp_type_definitions, {})
+
 -- Telescope
 -- keymap("n", "<leader>f", "<cmd>lua require 'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({previewer = false}))<CR>", opts)
 -- keymap("n", "<leader>f", "<cmd>Telescope find_files<CR>", opts)
@@ -200,7 +208,7 @@ vim.api.nvim_set_keymap(
 )
 vim.api.nvim_set_keymap(
   "n",
-  "<s-tab>",
+  "<c-tab>",
   "<cmd>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false, initial_mode='normal'})<cr>",
   opts
 )

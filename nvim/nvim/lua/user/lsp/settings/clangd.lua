@@ -6,7 +6,7 @@ return {
 			"clangd",
 			"--background-index",
 			"--pch-storage=memory",
-			"--clang-tidy",
+			-- "--clang-tidy",
 			"--suggest-missing-includes",
 			"--all-scopes-completion",
 			"--pretty",

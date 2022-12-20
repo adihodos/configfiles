@@ -14,6 +14,11 @@ dap.adapters.lldb = {
 	name = "lldb",
 }
 
+dap.adapters.codelldb = {
+  type = 'server',
+  command = ''
+}
+
 local lldb = {
 	name = "Launch lldb",
 	type = "lldb", -- matches the adapter

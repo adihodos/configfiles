@@ -29,7 +29,7 @@ local options = {
   laststatus = 3,
   showcmd = false,
   ruler = false,
-  relativenumber = true,                   -- set relative numbered lines
+  -- relativenumber = true,                   -- set relative numbered lines
   numberwidth = 4,                         -- set number column width to 2 {default 4}
   signcolumn = "yes",                      -- always show the sign column, otherwise it would shift the text each time
   wrap = false,                            -- display lines as one long line
@@ -37,7 +37,7 @@ local options = {
   sidescrolloff = 8,
   -- guifont = "Iosevka SS03:h16",               -- the font used in graphical neovim applications
   -- guifont = "BlexMono NFM:h14",               -- the font used in graphical neovim applications
-  --guifont = {"VictorMono NFM", ":h16"},               -- the font used in graphical neovim applications
+  -- guifont = {"VictorMono NFM", ":h16"},               -- the font used in graphical neovim applications
 	guifont = {"JetBrainsMono Nerd Font Mono", ":h14"},
   title = true,
   -- colorcolumn = "80",
@@ -69,6 +69,12 @@ vim.cmd [[set formatoptions-=cro]] -- TODO: this doesn't seem to work
 vim.filetype.add {
   extension = {
     conf = "dosini",
+    vert = "glsl",
+    frag = "glsl",
+    geom = "glsl",
+    tese = "glsl",
+    tesc = "glsl",
+    comp = "glsl"
   },
 }
 
