@@ -262,17 +262,20 @@ local mappings = {
     name = "LSP",
     a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
     c = { "<cmd>lua require('user.lsp').server_capabilities()<cr>", "Get Capabilities" },
-    d = { "<cmd>TroubleToggle<cr>", "Diagnostics" },
+    d = { "<cmd>lua require('telescope.builtin').diagnostics()<cr>", "Diagnostics" },
     w = {
       "<cmd>Telescope lsp_workspace_diagnostics<cr>",
       "Workspace Diagnostics",
     },
     f = { "<cmd>lua vim.lsp.buf.format({ async = true })<cr>", "Format" },
     F = { "<cmd>LspToggleAutoFormat<cr>", "Toggle Autoformat" },
-    i = { "<cmd>LspInfo<cr>", "Info" },
+
+    i = { "<cmd>lua require('telescope.builtin').lsp_incoming_calls()<cr>", "Incoming calls" },
+    -- I = { "<cmd>lua require('telescope.builtin').lsp_outgoing_calls()<cr>", "Outgoing calls" },
+
     h = { "<cmd>lua require('lsp-inlayhints').toggle()<cr>", "Toggle Hints" },
-    H = { "<cmd>IlluminationToggle<cr>", "Toggle Doc HL" },
-    I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
+    H = { "<cmd>IlluminateToggle<cr>", "Toggle Doc HL" },
+    
     j = {
       "<cmd>lua vim.diagnostic.goto_next({buffer=0})<CR>",
       "Next Diagnostic",
@@ -286,8 +289,8 @@ local mappings = {
     o = { "<cmd>SymbolsOutline<cr>", "Outline" },
     q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Quickfix" },
     r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
-    R = { "<cmd>TroubleToggle lsp_references<cr>", "References" },
-    s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+    R = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "References" },
+    s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "Document Symbols" },
     S = {
       "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
       "Workspace Symbols",
