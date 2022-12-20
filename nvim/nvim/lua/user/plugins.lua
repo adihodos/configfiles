@@ -255,6 +255,8 @@ use({
   use { "christianchiarulli/rust-tools.nvim", branch = "modularize_and_inlay_rewrite" }
   use "Saecki/crates.nvim"
 
+  use { 'Shatur/neovim-tasks', requires = 'nvim-lua/plenary.nvim' }
+
   -- Typescript TODO: set this up, also add keybinds to ftplugin
   --use "jose-elias-alvarez/typescript.nvim"
 
