@@ -1,0 +1,144 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2011 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+\documentclass[14pt,a4paper,sans]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% moderncv themes
+\moderncvstyle{classic}                        % style options are 'casual' (default) and 'classic' 
+\moderncvcolor{green}                          % color options 'blue' (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black'
+%\renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[romanian]{babel}                   % replace by the encoding you are using
+%\usepackage{CJKutf8}                         % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+\setlength{\hintscolumnwidth}{2.5cm}           % if you want to change the width of the column with the dates
+
+% personal data
+\firstname{Adrian}
+\familyname{Hodo\c{s}}
+\title{Curriculum vitae}                     % optional, remove the line if not wanted
+%\address{street and number}{postcode city}    % optional, remove the line if not wanted
+\mobile{+(0040)~0749~205428}                     % optional, remove the line if not wanted
+%\phone{+2~(345)~678~901}                      % optional, remove the line if not wanted
+%\fax{+3~(456)~789~012}                        % optional, remove the line if not wanted
+\email{adi.hodos@gmail.com}                 % optional, remove the line if not wanted
+%\homepage{cooltrainer.org}                 % optional, remove the line if not wanted
+%\extrainfo{additional information}            % optional, remove the line if not wanted
+%\photo[64pt][0.4pt]{picture}                  % '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{Some quote (optional)}                 % optional, remove the line if not wanted
+
+% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume
+%\makeatletter
+%\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+%\makeatother
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%\begin{CJK*}{UTF8}{gbsn}                     % to typeset your resume in Chinese using CJK
+\maketitle
+
+\section{Experien\c{t}\u{a}}
+\cventry{Ianuarie 2008 - Iulie 2010}{Programator}{SC Amplusnet SRL}{T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Responsabilit\u{a}\c{t}i :}
+\begin{itemize}
+\item dezvoltatea de produse software conform specifica\c{t}iilor primite
+\item mentenan\c{t}a \c{s}i \^{i}mbun\u{a}t\u{a}\c{t}irea 
+    func\c{t}ionalit\u{a}\c{t}ii produselor existente
+\item eliminarea erorilor raportate de echipa de QA sau de clien\c{t}i
+\item produse la care am lucrat : Application Blocker 
+    (aplica\c{t}ie de control parental), 
+    Cyclope Monitorizare Angaja\c{t}i (client \c{s}i server), 
+    Stealth Keylogger, IP Hider.
+\end{itemize}}
+
+\section{Studii}
+\cventry{2007-2012}{Informatic\u{a}}{Universitatea Petru Maior}
+{T\^{i}rgu Mure\c{s}, Mure\c{s}}{}{}  % arguments 3 to 6 can be left empty
+
+\section{Alte studii}
+\cventry{Nov. 2012 - Feb. 2013}{Coursera}{}{}{}{
+Heterogeneous Parallel Programming - \url{https://www.coursera.org/course/hetero}.\newline
+Curs de programare paralela GPU, folosind api-ul NVIDIA CUDA.\newline
+Teme studiate : modele de execu\c{t}ie paralel\u{a}, modele de memorie, 
+patternuri \c{s}i algoritmi pentru procesare paralel\u{a} 
+(scan, stencil, tiling, reduction), 
+suprapunerea computa\c{t}iei cu transferul de date.
+}
+
+\cventry{Feb. 2013 - }{Udacity}{}{}{}{Introduction to parallel programming
+ - \url{https://www.udacity.com/course/cs344}.\newline
+Curs de programare paralela GPU, folosind api-ul NVIDIA CUDA.\newline
+Teme studiate : modelul arhitectural \c{s}i de programare a GPU, algoritmi 
+\c{s}i tehnici de programare paralel\u{a} (scan, stencil, tiling, histogram, 
+reduction, binning, algoritmi de sortare paraleli), 
+tehnici de optimizare pentru GPU.
+}
+
+\section{Aptitudini de programare}
+%\subsection{Limbaje cunoscute}
+\cventry{}{Limbaje de programare}{}{}{}{
+    \begin{itemize}
+        \item C, C++ - avansat
+        \item Python, LUA - mediu, nu le-am mai folosit de ceva vreme
+        \item C\#, JAVA - \^{i}ncep\u{a}tor
+    \end{itemize}
+}
+\cventry{}{Tehnologii/Libr\u{a}rii folosite}{}{}{}{
+    \begin{itemize}
+        \item programare generic\u{a} \c{s}i orientat\u{a} obiect
+        \item STL, Windows SDK, MFC, Qt, SQL, Boost, Google Testing Framework
+        \item Intel TBB
+        \item DirectX, HLSL, PIX debugger
+        \item CUDA, Nvidia Nsight
+    \end{itemize}
+}
+\cventry{}{Proiecte personale}{}{}{}{
+    \begin{itemize}
+        \item engine grafic 3D minimalist (work in progress). 
+        Codul surs\u{a} poate fi accesat la adresa 
+        \url{https://bitbucket.org/adrianhodos/v8engine/src}.
+    \end{itemize}
+}
+%\cventry{C/C++}{Avansat}{}{}{}{}
+%\cventry{Python,LUA}{Mediu}{}{}{}{}
+%\subsection{Tehnologii/Libr\u{a}rii folosite}
+%\cventry{}{}{}{}{}{
+%\begin{itemize}
+%    \item programare generica, programare orientat\u{a} obiect
+%\end{itemize}}
+
+\section{Limbi str\u{a}ine}
+\cvitem{Englez\u{a}}{avansat}
+
+\section{Aptitudini}
+\cvitem{}{
+\begin{itemize}
+    \item autodidact
+    \item \^{i}mi place s\u{a} \^{i}nv\u{a}\c{t} lucruri noi \c{s}i \^{i}ntotdeauna 
+        \^{i}ncerc s\u{a}-mi perfec\c{t}ionez abilit\u{a}\c{t}ile profesionale
+    \item punctual
+\end{itemize}}
+
+\section{Interese}
+\cvitem{}{
+\begin{itemize}
+\item programare paralel\u{a}
+\item randare \^{i}n timp real \c{s}i ray tracing 
+\item matematic\u{a}
+\end{itemize}}
+
+%\clearpage\end{CJK*}                         % if you are typesetting your resume in Chinese using CJK; the \clearpage is required for fancyhdr to work correctly with CJK, though it kills the page numbering by making \lastpage undefined
+\end{document}

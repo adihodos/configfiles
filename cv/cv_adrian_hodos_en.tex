@@ -1,0 +1,243 @@
+%% start of file `template.tex'.
+%% Copyright 2006-2011 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+\documentclass[14pt,a4paper,sans]{moderncv}   % possible options include font size ('10pt', '11pt' and '12pt'), paper size ('a4paper', 'letterpaper', 'a5paper', 'legalpaper', 'executivepaper' and 'landscape') and font family ('sans' and 'roman')
+
+% moderncv themes
+\moderncvstyle{classic}                        % style options are 'casual'
+% (default) and 'classic'
+\moderncvcolor{blue}                          % color options 'blue'
+% (default), 'orange', 'green', 'red', 'purple', 'grey' and 'black' \renewcommand{\familydefault}{\sfdefault}    % to set the default font; use '\sfdefault' for the default sans serif font, '\rmdefault' for the default roman one, or any tex font name
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+
+% character encoding
+\usepackage[romanian]{babel}                   % replace by the encoding you are using
+%\usepackage{CJKutf8}                         % if you need to use CJK to typeset your resume in Chinese, Japanese or Korean
+\usepackage{fontawesome5}
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+\setlength{\hintscolumnwidth}{2.5cm}           % if you want to change the width of the column with the dates
+
+% personal data
+\firstname{Adrian}
+\familyname{Hodo\c{s}}
+\title{Curriculum vitae}                     % optional, remove the line if not wanted
+%\address{street and number}{postcode city}    % optional, remove the line if not wanted
+\mobile{+(0040)~0749~205428}                     % optional, remove the line if not wanted
+%\phone{+2~(345)~678~901}                      % optional, remove the line if not wanted
+%\fax{+3~(456)~789~012}                        % optional, remove the line if not wanted
+\email{adi.hodos@gmail.com}                 % optional, remove the line if not
+% wanted \homepage{cooltrainer.org}                 % optional, remove the line if not wanted
+%\extrainfo{additional information}            % optional, remove the line if not wanted
+%\photo[64pt][0.4pt]{picture}                  % '64pt' is the height the picture must be resized to, 0.4pt is the thickness of the frame around it (put it to 0pt for no frame) and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{Some quote (optional)}                 % optional, remove the line if not wanted
+
+% to show numerical labels in the bibliography (default is to show no labels); only useful if you make citations in your resume
+%\makeatletter
+%\renewcommand*{\bibliographyitemlabel}{\@biblabel{\arabic{enumiv}}}
+%\makeatother
+
+% bibliography with mutiple entries
+%\usepackage{multibib}
+%\newcites{book,misc}{{Books},{Others}}
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+%\begin{CJK*}{UTF8}{gbsn}                     % to typeset your resume in Chinese using CJK
+\maketitle
+
+\section{Work experience}
+
+\cventry{December 2020 - November 2021}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item Software developer for external project (Hella Aglaia - Cassandra Studio)
+\item Implementation of a plugin to automatically convert between different versions of data provided by various sensors
+\item tools used: C++/CMake/Python/libClang
+\end{itemize}}
+
+\cventry{April 2020 - December 2020}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item Software developer for internal Arobs project
+\item Implementation of functionality according to specifications
+\item tools used: Toradex Apalis iMX6 on IXORA carrier board, C++, Yocto Linux, Qt, QML, OpenGL, GLSL, CMake
+\end{itemize}}
+
+\cventry{April 2019 - April 2020}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item Software developer for the Aston Martin DBX instrument cluster
+\item Implemented different HMI modules according to client specifications 
+(engine oil level screen, gearbox oil temperature overlay, gear shift-up overlay,
+cruise control and speed limiter indications)
+\item tools used: Integrity RTOS, C++, Green Hills Compiler suite and debugger, Visual Studio
+2005/2015, Vector CANoe, CxxTest unit testing framework, Altia Design, QAC, CMake
+\end{itemize}}
+
+\cventry{September 2017 - March 2019}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item Software developer for Continental telematics project
+\item Implemented Bluetooth Low-Energy support for the middleware's API interface
+\item Implemented a generic module that retrieved data from Bluetooth LE sensors
+\item tools used: C++, Linux, GCC, GDB, Valgrind, JavaScript for the web-based configuration tool
+\end{itemize}}
+
+
+\cventry{March 2017 - September 2017}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item Software developer for Aston Martin DB11 IC project
+\item Writing unit tests for various software components, checking code coverage
+\item tools used: Green Hills Compiler suite and debugger, Visual Studio
+2005/2015, Vector CANoe, CxxTest unit testing framework, QAC
+\end{itemize}}
+
+
+\cventry{September 2016 - March 2017}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item Developer for Jaguar-Land Rover research project
+\item Designed and developed software to transfer images from externally car-mounted cameras, process and display the images to the driver
+\item tools used : iMX6 Sabre, Yocto Linux, C++, OpenGL + GLSL
+\end{itemize}}
+
+\cventry{May 2015 - September 2016}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item C++ HMI (human machine interface) developer for a digital instrument
+cluster used in the Aston Martin DB11. 
+\item areas of responsibility : Media, Radio, Telephone components and
+input/output comunication with the automotive controller for these components. 
+\item tools used : Green Hills Compiler suite and debugger, Visual Studio
+2005/2015, Altia Design, Vector CANoe.
+\end{itemize}}
+
+\cventry{June 2014 - May 2015}{Software developer}{SC AROBS Transilvania
+Software SRL} {T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item maintaining, improving and expanding functionality, bug fixing for 
+an internal tool used at 
+Continental Corporation ADAS (Advanced Driver Assistance Systems)
+\item tools used : Visual Studio 2010, C++11, WTL, STL
+\end{itemize}}
+
+\cventry{April 2013 - June 2014}{Software developer}{Cadsoft SRL}
+{T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item implemented from scratch a renderer (using DirectX 11.0) that is used in
+almost every product of Cadsoft to produce images of geometric objects in a Revit
+project.
+\item maintaining, improving and expanding functionality for existing products,
+bug fixing, porting of existing code to the latest Revit editions (RoomBook,
+BuildingBook, AreaBook).
+\item I was involved in a pilot project to design and implement a
+distributed computing solution for the company's Revit addons.
+\item tools used : Visual Studio 2010/2013, C++11, Revit SDK
+\end{itemize}}
+
+\cventry{July 2010 - March 2013}{Software developer}{On my own}{T\^{i}rgu
+Mure\c{s}, Mure\c{s}} {}{Worked on personal projects, mainly
+using C++11.}{}
+
+\cventry{January 2008 - July 2010}{Software developer}{SC Amplusnet SRL}
+{T\^{i}rgu Mure\c{s}}{Mure\c{s}}{
+\textbf{Job description :}
+\begin{itemize}
+\item development of new software products according to the issued specifications
+\item maintaining, improving and expanding functionality for existing products
+\item fixing of bugs reported by the QA team or by clients
+\item I was involved in the development of these products : 
+    Application Blocker (parental control software), 
+    Cyclope Employee Surveillance (client and server), 
+    Stealth Keylogger, IP Hider.
+\item tools used : Visual Studio 2008/2010, C++, Windows SDK, STL, WTL, MFC, Qt
+\end{itemize}}
+
+\section{Education}
+\cventry{2007-2012}{Computer science}{Petru Maior University}
+{T\^{i}rgu Mure\c{s}, Mure\c{s}}{}{}  % arguments 3 to 6 can be left empty
+
+\section{Other studies}
+\cventry{Nov. 2012 - Feb. 2013}{Coursera}{}{}{}{Heterogeneous Parallel Programming
+ - \url{https://www.coursera.org/course/hetero}.\newline
+Online parallel programming course (GPU programming using NVIDIA's CUDA API). 
+The topics covered were : parallel execution model, memory models and GPU 
+architecture, parallel algorithms and patterns (stencil, scan, 
+tiled convolution, reduction), overlapping data transfer with computation.
+}
+
+\cventry{Feb. 2013 - May 2013}{Udacity}{}{}{}{Introduction to parallel
+programming - \url{https://www.udacity.com/course/cs344}.\newline
+Online parallel programming course (GPU programming using NVIDIA's CUDA API).
+Topics covered in this course included : GPU programming model and architecture, 
+parallel algorithms and patterns (scan, stencil, tiling, histogram, reduction, 
+binning, parallel sorting algorithms), optimization techniques for GPU programming.
+}
+
+\section{Programming skills}
+\cventry{}{Programming languages}{}{}{}{
+    \begin{itemize}
+      \item C++ : standards C++98, C++03, C++11, C++14, C++17, C++20 medium level
+      \item Rust \faRust : medium level
+      \item C : medium level
+      \item Python \faPython, LUA - beginner, I have not used them for a while
+      \item C\#, JAVA - beginner
+    \end{itemize}
+}
+\cventry{}{Technologies/libraries/tools}{}{}{}{
+    \begin{itemize}
+        \item generic, functional and object oriented programming
+        \item STL, Windows SDK, MFC, Qt, SQL, Boost, Google Testing Framework
+        \item Intel Thread Building Blocks
+        \item Graphics APIs and shading languages: DirectX, HLSL, Vulkan, OpenGL and GLSL
+        \item CUDA, Nvidia Nsight, RenderDoc
+        \item Emacs + Vim/NeoVim 
+        \faSmileBeam[regular]
+    \end{itemize}
+}
+\cventry{}{Personal projects}{}{}{}{
+    \begin{itemize}
+        \item You can check out my personal projects on BitBucket \faIcon{bitbucket} (mostly written in C/C++/Rust)
+        \url{https://bitbucket.org/adrianhodos/workspace/repositories}.
+    \end{itemize}
+}
+
+\section{Foreign languages}
+\cvitem{English}{very good}
+
+\section{Skills}
+\cvitem{}{
+\begin{itemize}
+    \item self-taught
+    \item I love to learn new things and I always seek to improve my professional
+    skills
+    \item punctual, motivated, optimistic
+\end{itemize}}
+
+\section{Interests}
+\cvitem{}{
+\begin{itemize}
+\item C++ and Rust \faRust programming languages
+\item parallel programming
+\item real time rendering and ray tracing, Vulkan/OpenGL/DirectX
+\item mathematics
+\end{itemize}}
+
+%\clearpage\end{CJK*}                         % if you are typesetting your resume in Chinese using CJK; the \clearpage is required for fancyhdr to work correctly with CJK, though it kills the page numbering by making \lastpage undefined
+\end{document}
