@@ -9,7 +9,8 @@
 (setq user-full-name "Hodos Adrian"
       user-mail-address "adi.hodos@gmail.com"
       ;; doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 20 :weight 'normal)
-            doom-font (font-spec :family "VictorMono Nerd Font Mono" :size 20 :weight 'normal)
+            ;; doom-font (font-spec :family "VictorMono Nerd Font Mono" :size 20 :weight 'normal)
+            doom-font (font-spec :family "Iosevka SS03" :size 20 :weight 'normal)
       doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 13)
       lsp-enable-suggest-server-download nil
       )
@@ -91,3 +92,13 @@
 (after! lsp-clangd (set-lsp-priority! 'clangd 2))
 
 (after! lsp-clangd  (setq lsp-clangd-binary-path "/opt/clangd_15.0.3/bin/clangd"))
+(after! rg (rg-enable-default-bindings))
+
+;; start every frame maximized
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;;  (grep-apply-setting
+;;    'grep-find-command
+;;    '("rg -n -H --no-heading -e '' $(git rev-parse --show-toplevel || pwd)" . 27)
+;;  )
+;; (global-set-key (kbd "C-x C-g") 'grep-find)
