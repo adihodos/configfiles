@@ -99,7 +99,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(ack rg multiple-cursors yasnippet winum use-package toml-mode selectrum rustic rainbow-delimiters no-littering lsp-ui gruber-darker-theme glsl-mode flycheck doom-themes counsel-projectile company command-log-mode all-the-icons-dired))
+   '(company-tabnine cmake-mode ack rg multiple-cursors yasnippet winum use-package toml-mode selectrum rustic rainbow-delimiters no-littering lsp-ui gruber-darker-theme glsl-mode flycheck doom-themes counsel-projectile company command-log-mode all-the-icons-dired))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -124,8 +124,25 @@
   (lsp-rust-analyzer-display-closure-return-type-hints t)
   (lsp-rust-analyzer-display-parameter-hints nil)
   (lsp-rust-analyzer-display-reborrow-hints nil)
+  :hook (lsp-mode . (lambda ()
+                      (let ((lsp-keymap-prefix "C-c l"))
+                        (lsp-enable-which-key-integration))))
   :config
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (setq lsp-clients-clangd-args '(
+				  "--background-index"
+				  "--clang-tidy"
+				  "--enable-config"
+				  "--pch-storage=memory"
+				  "--header-insertion=never"
+				  "--header-insertion-decorators"
+				  "--all-scopes-completion"
+				  "--completion-style=detailed"
+				  "-j=4"
+				  "--log=verbose"))
+  )
+  
 
 (use-package lsp-ui
   :ensure
@@ -141,7 +158,11 @@
 (use-package company
   :ensure
   :custom
-  (company-idle-delay 0.5) ;; how long to wait until popup
+  ;; Trigger completion immediately.
+  (setq company-idle-delay 0)
+
+  ;; Number the candidates (use M-1, M-2 etc to select completions).
+  (setq company-show-numbers t)
   ;; (company-begin-commands nil) ;; uncomment to disable popup
   :bind
   (:map company-active-map
@@ -215,12 +236,13 @@
   :config (global-set-key (kbd "C-x C-b") 'ibuffer)
   )
 
-;; (use-package multiple-cursors
-;;   :ensure t
-;;   :config (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-;;   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-;;   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-;;   (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
+(use-package multiple-cursors
+  :ensure t
+  :config
+  ;; (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+  (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+  (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this))
 
 (setq backup-directory-alist            '((".*" . "~/.Trash")))
 
@@ -241,3 +263,20 @@
 ;;   (global-set-key (kbd "C-c s") 'ack)
 ;;   (setq ack-defaults-function 'ack-legacy-defaults)
 ;;   )
+
+(use-package cmake-mode :ensure t)
+(when (executable-find "clangd")
+  (add-hook 'c++-mode-hook #'lsp))
+
+;; (use-package company-tabnine :ensure t)
+;; (add-to-list 'company-backends #'company-tabnine)
+(with-eval-after-load 'c++-mode
+  :bind (:map c++-mode-map
+              ("M-j" . lsp-ui-imenu)
+              ("M-?" . lsp-find-references)
+              ("C-c C-c l" . flycheck-list-errors)
+              ("C-c C-c a" . lsp-execute-code-action)
+              ("C-c C-c r" . lsp-rename)
+              ("C-c C-c q" . lsp-workspace-restart)
+              ("C-c C-c Q" . lsp-workspace-shutdown)
+              ("C-c C-c s" . lsp-clangd-status)))
