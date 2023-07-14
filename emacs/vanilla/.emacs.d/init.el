@@ -99,7 +99,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company-tabnine cmake-mode ack rg multiple-cursors yasnippet winum use-package toml-mode selectrum rustic rainbow-delimiters no-littering lsp-ui gruber-darker-theme glsl-mode flycheck doom-themes counsel-projectile company command-log-mode all-the-icons-dired))
+   '(posframe cmake-mode hl-todo ack rg multiple-cursors yasnippet winum use-package toml-mode selectrum rustic rainbow-delimiters no-littering lsp-ui gruber-darker-theme glsl-mode flycheck doom-themes counsel-projectile company command-log-mode all-the-icons-dired))
  '(warning-suppress-types '((comp))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -107,6 +107,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+(use-package posframe :ensure t)
 
 (use-package lsp-mode
   :ensure t
@@ -130,6 +132,9 @@
   :config
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  (global-set-key (kbd "<C-tab>") 'lsp-signature-activate)
+  (global-set-key [C-up] 'lsp-signature-previous)
+  (global-set-key [C-down] 'lsp-signature-next)
   (setq lsp-clients-clangd-args '(
 				  "--background-index"
 				  "--clang-tidy"
@@ -153,6 +158,7 @@
   (lsp-ui-doc-enable t)
   (lsp-ui-doc-use-webkit t)
   (lsp-ui-doc-position 'at-point)
+  (lsp-signature-function 'lsp-signature-posframe)
   )
 
 (use-package company
@@ -169,7 +175,10 @@
 	      ("C-n". company-select-next)
 	      ("C-p". company-select-previous)
 	      ("M-<". company-select-first)
-	      ("M->". company-select-last)))
+	      ("M->". company-select-last))
+  :config
+  ;; (global-set-key (kbd "<C-tab>") 'company-complete)
+  )
 
 (use-package yasnippet
   :ensure
