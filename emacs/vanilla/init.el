@@ -129,7 +129,13 @@
 (use-package no-littering)
 (use-package nerd-icons
   :custom
-  (nerd-icons-font-family "Iosevka NFM"))
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
+(use-package nerd-icons-ibuffer
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
+  :config
+  ;; Use human readable file size in ibuffer.
+  (setq  nerd-icons-ibuffer-human-readable-size t))
 
 (use-package gruber-darker-theme)
 (load-theme 'gruber-darker t)
@@ -257,7 +263,7 @@
   ;; (setq lsp-signature-auto-activate nil)
 
   ;; comment to disable rustfmt on save
-  (setq rustic-format-on-save t)
+  ;; (setq rustic-format-on-save t)
   ;; (add-hook 'rustic-mode-hook 'rk/rustic-mode-hook)
   )
 
@@ -282,6 +288,7 @@
   (lsp-idle-delay 0.6)
   ;; enable / disable the hints as you prefer:
   (lsp-rust-analyzer-server-display-inlay-hints nil)
+
   ;; (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
   (lsp-rust-analyzer-display-chaining-hints nil)
   (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
@@ -309,6 +316,7 @@
   (global-set-key (kbd "<C-tab>") 'lsp-signature-activate)
   (global-set-key [C-up] 'lsp-signature-previous)
   (global-set-key [C-down] 'lsp-signature-next)
+    (global-set-key (kbd "M-j") 'lsp-ui-imenu)
   (lsp-enable-which-key-integration t))
 
 (use-package lsp-ui
@@ -322,7 +330,11 @@
     lsp-ui-doc-position 'at-point
     lsp-signature-function 'lsp-signature-posframe)
   (define-key lsp-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
+  (define-key lsp-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+
+  )
+
+
 
 (use-package lsp-treemacs
   :after lsp)
@@ -417,6 +429,11 @@
   (add-to-list 'auto-mode-alist '("\\.comp\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode)))
 
+(use-package company-glsl
+  :config
+  (when (executable-find "glslangValidator")
+    (add-to-list 'company-backends 'company-glsl)))
+
 ;; ;; Some common sense settings
 
 ;;; winum
@@ -461,9 +478,15 @@
 (add-hook 'c++-mode-hook #'lsp)
 
 ;;; misc settings
-(set-face-attribute 'default nil :font "Iosevka SS03" :weight 'normal :height 150)
-(set-face-attribute 'fixed-pitch nil :font "Iosevka SS03" :weight 'light :height 150)
-(set-face-attribute 'variable-pitch nil :font "Iosevka SS03" :weight 'light :height 150)
+(set-face-attribute 'default nil :font "Iosevka NFM" :weight 'normal :height 150)
+(set-face-attribute 'fixed-pitch nil :font "Iosevka NFM" :weight 'light :height 150)
+(set-face-attribute 'variable-pitch nil :font "Iosevka NFM" :weight 'light :height 150)
+
+;;
+;; eldoc
+(use-package eldoc-box
+  :hook ((eldoc-mode-hook . eldoc-box-hover-mode))
+  :config (global-set-key (kbd "C-h D") #'eldoc-box-help-at-point))
 
 ;;; doom themes
 (use-package doom-themes
