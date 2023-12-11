@@ -119,7 +119,7 @@
 ;;; tree-sitter
 (use-package tree-sitter)
 (use-package tree-sitter-langs)
-(global-tree-sitter-mode)
+;; (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
 (use-package xref
@@ -137,11 +137,33 @@
   ;; Use human readable file size in ibuffer.
   (setq  nerd-icons-ibuffer-human-readable-size t))
 
+;;
+;; Nice flat modeline
+;; https://www.youtube.com/watch?v=E1u6DcHis9M
+(defvar mode-line-height 1
+  "Modeline height.")
+
+(defun flat-style (theme &rest args)
+  (custom-set-faces
+   `(mode-line
+	 ((t (:inherit mode-line
+				   :box (:line-width, mode-line-height :style flat-button)))) t)
+   `(mode-line-inactive
+	 ((t (:inherit mode-line-inactive
+				   :box (:line-width, mode-line-height :style flat-button)))) t)
+   ))
+(advice-add 'load-theme :after #'flat-style)
+
 (use-package gruvbox-theme)
 (use-package gruber-darker-theme)
-(load-theme 'gruber-darker t)
+(use-package flatland-theme)
+(use-package zenburn-theme)
+(use-package dream-theme)
+(use-package modus-themes)
+;; (load-theme 'gruber-darker t)
 ;; (load-theme 'doom-one t)
-;; (load-theme 'gruvbox-dark-medium t)
+;; (load-theme 'zenburn t)
+(load-theme 'modus-vivendi-tinted t)
 
 (use-package command-log-mode)
 
@@ -330,7 +352,8 @@
 		lsp-ui-doc-position 'at-point)
 
   (define-key lsp-mode-map [remap xref-find-definitions] #'lsp-find-definition)
-  (define-key lsp-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
+  (define-key lsp-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+  (global-set-key (kbd "C-c C-h") 'lsp-describe-thing-at-point))
 
 (use-package lsp-treemacs
   :after lsp)
@@ -443,7 +466,7 @@
 ;;   (setq mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
 ;;   (setq dired-listing-switches
 ;;         "-l --almost-all --time-style=long-iso --group-directories-first --no-quotes")
-;;   (setq insert-directory-program "exa")
+;;   ;; (setq insert-directory-program "exa")
   
 ;;   :bind
 ;;   ;; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
@@ -534,17 +557,21 @@
 (add-hook 'c-mode-hook #'lsp)
 (add-hook 'c++-mode-hook #'lsp)
 
+(use-package pdf-tools)
+(pdf-loader-install)
+
 ;;; misc settings
-(set-face-attribute 'default nil :font "GeistMono NF" :weight 'light :height 180)
+(set-face-attribute 'default nil :font "Iosevka Nerd Font" :weight 'regular :height 160)
 (set-face-attribute 'fixed-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
 (set-face-attribute 'variable-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
 (global-set-key (kbd "C-x k") 'kill-this-buffer)
+(tooltip-mode nil)
 
 ;;
 ;; eldoc
-(use-package eldoc-box
-  :hook ((eldoc-mode-hook . eldoc-box-hover-mode))
-  :config (global-set-key (kbd "C-h D") #'eldoc-box-help-at-point))
+;; (use-package eldoc-box
+;;   :hook ((eldoc-mode-hook . eldoc-box-hover-mode))
+;;   :config (global-set-key (kbd "C-h D") #'eldoc-box-help-at-point))
 
 ;;; doom themes
 (use-package doom-themes
@@ -565,8 +592,9 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-;;; ef-themes
-(use-package ef-themes)
+(use-package eat)
+
+
 (setq-default fill-column 80)
 (setq column-number-mode t)
 (setq tab-width 4)
@@ -581,9 +609,11 @@
 (when (fboundp 'scroll-bar-mode)
   (scroll-bar-mode -1))
 
-(global-hl-line-mode 1)
+;; (global-hl-line-mode 1)
 (global-visual-line-mode 1)
-(global-display-line-numbers-mode 1)
+;; (global-display-line-numbers-mode 1)
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)
+(add-hook 'prog-mode-hook 'hl-line-mode)
 
 (setq scroll-step 1
 	  scroll-conservatively 10000
