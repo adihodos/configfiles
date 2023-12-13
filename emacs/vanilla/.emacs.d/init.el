@@ -24,6 +24,34 @@
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file t)
 
+(defmacro prot-emacs-keybind (keymap &rest definitions)
+  "Expand key binding DEFINITIONS for the given KEYMAP.
+DEFINITIONS is a sequence of string and command pairs."
+  (declare (indent 1))
+  (unless (zerop (% (length definitions) 2))
+    (error "Uneven number of key+command pairs"))
+  (let ((keys (seq-filter #'stringp definitions))
+        ;; We do accept nil as a definition: it unsets the given key.
+        (commands (seq-remove #'stringp definitions)))
+    `(when-let (((keymapp ,keymap))
+                (map ,keymap))
+       ,@(mapcar
+          (lambda (pair)
+            (let* ((key (car pair))
+                   (command (cdr pair)))
+              (unless (and (null key) (null command))
+                `(define-key map (kbd ,key) ,command))))
+          (cl-mapcar #'cons keys commands)))))
+
+;; Sample of `prot-emacs-keybind'
+;; (prot-emacs-keybind global-map
+;;   "C-z" nil
+;;   "C-x b" #'switch-to-buffer
+;;   "C-x C-c" nil
+;;   "C-x k" #'kill-buffer)
+
+;;
+;; Package management
 (require 'package)
 (setq package-archives '(
   ("gnu" . "https://elpa.gnu.org/packages/")
@@ -42,6 +70,9 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 (setq use-package-verbose nil)
+
+;;
+;; End package management
 
 ;; start every frame maximized
 (add-to-list 'default-frame-alist '(fullscreen . fullboth))
@@ -491,7 +522,7 @@
 
 (use-package multiple-cursors  
   :config
-  ;; (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+  (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this))
@@ -517,7 +548,6 @@
 (set-face-attribute 'default nil :font "Iosevka Nerd Font" :weight 'regular :height 160)
 (set-face-attribute 'fixed-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
 (set-face-attribute 'variable-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
-;; (global-set-key (kbd "C-x k") 'kill-this-buffer)
 (global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
 (tooltip-mode nil)
 
@@ -620,6 +650,29 @@
 (global-set-key (kbd "C-M-S-<down>") #'windmove-swap-states-down)
 (global-set-key (kbd "C-M-S-<left>") #'windmove-swap-states-left)
 
+;;
+;; Window size
+(global-set-key (kbd "C-x _") #'balance-windows)      ; underscore
+(global-set-key (kbd "C-x -") #'fit-window-to-buffer) ; hyphen
+(global-set-key (kbd "C-x +")  #'balance-windows-area)
+(global-set-key (kbd "C-x }")  #'enlarge-window)
+(global-set-key (kbd "C-x {")  #'shrink-window)
+(global-set-key (kbd "C-x >")  #'enlarge-window-horizontally) ; override `scroll-right'
+(global-set-key (kbd "C-x <")  #'shrink-window-horizontally) ; override `scroll-left'
+
+;;
+;; Window resizing
+(global-set-key (kbd "C-x _") #'balance-windows)
+(global-set-key (kbd "C-x -") #'fit-window-to-buffer)
+(global-set-key (kbd "C-x +") #'balance-windows-area)
+(global-set-key (kbd "C-x }") #'enlarge-window)
+(global-set-key (kbd "C-x {") #'shrink-window)
+(global-set-key (kbd "C-x >") #'enlarge-window-horizontally)
+(global-set-key (kbd "C-x <") #'shrink-window-horizontally)
+(prot-emacs-keybind resize-window-repeat-map
+					">" #'enlarge-window-horizontally
+					"<" #'shrink-window-horizontally)
+
 (setq-default fill-column 80)
 (setq column-number-mode t)
 (setq tab-width 4)
@@ -644,11 +697,6 @@
 	  scroll-conservatively 10000
 	  mouse-wheel-progressive-speed 1
 	  mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-
-(defun set80 ()
-  "Set the width of the active window to 80 columns."
-  (interactive)
-  (shrink-window (- (- 80 (window-width))) t))
 
 (provide 'init)
 ;;; init.el ends here
