@@ -19,6 +19,7 @@
 (unless (server-running-p)
   (server-start))
 
+(setq-default shell-file-name "/bin/bash")
 (setq backup-directory-alist            '((".*" . "~/.Trash")))
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file t)
@@ -29,8 +30,7 @@
   ("gnu-devel" . "https://elpa.gnu.org/devel/")
   ("nongnu" . "https://elpa.nongnu.org/nongnu/")
   ("tromey" . "http://tromey.com/elpa/")
-  ("melpa" . "https://melpa.org/packages/")
-  ))
+  ("melpa" . "https://melpa.org/packages/")))
 
 (setq package-user-dir (expand-file-name "elpa/" user-emacs-directory))
 (package-initialize)
@@ -86,6 +86,14 @@
   :init (which-key-mode)
   :diminish which-key-mode
   :config
+  (setq which-key-separator "  ")
+  (setq which-key-prefix-prefix "... ")
+  (setq which-key-max-display-columns 3)
+  
+  (setq which-key-idle-secondary-delay 0.25)
+  (setq which-key-add-column-padding 1)
+  (setq which-key-max-description-length 40)
+  
   (setq which-key-idle-delay 0.3)
   (setq which-key-popup-type 'side-window)
 
@@ -122,9 +130,9 @@
 ;; (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
 
-(use-package xref
-  :config
-  (setq xref-search-program 'rg))
+(use-package xref)
+  ;; :config
+  ;; (setq xref-search-program 'rg))
 
 (use-package no-littering)
 (use-package nerd-icons
@@ -180,7 +188,7 @@
   :diminish
   :bind (("C-s" . swiper)
          :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)	
+         ("TAB" . ivy-alt-done)
          ("C-l" . ivy-alt-done)
          ("C-j" . ivy-next-line)
          ("C-k" . ivy-previous-line)
@@ -266,9 +274,9 @@
   (setq projectile-switch-project-action #'projectile-dired))
 
 (use-package counsel-projectile
-  :after projectile
-  :config
-  (counsel-projectile-mode 1))
+  :after projectile)
+  ;; :config
+  ;; (counsel-projectile-mode 1))
 
 (use-package flycheck-projectile)
 
@@ -304,19 +312,19 @@
   (lsp-rust-analyzer-display-parameter-hints nil)
   (lsp-rust-analyzer-display-reborrow-hints nil)
   (setq lsp-clients-clangd-args '(
-								  "--background-index"
-								  "--clang-tidy"
-								  "--enable-config"
-								  "--pch-storage=memory"
-								  "--header-insertion=never"
-								  "--header-insertion-decorators"
-								  "--all-scopes-completion"
-								  "--completion-style=detailed"
-								  "-j=4"
-								  "--log=verbose"))
+				  "--background-index"
+				  "--clang-tidy"
+				  "--enable-config"
+				  "--pch-storage=memory"
+				  "--header-insertion=never"
+				  "--header-insertion-decorators"
+				  "--all-scopes-completion"
+				  "--completion-style=detailed"
+				  "-j=4"
+				  "--log=verbose"))
   :hook (
-		 (lsp-mode-hook . lsp-ui-mode)
-		 (lsp-mode . (lambda ()
+	 (lsp-mode-hook . lsp-ui-mode)
+	 (lsp-mode . (lambda ()
                        (let ((lsp-keymap-prefix "C-c l"))
                          (lsp-enable-which-key-integration)))))
   :config
@@ -328,7 +336,7 @@
   (setq lsp-signature-render-documentation nil)
 
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (global-set-key (kbd "<C-tab>") 'lsp-signature-activate)
+  (global-set-key (kbd "<backtab>") 'lsp-signature-activate)
   (global-set-key [C-up] 'lsp-signature-previous)
   (global-set-key [C-down] 'lsp-signature-next)
   (global-set-key (kbd "M-j") 'lsp-ui-imenu))
@@ -379,7 +387,7 @@
 	("M-<". company-select-first)
 	("M->". company-select-last))
   :config
-  (global-set-key (kbd "<C-S-tab>") 'company-complete))
+  (global-set-key (kbd "<C-tab>") 'company-complete))
 
 (use-package company-prescient
   :config (company-prescient-mode))
@@ -445,52 +453,6 @@
   :bind (("C-x C-j" . dired-jump))
   :custom ((dired-listing-switches "-agho --group-directories-first")))
 
-;; (use-package dirvish
-;;   :init
-;;   (dirvish-override-dired-mode)
-;;   :custom
-;;   (dirvish-quick-access-entries
-;;    '(("h" "~/"                          "Home")
-;;      ("d" "~/.emacs.d/"                 "Emacs")
-;;      ("p" "~/projects"                  "Projects")
-;;      ("t" "~/.local/share/Trash/files/" "TrashCan")))
-;;   (dirvish-mode-line-format
-;;    '(:left (sort file-time " " file-size symlink) :right (omit yank index)))
-;;   ;; Don't worry, Dirvish is still performant even you enable all these attributes
-;;   (dirvish-attributes '(all-the-icons collapse subtree-state vc-state git-msg))
-;;   :config
-;;   (setq dired-dwim-target t)
-;;   (setq delete-by-moving-to-trash t)
-;;   ;; Enable mouse drag-and-drop files to other applications
-;;   (setq dired-mouse-drag-files t)                   ; added in Emacs 29
-;;   (setq mouse-drag-and-drop-region-cross-program t) ; added in Emacs 29
-;;   (setq dired-listing-switches
-;;         "-l --almost-all --time-style=long-iso --group-directories-first --no-quotes")
-;;   ;; (setq insert-directory-program "exa")
-  
-;;   :bind
-;;   ;; Bind `dirvish|dirvish-side|dirvish-dwim' as you see fit
-;;   (("C-c f" . dirvish-fd)
-;;    ;; Dirvish has all the keybindings in `dired-mode-map' already
-;;    :map dirvish-mode-map
-;;    ("a"   . dirvish-quick-access)
-;;    ("f"   . dirvish-file-info-menu)
-;;    ("y"   . dirvish-yank-menu)
-;;    ("N"   . dirvish-narrow)
-;;    ("^"   . dirvish-history-last)
-;;    ("h"   . dirvish-history-jump) ; remapped `describe-mode'
-;;    ("s"   . dirvish-quicksort)    ; remapped `dired-sort-toggle-or-edit'
-;;    ("v"   . dirvish-vc-menu)      ; remapped `dired-view-file'
-;;    ("TAB" . dirvish-subtree-toggle)
-;;    ("M-f" . dirvish-history-go-forward)
-;;    ("M-b" . dirvish-history-go-backward)
-;;    ("M-l" . dirvish-ls-switches-menu)
-;;    ("M-m" . dirvish-mark-menu)
-;;    ("M-t" . dirvish-layout-toggle)
-;;    ("M-s" . dirvish-setup-menu)
-;;    ("M-e" . dirvish-emerge-menu)
-;;    ("M-j" . dirvish-fd-jump)))
-
 (use-package dired-single)
 
 (use-package glsl-mode
@@ -534,15 +496,6 @@
   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
   (global-set-key (kbd "C-c C->") 'mc/mark-all-like-this))
 
-(use-package rg
-  :config (global-set-key (kbd "C-c s") 'rg-project)
-  (setq rg-group-result t)
-  (setq rg-align-position-numbers t)
-  (setq rg-align-line-number-field-length 3)
-  (setq rg-align-column-number-field-length 3)
-  (setq rg-align-line-column-separator "#")
-  (setq rg-align-position-content-separator "|"))
-
 (use-package move-text
   :config (move-text-default-bindings))
 
@@ -564,7 +517,8 @@
 (set-face-attribute 'default nil :font "Iosevka Nerd Font" :weight 'regular :height 160)
 (set-face-attribute 'fixed-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
 (set-face-attribute 'variable-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
-(global-set-key (kbd "C-x k") 'kill-this-buffer)
+;; (global-set-key (kbd "C-x k") 'kill-this-buffer)
+(global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
 (tooltip-mode nil)
 
 ;;
@@ -574,8 +528,7 @@
 ;;   :config (global-set-key (kbd "C-h D") #'eldoc-box-help-at-point))
 
 ;;; doom themes
-(use-package doom-themes
-  
+(use-package doom-themes  
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -593,7 +546,79 @@
   (doom-themes-org-config))
 
 (use-package eat)
+(use-package vterm)
 
+;;
+;; Ripgrep
+;; https://www.youtube.com/watch?v=4qLD4oHOrlc
+(use-package rg
+  :config
+  (setq rg-group-result t)
+  (setq rg-hide-command t)
+  (setq rg-show-columns t)
+  (setq rg-ignore-case nil)
+  (setq rg-show-header t)
+  (setq rg-custom-type-aliases nil)
+  (setq rg-default-alias-fallback "all")
+
+  (rg-define-search adi/grep-project-or-current-dir
+    "Execute ripgrep in the project root/current directory"
+	:query ask
+	:format regexp
+	:files "everything"
+	:dir (let ((vc (vc-root-dir)))
+		   (if vc
+			   vc
+			 default-directory))
+	:confirm prefix
+	:flags ("--hidden -g !.git"))
+
+  :bind (("M-s g" . adi/grep-project-or-current-dir)
+		 :map rg-mode-map
+		 ("C-n" . next-line)
+		 ("C-p" . previous-line)
+		 ("M-n" . rg-next-file)
+		 ("M-p" . rg-prev-file)))
+
+(use-package emacs
+  :config
+  (defvar adi/window-configuration nil
+	"Current window configuration")
+
+  (define-minor-mode adi/window-single-toggle
+	"Toggle between multiple windows and single window"
+	:lighter " [M]"
+	:global nil
+	(if (one-window-p)
+		(when adi/window-configuration
+		  (set-window-configuration adi/window-configuration))
+	  (setq adi/window-configuration (current-window-configuration))
+	  (delete-other-windows)))
+
+  (defun adi/kill-buffer-current (&optional arg)
+	"Kill current buffer or abort recursion when in minibuffer."
+	(interactive "P")
+	(if (minibufferp)
+		(abort-recursive-edit)
+	  (kill-buffer (current-buffer)))
+	(when (and arg
+			   (not (one-window-p)))
+	  (delete-window)))
+
+  :bind (("s-m" . adi/window-single-toggle)
+		 ("s-k" . adi/kill-buffer-current)))  
+
+
+;;; Directional window motions (windmove)
+;; (setq windmove-create-window nil)     ; Emacs 27.1
+(global-set-key (kbd "C-M-<up>") #'windmove-up)
+(global-set-key (kbd "C-M-<right>") #'windmove-right)
+(global-set-key (kbd "C-M-<down>") #'windmove-down)
+(global-set-key (kbd "C-M-<left>") #'windmove-left)
+(global-set-key (kbd "C-M-S-<up>") #'windmove-swap-states-up)
+(global-set-key (kbd "C-M-S-<right>") #'windmove-swap-states-right)
+(global-set-key (kbd "C-M-S-<down>") #'windmove-swap-states-down)
+(global-set-key (kbd "C-M-S-<left>") #'windmove-swap-states-left)
 
 (setq-default fill-column 80)
 (setq column-number-mode t)
