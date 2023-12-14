@@ -324,8 +324,11 @@ DEFINITIONS is a sequence of string and command pairs."
   :hook ((rustic-mode . flycheck-mode))
   :config
   ;; comment to disable rustfmt on save
-  ;; (setq rustic-format-on-save t)
-  )
+  ;; format on save makes Emacs freeze on Windows
+  (when (not (eq system-type 'windows-nt))
+    (setq rustic-format-on-save t)))
+
+(use-package rust-playground)
 
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
@@ -392,7 +395,8 @@ DEFINITIONS is a sequence of string and command pairs."
 
   (define-key lsp-mode-map [remap xref-find-definitions] #'lsp-find-definition)
   (define-key lsp-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (global-set-key (kbd "C-c C-h") 'lsp-describe-thing-at-point))
+  ;; (global-set-key (kbd "C-c C-h") 'lsp-describe-thing-at-point))
+    (global-set-key (kbd "C-c C-h") 'lsp-ui-doc-glance))
 
 (use-package lsp-treemacs
   :after lsp)
