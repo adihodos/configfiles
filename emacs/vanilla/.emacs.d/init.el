@@ -4,25 +4,9 @@
 
 ;;; Code:
 
-(setq gc-cons-threshold (* 128 1024 1024)
-      read-process-output-max (* 1024 1024)
-      make-backup-files nil
-      create-lockfiles nil)
 
-(add-hook 'emacs-startup-hook
-	  #'(lambda ()
-	      (message "Startup in %s seconds with %d garbage collection"
-		       (emacs-init-time "%.2f")
-		       gcs-done)))
+;; (setq-default shell-file-name "/bin/bash")
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
-(setq-default shell-file-name "/bin/bash")
-(setq backup-directory-alist            '((".*" . "~/.Trash")))
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file t)
 
 (defmacro prot-emacs-keybind (keymap &rest definitions)
   "Expand key binding DEFINITIONS for the given KEYMAP.
@@ -50,69 +34,52 @@ DEFINITIONS is a sequence of string and command pairs."
 ;;   "C-x C-c" nil
 ;;   "C-x k" #'kill-buffer)
 
-;;
-;; Package management
-(require 'package)
-(setq package-archives '(
-  ("gnu" . "https://elpa.gnu.org/packages/")
-  ("gnu-devel" . "https://elpa.gnu.org/devel/")
-  ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-  ("tromey" . "http://tromey.com/elpa/")
-  ("melpa" . "https://melpa.org/packages/")))
-
-(setq package-user-dir (expand-file-name "elpa/" user-emacs-directory))
-(package-initialize)
-
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-(setq use-package-always-ensure t)
-(setq use-package-verbose nil)
 
 ;;
-;; End package management
+;; straight package manager
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
 
-;; start every frame maximized
-(add-to-list 'default-frame-alist '(fullscreen . fullboth))
-;; Make ESC quit prompts
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(straight-use-package 'use-package)
+(setq straight-use-package-by-default t)
 
-;;; undo-tree
-(use-package undo-tree
+;;
+;; DASHBOARD
+(use-package dashboard
   :config
-  (global-undo-tree-mode 1)
-  (setq undo-tree-auto-save-history nil))
+  (setq initial-buffer-choice 'dashboard-open)
+  (setq dashboard-banner-logo-title "Emacs Is ... Everything ??!!!!")
+  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-center-content t) ;; set to 't' for centered content
+  (setq dashboard-items '((recents . 5)
+                          (agenda . 5 )
+                          (bookmarks . 3)
+                          ;; (projects . 3)
+                          (registers . 3)))
+  (setq dashboard-display-icons-p t) ;; display icons on both GUI and terminal
+  (setq dashboard-icon-type 'all-the-icons) ;; use `nerd-icons' package
+  ;; (setq dashboard-set-heading-icons t)
+  (setq dashboard-set-file-icons t)
+  (setq dashboard-set-navigator t)
+  (dashboard-modify-heading-icons '((recents . "file-text")
+									(bookmarks . "book")))
+  (dashboard-setup-startup-hook))
 
-;;; completion / vertico
-(use-package vertico
-  :config
-  (vertico-mode))
+(use-package page-break-lines
+  :config (global-page-break-lines-mode))
 
-(use-package marginalia
-  :config
-  (marginalia-mode))
-
-(use-package orderless
-  :config
-  (setq completion-styles '(orderless basic)
-	read-buffer-completion-ignore-case t
-	completion-category-defaults nil
-	completion-category-overrides '((file (styles partial-completion)))))
-
-(use-package consult
-  :config)
-
-(use-package embark
-  :config
-  (keymap-set minibuffer-mode-map "M-." #'embark-collect)
-  (setq embark-indicators
-	'(embark-highlight-indicator
-	  embark-isearch-highlight-indicator)))
-
-(use-package embark-consult)
-
+;;
+;; which-key
 (use-package which-key
   :init (which-key-mode)
   :diminish which-key-mode
@@ -144,316 +111,13 @@ DEFINITIONS is a sequence of string and command pairs."
   ;; frame's height (float larger than 0 and smaller than 1)
   (setq which-key-side-window-max-height 0.25))
 
-;;; TOML
-(use-package toml-mode)
-
-(use-package rainbow-delimiters
-  :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
-         (clojure-mode . rainbow-delimiters-mode)
-	 (rust-mode . rainbow-delimiters-mode)
-	 (rustic-mode . rainbow-delimiters-mode)
-	 (c++-mode . rainbow-delimiters-mode))
-  :config)
-
-;;; tree-sitter
-(use-package tree-sitter)
-(use-package tree-sitter-langs)
-;; (global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-
-(use-package xref)
-  ;; :config
-  ;; (setq xref-search-program 'rg))
-
-(use-package no-littering)
-(use-package nerd-icons
-  :custom
-  (nerd-icons-font-family "Symbols Nerd Font Mono"))
-
-(use-package nerd-icons-ibuffer
-  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
-  :config
-  ;; Use human readable file size in ibuffer.
-  (setq  nerd-icons-ibuffer-human-readable-size t))
 
 ;;
-;; Nice flat modeline
-;; https://www.youtube.com/watch?v=E1u6DcHis9M
-(defvar mode-line-height 1
-  "Modeline height.")
-
-(defun flat-style (theme &rest args)
-  (custom-set-faces
-   `(mode-line
-	 ((t (:inherit mode-line
-				   :box (:line-width, mode-line-height :style flat-button)))) t)
-   `(mode-line-inactive
-	 ((t (:inherit mode-line-inactive
-				   :box (:line-width, mode-line-height :style flat-button)))) t)
-   ))
-(advice-add 'load-theme :after #'flat-style)
-
-(use-package gruvbox-theme)
-(use-package gruber-darker-theme)
-(use-package flatland-theme)
-(use-package zenburn-theme)
-(use-package dream-theme)
-(use-package modus-themes)
-;; (load-theme 'gruber-darker t)
-;; (load-theme 'doom-one t)
-;; (load-theme 'zenburn t)
-(load-theme 'modus-vivendi-tinted t)
-
-(use-package command-log-mode)
-
-(use-package all-the-icons)
-
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package rainbow-mode
-  :diminish
-  :hook org-mode prog-mode)
-
-(use-package ivy
-  :diminish
-  :bind (("C-s" . swiper)
-         :map ivy-minibuffer-map
-         ("TAB" . ivy-alt-done)
-         ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
-         :map ivy-switch-buffer-map
-         ("C-k" . ivy-previous-line)
-         ("C-l" . ivy-done)
-         ("C-d" . ivy-switch-buffer-kill)
-         :map ivy-reverse-i-search-map
-         ("C-k" . ivy-previous-line)
-         ("C-d" . ivy-reverse-i-search-kill))
-  :custom
-  (setq ivy-use-virtual-buffers t)
-  (setq ivy-count-format "(%d/%d) ")
-  (setq enable-recursive-minibuffers t)
-  :config
-  (ivy-mode 1))
-
-(use-package all-the-icons-ivy-rich
-  :ensure t
-  :init (all-the-icons-ivy-rich-mode 1))
-
-(use-package ivy-rich
-  :after ivy
-  :ensure t
-  :init (ivy-rich-mode 1) ;; this gets us descriptions in M-x.
-  :custom
-  (ivy-virtual-abbreviate 'full
-   ivy-rich-switch-buffer-align-virtual-buffer t
-   ivy-rich-path-style 'abbrev)
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer))
-
-(use-package doom-modeline
-  :init (doom-modeline-mode 1)
-  :config
-  (setq doom-modeline-height 35      ;; sets modeline height
-        doom-modeline-bar-width 5    ;; sets right bar width
-        doom-modeline-persp-name t   ;; adds perspective name to modeline
-        doom-modeline-persp-icon t)) ;; adds folder icon next to persp name
-
-(use-package neotree
-  :config
-  (global-set-key (kbd "C-c C-t") 'neotree-toggle)
-  (setq neo-smart-open t
-        neo-show-hidden-files t
-        neo-window-width 55
-        neo-window-fixed-size nil
-        inhibit-compacting-font-caches t
-        projectile-switch-project-action 'neotree-projectile-action) 
-  ;; truncate long file names in neotree
-  (add-hook 'neo-after-create-hook
-            #'(lambda (_)
-		(with-current-buffer (get-buffer neo-buffer-name)
-                  (setq truncate-lines t)
-                  (setq word-wrap nil)
-                  (make-local-variable 'auto-hscroll-mode)
-                  (setq auto-hscroll-mode nil)))))
-
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ;; ("C-x b" . counsel-ibuffer)
-         ("C-x C-f" . counsel-find-file)
-         :map minibuffer-local-map
-         ("C-r" . 'counsel-minibuffer-history)))
-
-(use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
-
-(use-package projectile
-  :diminish projectile-mode
-  :config (projectile-mode)
-  :bind-keymap
-  ("C-c p" . projectile-command-map)
-  :init
-  (setq projectile-switch-project-action #'projectile-dired))
-
-(use-package counsel-projectile
-  :after projectile)
-  ;; :config
-  ;; (counsel-projectile-mode 1))
-
-(use-package flycheck-projectile)
-
-;;; perspective
-(use-package perspective
-  :bind
-  (("C-x b" . persp-switch-to-buffer*))
-  :custom
-  (persp-mode-prefix-key (kbd "C-c C-j")))
-
-(use-package posframe)
-
-(use-package rustic
-  :hook ((rustic-mode . flycheck-mode))
-  :config
-  ;; comment to disable rustfmt on save
-  ;; format on save makes Emacs freeze on Windows
-  (when (not (eq system-type 'windows-nt))
-    (setq rustic-format-on-save t)))
-
-(use-package rust-playground)
-
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :custom
-  ;; what to use when checking on-save. "check" is default, I prefer clippy
-  ;; (lsp-rust-analyzer-cargo-watch-command "clippy")
-  
-  (lsp-idle-delay 0.6)
-  ;; enable / disable the hints as you prefer:
-  (lsp-rust-analyzer-server-display-inlay-hints nil)
-  ;; (lsp-rust-analyzer-display-lifetime-elision-hints-enable "skip_trivial")
-  (lsp-rust-analyzer-display-chaining-hints nil)
-  (lsp-rust-analyzer-display-lifetime-elision-hints-use-parameter-names nil)
-  (lsp-rust-analyzer-display-closure-return-type-hints t)
-  (lsp-rust-analyzer-display-parameter-hints nil)
-  (lsp-rust-analyzer-display-reborrow-hints nil)
-  (setq lsp-clients-clangd-args '(
-				  "--background-index"
-				  "--clang-tidy"
-				  "--enable-config"
-				  "--pch-storage=memory"
-				  "--header-insertion=never"
-				  "--header-insertion-decorators"
-				  "--all-scopes-completion"
-				  "--completion-style=detailed"
-				  "-j=4"
-				  "--log=verbose"))
-  :hook (
-	 (lsp-mode-hook . lsp-ui-mode)
-	 (lsp-mode . (lambda ()
-                       (let ((lsp-keymap-prefix "C-c l"))
-                         (lsp-enable-which-key-integration)))))
-  :config
-  (setq lsp-headerline-breadcrumb-enable nil)
-  (setq lsp-eldoc-render-all t)
-  (setq lsp-eldoc-enable-hover nil)
-  (setq lsp-lens-enable nil)
-  (setq lsp-signature-auto-activate t) ;; you could manually request them via `lsp-signature-activate`
-  (setq lsp-signature-render-documentation nil)
-
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  (global-set-key (kbd "<backtab>") 'lsp-signature-activate)
-  (global-set-key [C-up] 'lsp-signature-previous)
-  (global-set-key [C-down] 'lsp-signature-next)
-  (global-set-key (kbd "M-j") 'lsp-ui-imenu))
-
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (setq lsp-ui-peek-always-show nil
-		lsp-ui-sideline-show-diagnostics nil
-		lsp-ui-sideline-show-hover nil
-		lsp-ui-sideline-show-code-actions nil
-		
-		lsp-ui-peek-enable t
-		lsp-ui-peek-show-directory t
-		
-		lsp-ui-doc-enable nil
-		lsp-ui-doc-use-webkit t
-		lsp-ui-doc-show-with-mouse nil
-		lsp-ui-doc-show-with-cursor nil
-		lsp-ui-doc-position 'at-point)
-
-  (define-key lsp-mode-map [remap xref-find-definitions] #'lsp-find-definition)
-  (define-key lsp-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  ;; (global-set-key (kbd "C-c C-h") 'lsp-describe-thing-at-point))
-    (global-set-key (kbd "C-c C-h") 'lsp-ui-doc-glance))
-
-(use-package lsp-treemacs
-  :after lsp)
-
-(use-package lsp-ivy)
-
-(use-package company
-  :after lsp-mode
-  :hook (lsp-mode . company-mode)
-  :custom
-  ;; Trigger completion immediately.
-  (setq company-idle-delay 0)
-
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (setq company-show-numbers t)
-  ;; (company-begin-commands nil) ;; uncomment to disable popup
-  (company-tooltip-align-annotations 't)
-  (global-company-mode t)
-  :bind
-  (:map company-active-map
-	("C-n". company-select-next)
-	("C-p". company-select-previous)
-	("M-<". company-select-first)
-	("M->". company-select-last))
-  :config
-  (global-set-key (kbd "<C-tab>") 'company-complete))
-
-(use-package company-prescient
-  :config (company-prescient-mode))
-
-(use-package company-box
-  :after company
-  :hook (company-mode . company-box-mode))
-
-(use-package terminal-here
-  :config
-  (setq terminal-here-windows-terminal-command 'alacritty))
-  
-(use-package dashboard
-  :init
-  (setq initial-buffer-choice 'dashboard-open)
-  (setq dashboard-set-heading-icons t)
-  (setq dashboard-set-file-icons t)
-  (setq dashboard-banner-logo-title "Emacs Is ... Everything ??!!!!")
-  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
-  ;; (setq dashboard-startup-banner "~/.config/emacs/images/dtmacs-logo.png")  ;; use custom image as banner
-  (setq dashboard-center-content t) ;; set to 't' for centered content
-  (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
-                          (bookmarks . 3)
-                          (projects . 3)
-                          (registers . 3)))
-  :custom 
-  (dashboard-modify-heading-icons '((recents . "file-text")
-				    (bookmarks . "book")))
-  :config
-  (dashboard-setup-startup-hook))
+;; Configuration
+;; start every frame maximized
+(add-to-list 'default-frame-alist '(fullscreen . fullboth))
+;; Make ESC quit prompts
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;;; yasnippet
 (use-package yasnippet
@@ -467,26 +131,221 @@ DEFINITIONS is a sequence of string and command pairs."
 ;;; markdown mode
 (use-package markdown-mode
   :mode (("README\\.md\\'" . gfm-mode)
-	 ("\\.md\\'" . markdown-mode)
-	 ("\\.markdown\\'" . markdown-mode))
+		 ("\\.md\\'" . markdown-mode)
+		 ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "pandoc"))
 
-;;; flycheck
-(use-package flycheck
-  :defer t
-  :init (global-flycheck-mode))
-
-(use-package selectrum
+;;
+;; LSP bridge
+(use-package lsp-bridge
+  :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+						 :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+						 :build (:not compile))
   :init
-  (selectrum-mode)
-  :custom
-  (completion-styles '(flex substring partial-completion)))
+  (global-lsp-bridge-mode))
 
-(use-package dired
-  :ensure nil
-  :commands (dired dired-jump)
-  :bind (("C-x C-j" . dired-jump))
-  :custom ((dired-listing-switches "-agho --group-directories-first")))
+;;
+;;
+(use-package rust-mode)
+;;; TOML
+(use-package toml-mode)
+
+(use-package rainbow-delimiters
+  :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
+         (clojure-mode . rainbow-delimiters-mode)
+		 (rust-mode . rainbow-delimiters-mode)
+		 (rustic-mode . rainbow-delimiters-mode)
+		 (c++-mode . rainbow-delimiters-mode)))
+
+
+;;
+;; DOOM modeline
+(use-package doom-modeline
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-height 35      ;; sets modeline height
+        doom-modeline-bar-width 5    ;; sets right bar width
+        doom-modeline-persp-name t   ;; adds perspective name to modeline
+        doom-modeline-persp-icon t)) ;; adds folder icon next to persp name
+
+;;
+;; better help
+(use-package helpful
+  :bind
+  ;; Note that the built-in `describe-function' includes both functions
+  ;; and macros. `helpful-function' is functions only, so we provide
+  ;; `helpful-callable' as a drop-in replacement.
+
+  ([remap describe-function] . helpful-callable)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-key] . helpful-key))
+
+;;; undo-tree
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode 1)
+  (setq undo-tree-auto-save-history nil))
+
+;;
+;; Ripgrep
+;; https://www.youtube.com/watch?v=4qLD4oHOrlc
+(use-package rg
+  :config
+  (setq rg-group-result t)
+  (setq rg-hide-command t)
+  (setq rg-show-columns t)
+  (setq rg-ignore-case nil)
+  (setq rg-show-header t)
+  (setq rg-custom-type-aliases nil)
+  (setq rg-default-alias-fallback "all")
+
+  (rg-define-search adi/grep-project-or-current-dir
+    "Execute ripgrep in the project root/current directory"
+    :query ask
+    :format regexp
+    :files "everything"
+    :dir (let ((vc (vc-root-dir)))
+		   (if vc
+			   vc
+			 default-directory))
+    :confirm prefix
+    :flags ("--hidden -g !.git"))
+
+  :bind (("M-s g" . adi/grep-project-or-current-dir)
+		 :map rg-mode-map
+		 ("C-n" . next-line)
+		 ("C-p" . previous-line)
+		 ("M-n" . rg-next-file)
+		 ("M-p" . rg-prev-file)))
+
+(use-package emacs
+  :config
+  (defvar adi/window-configuration nil
+    "Current window configuration")
+
+  (define-minor-mode adi/window-single-toggle
+    "Toggle between multiple windows and single window"
+    :lighter " [M]"
+    :global nil
+    (if (one-window-p)
+		(when adi/window-configuration
+		  (set-window-configuration adi/window-configuration))
+      (setq adi/window-configuration (current-window-configuration))
+      (delete-other-windows)))
+
+  (defun adi/kill-buffer-current (&optional arg)
+    "Kill current buffer or abort recursion when in minibuffer."
+    (interactive "P")
+    (if (minibufferp)
+		(abort-recursive-edit)
+      (kill-buffer (current-buffer)))
+    (when (and arg
+			   (not (one-window-p)))
+      (delete-window)))
+
+  :bind (("s-m" . adi/window-single-toggle)
+		 ("s-k" . adi/kill-buffer-current)))  
+
+
+;;; Directional window motions (windmove)
+;; (setq windmove-create-window nil)     ; Emacs 27.1
+(global-set-key (kbd "C-M-<up>") #'windmove-up)
+(global-set-key (kbd "C-M-<right>") #'windmove-right)
+(global-set-key (kbd "C-M-<down>") #'windmove-down)
+(global-set-key (kbd "C-M-<left>") #'windmove-left)
+(global-set-key (kbd "C-M-S-<up>") #'windmove-swap-states-up)
+(global-set-key (kbd "C-M-S-<right>") #'windmove-swap-states-right)
+(global-set-key (kbd "C-M-S-<down>") #'windmove-swap-states-down)
+(global-set-key (kbd "C-M-S-<left>") #'windmove-swap-states-left)
+
+
+
+;;
+;; Look & feel
+(use-package modus-themes)
+;; (load-theme 'gruber-darker t)
+;; (load-theme 'doom-one t)
+;; (load-theme 'zenburn t)
+(load-theme 'modus-vivendi-tinted t)
+
+(use-package all-the-icons)
+(use-package all-the-icons-dired
+  :hook (dired-mode . all-the-icons-dired-mode))
+
+;;
+;; icons
+(use-package no-littering)
+(use-package nerd-icons
+  :custom
+  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
+(use-package nerd-icons-ibuffer
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
+  :config
+  ;; Use human readable file size in ibuffer.
+  (setq  nerd-icons-ibuffer-human-readable-size t))
+
+(use-package nix-mode
+  :mode "\\.nix\\'")
+
+(use-package neotree
+  :config
+  (global-set-key (kbd "C-c C-t") 'neotree-toggle)
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+  (setq neo-smart-open t
+        neo-show-hidden-files t
+        neo-window-width 55
+        neo-window-fixed-size nil
+        inhibit-compacting-font-caches t
+        projectile-switch-project-action 'neotree-projectile-action)		
+  ;; truncate long file names in neotree
+  (add-hook 'neo-after-create-hook
+            #'(lambda (_)
+				(with-current-buffer (get-buffer neo-buffer-name)
+                  (setq truncate-lines t)
+                  (setq word-wrap nil)
+                  (make-local-variable 'auto-hscroll-mode)
+                  (setq auto-hscroll-mode nil)))))
+
+(when (featurep 'dired)
+	  (progn
+		 (setq dired-recursive-copies 'always)
+		 (setq dired-recursive-deletes 'always)
+		 (setq delete-by-moving-to-trash t)
+		 (setq dired-listing-switches
+			   "-AGFhlv --group-directories-first --time-style=long-iso")
+		 (setq dired-dwim-target t)
+		 (setq dired-auto-revert-buffer #'dired-directory-changed-p) ; also see `dired-do-revert-buffer'
+		 (setq dired-make-directory-clickable t) ; Emacs 29.1
+		 (setq dired-free-space nil) ; Emacs 29.1
+		 (setq dired-mouse-drag-files t) ; Emacs 29.1
+		 (setq dired-guess-shell-alist-user ; those are the suggestions for ! and & in Dired
+			   '(("\\.\\(png\\|jpe?g\\|tiff\\)" "feh" "xdg-open")
+				 ("\\.\\(mp[34]\\|m4a\\|ogg\\|flac\\|webm\\|mkv\\)" "mpv" "xdg-open")
+				 (".*" "xdg-open")))
+
+		 ;; (add-hook 'dired-mode-hook #'dired-hide-details-mode)
+		 (add-hook 'dired-mode-hook #'hl-line-mode)))
+
+(when (featurep 'dired-aux)
+  (setq dired-isearch-filenames 'dwim)
+  (setq dired-create-destination-dirs 'ask) ; Emacs 27
+  (setq dired-vc-rename-file t)             ; Emacs 27
+  (setq dired-do-revert-buffer (lambda (dir) (not (file-remote-p dir)))) ; Emacs 28
+  (setq dired-create-destination-dirs-on-trailing-dirsep t))
+
+(when (featurep 'dired-x)
+  (setq dired-clean-up-buffers-too t)
+  (setq dired-clean-confirm-killing-deleted-buffers t)
+  (setq dired-x-hands-off-my-keys t)    ; easier to show the keys I use
+  (setq dired-bind-man nil)
+  (setq dired-bind-info nil)
+  (define-key dired-mode-map (kbd "I") #'dired-info))
+
+(when (featurep 'wdired)
+  (setq wdired-allow-to-change-permissions t)
+  (setq wdired-create-parent-directories t))
 
 (use-package dired-single)
 
@@ -497,13 +356,6 @@ DEFINITIONS is a sequence of string and command pairs."
   (add-to-list 'auto-mode-alist '("\\.frag\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.comp\\'" . glsl-mode))
   (add-to-list 'auto-mode-alist '("\\.geom\\'" . glsl-mode)))
-
-(use-package company-glsl
-  :config
-  (when (executable-find "glslangValidator")
-    (add-to-list 'company-backends 'company-glsl)))
-
-;; ;; Some common sense settings
 
 ;;; winum
 (use-package winum
@@ -521,9 +373,6 @@ DEFINITIONS is a sequence of string and command pairs."
   (global-set-key (kbd "M-9") 'winum-select-window-9)
   (winum-mode))
 
-(use-package ibuffer
-  :config (global-set-key (kbd "C-x C-b") 'ibuffer))
-
 (use-package multiple-cursors  
   :config
   (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
@@ -540,142 +389,127 @@ DEFINITIONS is a sequence of string and command pairs."
 (use-package gitignore-templates
   :defer t)
 
-(use-package cmake-mode)
+(straight-use-package '( vertico :files (:defaults "extensions/*")
+                         :includes (vertico-buffer
+                                    vertico-directory
+                                    vertico-flat
+                                    vertico-indexed
+                                    vertico-mouse
+                                    vertico-quick
+                                    vertico-repeat
+                                    vertico-reverse)))
 
-(add-hook 'c-mode-hook #'lsp)
-(add-hook 'c++-mode-hook #'lsp)
+;; Enable vertico
+(use-package vertico
+  :init
+  (vertico-mode)
 
-(use-package pdf-tools)
-(pdf-loader-install)
+  ;; Different scroll margin
+  (setq vertico-scroll-margin 0)
 
-;;; misc settings
-(set-face-attribute 'default nil :font "Iosevka Nerd Font" :weight 'regular :height 160)
-(set-face-attribute 'fixed-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
-(set-face-attribute 'variable-pitch nil :font "Iosevka NFM" :weight 'light :height 160)
-(global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
-(tooltip-mode nil)
+  ;; Show more candidates
+  (setq vertico-count 4)
 
-;;
-;; eldoc
-;; (use-package eldoc-box
-;;   :hook ((eldoc-mode-hook . eldoc-box-hover-mode))
-;;   :config (global-set-key (kbd "C-h D") #'eldoc-box-help-at-point))
+  ;; Grow and shrink the Vertico minibuffer
+  (setq vertico-resize nil)
 
-;;; doom themes
-(use-package doom-themes  
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  ;;(load-theme 'doom-one t)
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t)
+  :hook
+  ;; This works with `file-name-shadow-mode' enabled.  When you are in
+;; a sub-directory and use, say, `find-file' to go to your home '~/'
+;; or root '/' directory, Vertico will clear the old path to keep
+;; only your current input.
+  (rfn-eshadow-update-overlay-hook . vertico-directory-tidy))
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
 
-(use-package eat)
-(use-package vterm)
+(use-package vertico-flat
+  :after vertico
+  :ensure nil)
 
-;;
-;; Ripgrep
-;; https://www.youtube.com/watch?v=4qLD4oHOrlc
-(use-package rg
-  :config
-  (setq rg-group-result t)
-  (setq rg-hide-command t)
-  (setq rg-show-columns t)
-  (setq rg-ignore-case nil)
-  (setq rg-show-header t)
-  (setq rg-custom-type-aliases nil)
-  (setq rg-default-alias-fallback "all")
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode))
 
-  (rg-define-search adi/grep-project-or-current-dir
-    "Execute ripgrep in the project root/current directory"
-	:query ask
-	:format regexp
-	:files "everything"
-	:dir (let ((vc (vc-root-dir)))
-		   (if vc
-			   vc
-			 default-directory))
-	:confirm prefix
-	:flags ("--hidden -g !.git"))
-
-  :bind (("M-s g" . adi/grep-project-or-current-dir)
-		 :map rg-mode-map
-		 ("C-n" . next-line)
-		 ("C-p" . previous-line)
-		 ("M-n" . rg-next-file)
-		 ("M-p" . rg-prev-file)))
-
+;; A few more useful configurations...
 (use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
+
+(use-package marginalia
   :config
-  (defvar adi/window-configuration nil
-	"Current window configuration")
+  (marginalia-mode))
 
-  (define-minor-mode adi/window-single-toggle
-	"Toggle between multiple windows and single window"
-	:lighter " [M]"
-	:global nil
-	(if (one-window-p)
-		(when adi/window-configuration
-		  (set-window-configuration adi/window-configuration))
-	  (setq adi/window-configuration (current-window-configuration))
-	  (delete-other-windows)))
-
-  (defun adi/kill-buffer-current (&optional arg)
-	"Kill current buffer or abort recursion when in minibuffer."
-	(interactive "P")
-	(if (minibufferp)
-		(abort-recursive-edit)
-	  (kill-buffer (current-buffer)))
-	(when (and arg
-			   (not (one-window-p)))
-	  (delete-window)))
-
-  :bind (("s-m" . adi/window-single-toggle)
-		 ("s-k" . adi/kill-buffer-current)))  
+;; Optionally use the `orderless' completion style.
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 
-;;; Directional window motions (windmove)
-;; (setq windmove-create-window nil)     ; Emacs 27.1
-(global-set-key (kbd "C-M-<up>") #'windmove-up)
-(global-set-key (kbd "C-M-<right>") #'windmove-right)
-(global-set-key (kbd "C-M-<down>") #'windmove-down)
-(global-set-key (kbd "C-M-<left>") #'windmove-left)
-(global-set-key (kbd "C-M-S-<up>") #'windmove-swap-states-up)
-(global-set-key (kbd "C-M-S-<right>") #'windmove-swap-states-right)
-(global-set-key (kbd "C-M-S-<down>") #'windmove-swap-states-down)
-(global-set-key (kbd "C-M-S-<left>") #'windmove-swap-states-left)
+(use-package pulsar
+  :config
+  (setq pulsar-pulse t)
+  (setq pulsar-delay 0.055)
+  (setq pulsar-iterations 10)
+  (setq pulsar-face 'pulsar-magenta)
+  (setq pulsar-highlight-face 'pulsar-yellow)
+  (pulsar-global-mode 1))
 
 ;;
-;; Window size
-(global-set-key (kbd "C-x _") #'balance-windows)      ; underscore
-(global-set-key (kbd "C-x -") #'fit-window-to-buffer) ; hyphen
-(global-set-key (kbd "C-x +")  #'balance-windows-area)
-(global-set-key (kbd "C-x }")  #'enlarge-window)
-(global-set-key (kbd "C-x {")  #'shrink-window)
-(global-set-key (kbd "C-x >")  #'enlarge-window-horizontally) ; override `scroll-right'
-(global-set-key (kbd "C-x <")  #'shrink-window-horizontally) ; override `scroll-left'
+;; Nice flat modeline
+;; https://www.youtube.com/watch?v=E1u6DcHis9M
+(defvar mode-line-height 1
+  "Modeline height.")
 
-;;
-;; Window resizing
-(global-set-key (kbd "C-x _") #'balance-windows)
-(global-set-key (kbd "C-x -") #'fit-window-to-buffer)
-(global-set-key (kbd "C-x +") #'balance-windows-area)
-(global-set-key (kbd "C-x }") #'enlarge-window)
-(global-set-key (kbd "C-x {") #'shrink-window)
-(global-set-key (kbd "C-x >") #'enlarge-window-horizontally)
-(global-set-key (kbd "C-x <") #'shrink-window-horizontally)
-(prot-emacs-keybind resize-window-repeat-map
-					">" #'enlarge-window-horizontally
-					"<" #'shrink-window-horizontally)
+(defun flat-style (theme &rest args)
+  (custom-set-faces
+   `(mode-line
+     ((t (:inherit mode-line
+				   :box (:line-width, mode-line-height :style flat-button)))) t)
+   `(mode-line-inactive
+     ((t (:inherit mode-line-inactive
+				   :box (:line-width, mode-line-height :style flat-button)))) t)
+   ))
+(advice-add 'load-theme :after #'flat-style)
 
 (setq-default fill-column 80)
 (setq column-number-mode t)
@@ -686,21 +520,26 @@ DEFINITIONS is a sequence of string and command pairs."
       inhibit-startup-message t
       ring-bell-function 'ignore)
 
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(when (fboundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-
-;; (global-hl-line-mode 1)
+(global-hl-line-mode 1)
 (global-visual-line-mode 1)
-;; (global-display-line-numbers-mode 1)
-(add-hook 'prog-mode-hook 'display-line-numbers-mode)
-(add-hook 'prog-mode-hook 'hl-line-mode)
+(global-display-line-numbers-mode 1)
+;; (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+;; (add-hook 'prog-mode-hook 'hl-line-mode)
 
 (setq scroll-step 1
-	  scroll-conservatively 10000
-	  mouse-wheel-progressive-speed 1
-	  mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+      scroll-conservatively 10000
+      mouse-wheel-progressive-speed 1
+      mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+
+(defvar adi/default-font "Iosevka Nerd Font" "Font to use")
+;; (defvar adi/default-font "JetBrainsMono Nerd Font" "Font to use")
+(defvar adi/default-font-size 160 "Size of the default font")
+(set-face-attribute 'default nil :font adi/default-font :weight 'regular :height adi/default-font-size)
+(set-face-attribute 'fixed-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
+(set-face-attribute 'variable-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
+(global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
+(tooltip-mode nil)
+
 
 (provide 'init)
 ;;; init.el ends here
