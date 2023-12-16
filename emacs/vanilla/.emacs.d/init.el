@@ -136,15 +136,6 @@ DEFINITIONS is a sequence of string and command pairs."
   :init (setq markdown-command "pandoc"))
 
 ;;
-;; LSP bridge
-(use-package lsp-bridge
-  :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-						 :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-						 :build (:not compile))
-  :init
-  (global-lsp-bridge-mode))
-
-;;
 ;;
 (use-package rust-mode)
 ;;; TOML
@@ -181,7 +172,7 @@ DEFINITIONS is a sequence of string and command pairs."
   ([remap describe-variable] . helpful-variable)
   ([remap describe-key] . helpful-key))
 
-;;; undo-tree
+;;undo-tree
 (use-package undo-tree
   :config
   (global-undo-tree-mode 1)
@@ -526,10 +517,10 @@ DEFINITIONS is a sequence of string and command pairs."
 ;; (add-hook 'prog-mode-hook 'display-line-numbers-mode)
 ;; (add-hook 'prog-mode-hook 'hl-line-mode)
 
-(setq scroll-step 1
-      scroll-conservatively 10000
-      mouse-wheel-progressive-speed 1
-      mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+;; (setq scroll-step 1
+;;       scroll-conservatively 10000
+;;       mouse-wheel-progressive-speed 1
+;;       mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 (defvar adi/default-font "Iosevka Nerd Font" "Font to use")
 ;; (defvar adi/default-font "JetBrainsMono Nerd Font" "Font to use")
@@ -538,8 +529,14 @@ DEFINITIONS is a sequence of string and command pairs."
 (set-face-attribute 'fixed-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
 (set-face-attribute 'variable-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
 (global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
-(tooltip-mode nil)
 
+;; (tooltip-mode nil)
 
+(dolist (path '("emacs-modules"))
+  (add-to-list 'load-path (locate-user-emacs-file path)))
+
+;; (add-to-list 'load-path #'locate-user-emacs-file)
+(require 'essentials)
+(require 'lsp-bridge-cfg)
 (provide 'init)
 ;;; init.el ends here
