@@ -191,6 +191,7 @@
     (server-start)))
 
 ;;; Visualise undo ring (`vundo')
+;; fails to build for some reason for me
 ;; (use-package vundo
 ;;   :config
 ;;   (setq vundo-glyph-alist vundo-unicode-symbols)

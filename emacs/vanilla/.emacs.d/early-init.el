@@ -36,10 +36,6 @@
 					   (emacs-init-time "%.2f")
 					   gcs-done)))
 
-(require 'server)
-(unless (server-running-p)
-  (server-start))
-
 (setq backup-directory-alist '((".*" . "~/.Trash")))
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file t)
