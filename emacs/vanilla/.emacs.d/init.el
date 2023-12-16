@@ -485,6 +485,10 @@ DEFINITIONS is a sequence of string and command pairs."
   (setq pulsar-highlight-face 'pulsar-yellow)
   (pulsar-global-mode 1))
 
+(use-package direnv
+  :config (direnv-mode)
+  (setq direnv-always-show-summary t))
+
 ;;
 ;; Nice flat modeline
 ;; https://www.youtube.com/watch?v=E1u6DcHis9M
@@ -531,9 +535,12 @@ DEFINITIONS is a sequence of string and command pairs."
 (global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
 
 ;; (tooltip-mode nil)
-
 (dolist (path '("emacs-modules"))
   (add-to-list 'load-path (locate-user-emacs-file path)))
+
+(defvar adi/cfg-root-directory
+  (file-name-directory (or load-file-name (buffer-file-name)))
+  "Directory where this config is loaded from")
 
 ;; (add-to-list 'load-path #'locate-user-emacs-file)
 (require 'essentials)

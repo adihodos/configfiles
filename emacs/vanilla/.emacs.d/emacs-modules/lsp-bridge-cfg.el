@@ -1,4 +1,8 @@
 
+;; (dolist (path '("lsp-config-modules"))
+;;   (add-to-list 'load-path (locate-user-emacs-file path)))
+
+(defvar adi/lsp-bridge-lsp-config-dir (concat adi/cfg-root-directory "emacs-modules/lsp-server-config"))
 ;;
 ;; LSP bridge
 (use-package lsp-bridge
@@ -16,7 +20,8 @@
   (global-set-key (kbd "C-c l a a") #'lsp-bridge-code-action)
   (global-set-key (kbd "C-<tab>") #'lsp-bridge-popup-complete-menu)
   (global-set-key (kbd "C-c l = =") #'lsp-bridge-code-format)
-
+  (global-set-key (kbd "C-c l d") #'lsp-bridge-diagnostic-list)
+  (setq lsp-bridge-user-langserver-dir adi/lsp-bridge-lsp-config-dir)
   ;; (setq lsp-bridge-enable-inlay-hint nil)
   )
 
