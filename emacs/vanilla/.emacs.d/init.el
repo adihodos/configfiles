@@ -53,30 +53,30 @@ DEFINITIONS is a sequence of string and command pairs."
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
+(use-package page-break-lines
+  :config (global-page-break-lines-mode))
+
 ;;
 ;; DASHBOARD
 (use-package dashboard
   :config
   (setq initial-buffer-choice 'dashboard-open)
   (setq dashboard-banner-logo-title "Emacs Is ... Everything ??!!!!")
-  (setq dashboard-startup-banner 'logo) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.emacs.d/banners/pepecry.png" ) ;; use standard emacs logo as banner
   (setq dashboard-center-content t) ;; set to 't' for centered content
   (setq dashboard-items '((recents . 5)
-                          (agenda . 5 )
+                          ;; (agenda . 5 )
                           (bookmarks . 3)
                           ;; (projects . 3)
                           (registers . 3)))
   (setq dashboard-display-icons-p t) ;; display icons on both GUI and terminal
-  (setq dashboard-icon-type 'all-the-icons) ;; use `nerd-icons' package
+  (setq dashboard-icon-type 'nerd-icons) ;; use `nerd-icons' package
   ;; (setq dashboard-set-heading-icons t)
   (setq dashboard-set-file-icons t)
   (setq dashboard-set-navigator t)
   (dashboard-modify-heading-icons '((recents . "file-text")
 									(bookmarks . "book")))
   (dashboard-setup-startup-hook))
-
-(use-package page-break-lines
-  :config (global-page-break-lines-mode))
 
 ;;
 ;; which-key
