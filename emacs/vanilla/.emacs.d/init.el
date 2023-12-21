@@ -53,7 +53,12 @@ DEFINITIONS is a sequence of string and command pairs."
 (straight-use-package 'use-package)
 (setq straight-use-package-by-default t)
 
+(use-package slime
+  :config
+  (setq inferior-lisp-program "sbcl"))
+
 (use-package page-break-lines
+  :diminish (page-break-lines-mode visual-line-mode)
   :config (global-page-break-lines-mode))
 
 ;;
@@ -62,7 +67,7 @@ DEFINITIONS is a sequence of string and command pairs."
   :config
   (setq initial-buffer-choice 'dashboard-open)
   (setq dashboard-banner-logo-title "Emacs Is ... Everything ??!!!!")
-  (setq dashboard-startup-banner "~/.emacs.d/banners/pepecry.png" ) ;; use standard emacs logo as banner
+  (setq dashboard-startup-banner "~/.emacs.d/banners/pepephone_big.png" ) ;; use standard emacs logo as banner
   (setq dashboard-center-content t) ;; set to 't' for centered content
   (setq dashboard-items '((recents . 5)
                           ;; (agenda . 5 )
@@ -250,19 +255,26 @@ DEFINITIONS is a sequence of string and command pairs."
 (global-set-key (kbd "C-M-S-<down>") #'windmove-swap-states-down)
 (global-set-key (kbd "C-M-S-<left>") #'windmove-swap-states-left)
 
-
-
 ;;
 ;; Look & feel
 (use-package modus-themes)
+(use-package catppuccin-theme
+  :config
+  (setq catppuccin-height-title1 1.5)
+  (load-theme 'catppuccin t))
 ;; (load-theme 'gruber-darker t)
 ;; (load-theme 'doom-one t)
 ;; (load-theme 'zenburn t)
-(load-theme 'modus-vivendi-tinted t)
+;; (load-theme 'modus-vivendi-tinted t)
 
 (use-package all-the-icons)
 (use-package all-the-icons-dired
   :hook (dired-mode . all-the-icons-dired-mode))
+
+(use-package all-the-icons-completion
+  :after (marginalia all-the-icons)
+  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+  :init (all-the-icons-completion-mode))
 
 ;;
 ;; icons
@@ -492,8 +504,7 @@ DEFINITIONS is a sequence of string and command pairs."
 ;;
 ;; Nice flat modeline
 ;; https://www.youtube.com/watch?v=E1u6DcHis9M
-(defvar mode-line-height 1
-  "Modeline height.")
+(defvar mode-line-height 1 "Modeline height.")
 
 (defun flat-style (theme &rest args)
   (custom-set-faces
@@ -509,6 +520,7 @@ DEFINITIONS is a sequence of string and command pairs."
 (setq-default fill-column 80)
 (setq column-number-mode t)
 (setq tab-width 4)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (recentf-mode 1)
 (setq recentf-max-saved-items 100
@@ -543,6 +555,8 @@ DEFINITIONS is a sequence of string and command pairs."
   "Directory where this config is loaded from")
 
 ;; (add-to-list 'load-path #'locate-user-emacs-file)
+(require 'debugging)
+(require 'sane-defaults)
 (require 'essentials)
 (require 'lsp-bridge-cfg)
 (provide 'init)
