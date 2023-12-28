@@ -142,9 +142,11 @@ DEFINITIONS is a sequence of string and command pairs."
 
 ;;
 ;;
-(use-package rust-mode)
+;; (use-package rust-mode)
 ;;; TOML
 (use-package toml-mode)
+;; RON - Rusty Object Notation
+(use-package ron-mode)
 
 (use-package rainbow-delimiters
   :hook ((emacs-lisp-mode . rainbow-delimiters-mode)
@@ -162,7 +164,10 @@ DEFINITIONS is a sequence of string and command pairs."
   (setq doom-modeline-height 35      ;; sets modeline height
         doom-modeline-bar-width 5    ;; sets right bar width
         doom-modeline-persp-name t   ;; adds perspective name to modeline
-        doom-modeline-persp-icon t)) ;; adds folder icon next to persp name
+        doom-modeline-persp-icon t
+	doom-modeline-icon t
+	doom-modeline-modal-modern-icon t
+	)) ;; adds folder icon next to persp name
 
 ;;
 ;; better help
@@ -257,37 +262,58 @@ DEFINITIONS is a sequence of string and command pairs."
 
 ;;
 ;; Look & feel
-(use-package modus-themes)
-(use-package catppuccin-theme
+;; (use-package modus-themes
+;;   :config
+;;   (load-theme 'modus-vivendi-tinted t))
+
+(use-package gruber-darker-theme
   :config
-  (setq catppuccin-height-title1 1.5)
-  (load-theme 'catppuccin t))
+  (load-theme 'gruber-darker t))
+
+;; (use-package catppuccin-theme
+;;   :config
+;;   (setq catppuccin-height-title1 1.5)
+;;   (load-theme 'catppuccin t))
 ;; (load-theme 'gruber-darker t)
 ;; (load-theme 'doom-one t)
 ;; (load-theme 'zenburn t)
 ;; (load-theme 'modus-vivendi-tinted t)
 
 (use-package all-the-icons)
-(use-package all-the-icons-dired
-  :hook (dired-mode . all-the-icons-dired-mode))
-
-(use-package all-the-icons-completion
-  :after (marginalia all-the-icons)
-  :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
-  :init (all-the-icons-completion-mode))
+;; (use-package all-the-icons-dired
+;;   :hook (dired-mode . all-the-icons-dired-mode))
+;; 
+;; (use-package all-the-icons-completion
+;;   :after (marginalia all-the-icons)
+;;   :hook (marginalia-mode . all-the-icons-completion-marginalia-setup)
+;;   :init (all-the-icons-completion-mode))
 
 ;;
 ;; icons
 (use-package no-littering)
+
 (use-package nerd-icons
   :custom
   (nerd-icons-font-family "Symbols Nerd Font Mono"))
+
+(use-package nerd-icons-dired
+  :hook (dired-mode . nerd-icons-dired-mode))
+
+(use-package treemacs-nerd-icons
+  :config
+  (treemacs-load-theme "nerd-icons"))
 
 (use-package nerd-icons-ibuffer
   :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
   :config
   ;; Use human readable file size in ibuffer.
   (setq  nerd-icons-ibuffer-human-readable-size t))
+
+(use-package nerd-icons-completion
+  :after marginalia
+  :config
+  (nerd-icons-completion-mode)
+  (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup))
 
 (use-package nix-mode
   :mode "\\.nix\\'")
@@ -501,9 +527,16 @@ DEFINITIONS is a sequence of string and command pairs."
   :config (direnv-mode)
   (setq direnv-always-show-summary t))
 
+(use-package caser
+  :config
+  (prot-emacs-keybind global-map
+    "C-c s" #'caser-snakecase-dwim
+    "C-c c" #'caser-camelcase-dwim
+    "C-c d" #'caser-dashcase-dwim))
+  
 ;;
-;; Nice flat modeline
-;; https://www.youtube.com/watch?v=E1u6DcHis9M
+;; Nice Flat Modeline
+;; Https://www.youtube.com/watch?v=E1u6DcHis9M
 (defvar mode-line-height 1 "Modeline height.")
 
 (defun flat-style (theme &rest args)
@@ -539,8 +572,9 @@ DEFINITIONS is a sequence of string and command pairs."
 ;;       mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
 (defvar adi/default-font "Iosevka Nerd Font" "Font to use")
+;; (defvar adi/default-font "Input" "Font to use")
 ;; (defvar adi/default-font "JetBrainsMono Nerd Font" "Font to use")
-(defvar adi/default-font-size 160 "Size of the default font")
+(defvar adi/default-font-size 180 "Size of the default font")
 (set-face-attribute 'default nil :font adi/default-font :weight 'regular :height adi/default-font-size)
 (set-face-attribute 'fixed-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
 (set-face-attribute 'variable-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
@@ -558,6 +592,7 @@ DEFINITIONS is a sequence of string and command pairs."
 (require 'debugging)
 (require 'sane-defaults)
 (require 'essentials)
-(require 'lsp-bridge-cfg)
+;; (require 'lsp-bridge-cfg)
+(require 'lsp)
 (provide 'init)
 ;;; init.el ends here
