@@ -571,13 +571,23 @@ DEFINITIONS is a sequence of string and command pairs."
 ;;       mouse-wheel-progressive-speed 1
 ;;       mouse-wheel-scroll-amount '(1 ((shift) . 1)))
 
-(defvar adi/default-font "Iosevka Nerd Font" "Font to use")
+(when (eq system-type 'windows-nt)
+  (setq w32-pass-lwindow-to-system nil)
+  (setq w32-lwindow-modifier 'super) ; Left Windows key
+  (w32-register-hot-key [s-]) ; disable all Windows shortcuts while Emacs has focus
+  (setq w32-pass-rwindow-to-system nil)
+  (setq w32-rwindow-modifier 'super) ; Right Windows key
+  (setq w32-apps-modifier 'hyper) ; Menu/App key
+  (defvar adi/default-font "Iosevka NFM")
+  (defvar adi/font-variable-pitch "Iosevka NFP"))
+
+;; (defvar adi/default-font "Iosevka Nerd Font" "Font to use")
 ;; (defvar adi/default-font "Input" "Font to use")
 ;; (defvar adi/default-font "JetBrainsMono Nerd Font" "Font to use")
-(defvar adi/default-font-size 180 "Size of the default font")
+(defvar adi/default-font-size 180 "Size of the default font.")
 (set-face-attribute 'default nil :font adi/default-font :weight 'regular :height adi/default-font-size)
-(set-face-attribute 'fixed-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
-(set-face-attribute 'variable-pitch nil :font adi/default-font :weight 'light :height adi/default-font-size)
+(set-face-attribute 'fixed-pitch nil :font adi/default-font :weight 'regular :height adi/default-font-size)
+(set-face-attribute 'variable-pitch nil :font adi/font-variable-pitch :weight 'regular :height adi/default-font-size)
 (global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
 
 ;; (tooltip-mode nil)
