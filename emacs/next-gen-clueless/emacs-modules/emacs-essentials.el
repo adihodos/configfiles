@@ -374,7 +374,9 @@ to be cycling through the edits."
 	"C-S-c C-S-c" #'mc/edit-lines
 	"C->" #'mc/mark-next-like-this
 	"C-<" #'mc/mark-previous-like-this
-	"C-c C->" #'mc/mark-all-like-this))
+	"M-<f2>" #'mc/mark-next-like-this-word
+	"M-<f3>" #'mc/mark-all-like-this
+	"M-<f4>" #'mc/mark-all-like-this-dwim))
 
 (prot-emacs-package move-text
   (:install t)
@@ -391,6 +393,10 @@ to be cycling through the edits."
 	(:delay 1)
 	(direnv-mode 1)
 	(setq direnv-always-show-summary t)))
+
+(prot-emacs-package p4
+  (:install t)
+  (:delay 8))
 
 (provide 'emacs-essentials)
 ;; emacs-essentials.el ends here
