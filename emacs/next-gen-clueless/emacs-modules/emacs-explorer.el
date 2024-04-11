@@ -21,6 +21,8 @@
 				  (make-local-variable 'auto-hscroll-mode)
 				  (setq auto-hscroll-mode nil)))))
 
+(prot-emacs-package dired-single (:install t) (:delay 1))
+
 (prot-emacs-configure
   (:delay 1)
   (setq dired-recursive-copies 'always)
@@ -58,8 +60,6 @@
 
   (setq wdired-allow-to-change-permissions t)
   (setq wdired-create-parent-directories t))
-
-(prot-emacs-package dired-single (:install t) (:delay 5))
 
 (provide 'emacs-explorer)
 ;; emacs-explorer.el ends here

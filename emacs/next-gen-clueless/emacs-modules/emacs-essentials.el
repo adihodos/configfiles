@@ -390,7 +390,6 @@ to be cycling through the edits."
 (when (not (eq system-type 'windows-nt))
   (prot-emacs-package direnv
 	(:install t)
-	(:delay 1)
 	(direnv-mode 1)
 	(setq direnv-always-show-summary t)))
 

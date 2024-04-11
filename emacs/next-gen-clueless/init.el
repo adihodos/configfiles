@@ -192,7 +192,7 @@ DEFINITIONS is a sequence of string and command pairs."
   "Directory where this config is loaded from")
 
 (require 'emacs-essentials)
-(require 'emacs-win32)
+(require 'emacs-sys)
 (require 'emacs-themes)
 (require 'emacs-icons)
 (require 'emacs-dashboard)
@@ -231,38 +231,5 @@ DEFINITIONS is a sequence of string and command pairs."
 
 ;;   ;; Enable recursive minibuffers
 ;;   (setq enable-recursive-minibuffers t))
-
-
-
-  
-;; (setq-default fill-column 80)
-;; (setq column-number-mode t)
-;; (setq tab-width 4)
-;; (defalias 'yes-or-no-p 'y-or-n-p)
-
-;; (recentf-mode 1)
-;; (setq recentf-max-saved-items 100
-;;       inhibit-startup-message t
-;;       ring-bell-function 'ignore)
-
-;; ;; (setq scroll-step 1
-;; ;;       scroll-conservatively 10000
-;; ;;       mouse-wheel-progressive-speed 1
-;; ;;       mouse-wheel-scroll-amount '(1 ((shift) . 1)))
-
-;; ;; (defvar adi/default-font "Iosevka Nerd Font" "Font to use")
-;; ;; (defvar adi/default-font "Input" "Font to use")
-;; ;; (defvar adi/default-font "JetBrainsMono Nerd Font" "Font to use")
-;; (global-set-key (kbd "C-x k") 'adi/kill-buffer-current)
-
-;; ;; (add-to-list 'load-path #'locate-user-emacs-file)
-;; (require 'debugging)
-;; (require 'sane-defaults)
-;; (require 'essentials)
-;; (require 'emacs-window)
-;; (require 'emacs-langs)
-;; ;; (require 'lsp-bridge-cfg)
-;; (require 'lsp)
-;; (provide 'init)
 
 ;; ;;; init.el ends here
