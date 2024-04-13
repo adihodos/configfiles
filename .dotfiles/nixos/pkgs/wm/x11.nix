@@ -29,6 +29,4 @@
     enable = true;
     configPackages = [pkgs.xdg-desktop-portal-gtk];
   };
-
-  environment.systemPackages = with pkgs; [ rxvt-unicode ];
 }

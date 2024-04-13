@@ -9,9 +9,10 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./hw.nix
-      ./wm/x11.nix
-      ./sys/sys.nix
-      ./emacs.nix
+      ./pkgs/wm/x11.nix
+      ./pkgs/wm/i3.nix
+      ./pkgs/direnv.nix
+      ./pkgs/emacs.nix
     ];
 
   nix.package = pkgs.nixFlakes;
@@ -73,6 +74,8 @@
     curl
     git
     mc
+    file
+    usbutils
   ];
 
   fonts.fontDir.enable = true;

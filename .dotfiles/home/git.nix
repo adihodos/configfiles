@@ -13,4 +13,8 @@
       diftool.prompt = "false";
     };
   };
+
+  home.packages = [
+  	pkgs.lazygit
+  ];
 }

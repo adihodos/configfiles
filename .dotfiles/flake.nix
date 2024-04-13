@@ -1,5 +1,5 @@
 {
-  description = "My (surely) epic NIX flake";
+  description = "My (surely/clueless) epic NIX flake";
 
   inputs = {
 	  nixpkgs = {
@@ -39,7 +39,8 @@
           spawnEditor = "emacsclient -c -a 'emacs'";
           font = {
             serif = "Roboto";
-            mono = "Iosevka Nerd Font Mono Medium";
+            mono = "Iosevka Nerd Font Mono";
+            propo = "Iosevka Nerd Front Propo";
           };
         };
       };
@@ -57,21 +58,30 @@
 	      nixosConfigurations = {
 		      ${setupOptions.system.hostname} = lib.nixosSystem {
             system = setupOptions.system.systemType;
-			      modules = [ ./configuration.nix ];
+            
             specialArgs = {
               inherit pkgs;
               inherit setupOptions;
             };
-		      };
-	      };
+            
+			      modules = [
+              ./nixos/configuration.nix
+              
+              home-manager.nixosModules.home-manager {
+                
+                home-manager = {
+                  extraSpecialArgs = {
+			              inherit pkgs;
+                    inherit setupOptions;
+                  };
+                  
+		              users.${setupOptions.user.username} = {
+			              imports = [ ./home/home.nix ];
+                  };
+                };
+              }
 
-	      homeConfigurations = {
-		      adi = home-manager.lib.homeManagerConfiguration {
-			      modules = [ ./home.nix ];
-            extraSpecialArgs = {
-			        inherit pkgs;
-              inherit setupOptions;
-            };
+            ];
 		      };
 	      };
       };

@@ -1,13 +1,16 @@
 { config, pkgs, setupOptions, ... }:
 
 {
-
 	imports = [
-    ./user/shell/shells.nix
-		./user/terminals/alacritty.nix
-    ./user/git.nix
-    ./user/devtools.nix
-    ./user/browser.nix
+    ./x11.nix
+    ./shells.nix
+		./terminals/alacritty.nix
+    ./terminals/kitty.nix
+    ./git.nix
+    ./devtools.nix
+    ./browser.nix
+    ./utilities.nix
+    ./graphics.nix
 	];
   # Home Manager needs a bit of information about you and the paths it should
   # manage.

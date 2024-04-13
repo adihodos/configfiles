@@ -62,4 +62,11 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
+
+  # console = {
+  #   enable = true;
+  #   packages = [ pkgs.terminus_font ];
+  #   earlySetup = true;
+  #   font = "TER16x32";
+  # };
 }

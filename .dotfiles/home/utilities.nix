@@ -1,17 +1,5 @@
 { config, lib, pkgs, ... }:
 {
-  programs.bash = {
-    enable = true;
-    shellAliases = {
-	    ll = "eza";
-    };
-  };
-
-  programs.starship = {
-    enable = true;
-    settings = lib.importTOML ./starship.pastel.toml;
-  };
-
   programs.eza = {
     enable = true;
     extraOptions = [
@@ -30,11 +18,22 @@
 
   home.packages = with pkgs; [
     btop
-    pastel
-    mc
     bitwise
     neofetch
     du-dust
     tlrc
+    ripgrep
+    zenith
+    dfc
+	  bandwhich
+	  procs
+	  most
+	  dua
+	  fzf
+	  bitwise
+	  skim
+	  gf
+	  fd
+	  far2l
   ];
 }

@@ -6,9 +6,10 @@
 
 {
   services.xserver.desktopManager.xterm.enable = false;
+  
   services.xserver.displayManager = {
     lightdm.enable = true;
-    defaultSession = "i3";
+    defaultSession = "none+i3";
   };
   
   services.xserver.windowManager.i3 = {
@@ -18,11 +19,7 @@
       i3lock
       i3blocks 
       clipmenu
-      rlauncher
+      rlaunch
     ];
-    # configFile = ./i3.config;
   };
-
-  home.file.".i3/config".source = ./i3.config;
-  
 }
