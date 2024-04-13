@@ -37,8 +37,4 @@
     du-dust
     tlrc
   ];
-
-  # home.file = {
-  # };
-
 }

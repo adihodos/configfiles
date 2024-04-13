@@ -1,31 +1,34 @@
 { config, pkgs, setupOptions, ... }:
 
 {
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-
-  # Enable the XFCE Desktop Environment.
-  #services.xserver.displayManager.lightdm.enable = true;
-  # services.xserver.desktopManager.xfce.enable = true;
-
-  services.xserver.desktopManager.mate = {
+  services.dbus = {
     enable = true;
-    #extraPanelApplets = with pkgs.mate; [ mate-applets ];
-    #extraCajaExtensions = with pkgs.mate; [ caja-extensions ];
+    packages = [ pkgs.dconf ];
   };
 
-#  home.packages = with pkgs; [
-#    material-design-icons
-#    marwaita
-#  ];
+  programs.dconf = {
+    enable = true;
+  };
 
-  # Configure keymap in X11
+  services.gnome = {
+    gnome-keyring.enable = true;
+  };
+
   services.xserver = {
-    layout = "us";
-    xkbVariant = "";
+    enable = true;
+    videoDrivers = ["nvidia"];
+    xkb = {
+      layout = "us";
+      variant = "";
+      options = "caps:escape";
+    };
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
+  # xdg portal is required for screenshare
+  xdg.portal = {
+    enable = true;
+    configPackages = [pkgs.xdg-desktop-portal-gtk];
+  };
 
+  environment.systemPackages = with pkgs; [ rxvt-unicode ];
 }

@@ -5,18 +5,24 @@
 	  nixpkgs = {
 		  url = "github:NixOS/nixpkgs/nixos-23.11";
 	  };
+    
 	  home-manager.url = "github:nix-community/home-manager/release-23.11";
 	  home-manager.inputs.nixpkgs.follows = "nixpkgs";
+
+    emacs-overlay = {
+	    url = "github:nix-community/emacs-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, home-manager, ...}:
+  outputs = { self, nixpkgs, home-manager, ...} @inputs :
 	  let
 		  lib = nixpkgs.lib;
       setupOptions = {
         system = {
           compositor = "x11";
           systemType = "x86_64-linux";
-          hostname = "B4X64-NIX-EE-VM";
+          hostname = "B5X64-NIX-EE-VM";
           profile = "personal";
           timezone = "Europe/Bucharest";
           locale = "en_US.UTF-8";
@@ -38,13 +44,13 @@
         };
       };
 
-		  pkgs = import nixpkgs.legacyPackages.${setupOptions.system.systemType} {
-        system = setupOptions.systemType;
-          # Allow unfree packages
+      pkgs = import nixpkgs {
+        system = setupOptions.system.systemType;
         config = {
           allowUnfree = true;
           allowUnfreePredicate = (_: true);
         };
+        overlays = [ (import self.inputs.emacs-overlay) ];
       };
 	  in
       {
@@ -53,6 +59,7 @@
             system = setupOptions.system.systemType;
 			      modules = [ ./configuration.nix ];
             specialArgs = {
+              inherit pkgs;
               inherit setupOptions;
             };
 		      };
@@ -60,9 +67,9 @@
 
 	      homeConfigurations = {
 		      adi = home-manager.lib.homeManagerConfiguration {
-			      inherit pkgs;
 			      modules = [ ./home.nix ];
             extraSpecialArgs = {
+			        inherit pkgs;
               inherit setupOptions;
             };
 		      };
