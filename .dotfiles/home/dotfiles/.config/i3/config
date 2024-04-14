@@ -248,3 +248,13 @@ client.placeholder      $red1 $red1 $white2 $red1 $red1
 
 
 #bindsym $mod+Ctrl+f fullscreen toggle global
+
+# bar {
+# 	font pango:Iosevka Nerd Font Propo 10
+# 	position top
+# 	tray_output none
+# 	status_command bumblebee-status -m nic disk:root cpu \
+# 		memory battery date time pasink pasource dnf \
+# 		-p root.path=/ time.format="%H:%M CW %V" date.format="%a, %b %d %Y" \
+# 		-t solarized-powerline
+# }

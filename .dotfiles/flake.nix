@@ -5,6 +5,8 @@
 	  nixpkgs = {
 		  url = "github:NixOS/nixpkgs/nixos-23.11";
 	  };
+
+    nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
     
 	  home-manager.url = "github:nix-community/home-manager/release-23.11";
 	  home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -51,7 +53,16 @@
           allowUnfree = true;
           allowUnfreePredicate = (_: true);
         };
+
         overlays = [ (import self.inputs.emacs-overlay) ];
+      };
+
+      pkgs-unstable = import inputs.nixpkgs-unstable {
+        system = setupOptions.system.systemType;
+        config = {
+          allowUnfree = true;
+          allowUnfreePredicate = (_: true);
+        };        
       };
 	  in
       {
@@ -61,6 +72,7 @@
             
             specialArgs = {
               inherit pkgs;
+              inherit pkgs-unstable;
               inherit setupOptions;
             };
             
@@ -72,11 +84,13 @@
                 home-manager = {
                   extraSpecialArgs = {
 			              inherit pkgs;
+                    inherit pkgs-unstable;
                     inherit setupOptions;
                   };
                   
 		              users.${setupOptions.user.username} = {
 			              imports = [ ./home/home.nix ];
+                    _module.args.theme = import ./theme;
                   };
                 };
               }

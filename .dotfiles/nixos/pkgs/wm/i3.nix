@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, setupOptions, ... }:
+{ config, pkgs, pkgs-unstable, setupOptions, ... }:
 
 {
   services.xserver.desktopManager.xterm.enable = false;
@@ -22,4 +22,8 @@
       rlaunch
     ];
   };
+
+  environment.systemPackages = with pkgs-unstable; [
+    (bumblebee-status.override{plugins = p:[p.cpu p.nic p.load p.dunstctl];})
+  ] ++ [pkgs.iw];
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, setupOptions, lib, ... }:
+{ config, pkgs, pkgs-unstable, setupOptions, lib, ... }:
 let
   mod = "Mod4";
 in
@@ -61,6 +61,10 @@ in
 
       flameshot.Install.WantedBy = lib.mkForce [ "i3-session.target" ];
     };
+  };
+
+  xsession = {
+    numlock.enable = true;
   };
 
   xsession.windowManager.i3 = {
@@ -161,14 +165,6 @@ in
         "${mod}+c" = "focus child";
       };
 
-    #   bars = [
-    #     {
-    #       position = "bottom";
-    #       statusCommand = "${pkgs.i3status-rust}/bin/i3status-rs ${./i3status-rust.toml}";
-    #     }
-    #   ];
-      # };
-
       focus = {
         # Mouse doesn't jump from one screen to another
         mouseWarping = false;
@@ -176,6 +172,30 @@ in
 
       workspaceAutoBackAndForth = true;
       workspaceLayout = "default";
+
+      bars = [
+        {
+          statusCommand = 
+        let
+          cmd = "${pkgs-unstable.bumblebee-status}/bin/bumblebee-status";
+          # theme = "gruvbox-powerline";
+          theme = "iceberg-rainbow";
+        in
+          "${cmd} -m nic disk:root cpu memory battery date time \\
+-p root.path=/ time.format=\"%H:%M CW %V\" \\
+date.format=\"%a, %b %d %Y\" -t ${theme}";
+        
+          fonts = {
+            names = [ setupOptions.user.font.propo ];
+            style = "SemiBold";
+            size = 10.0;
+          };
+        
+          mode = "dock";
+          position = "bottom";
+          trayOutput = null;
+        }
+      ];
     };
 
     extraConfig = builtins.readFile ./../../dotfiles/.config/i3/config;

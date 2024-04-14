@@ -2,9 +2,10 @@
 
 {
 	# Module installing librewolf as default browser
-	home.packages = [
-		pkgs.librewolf
-		pkgs.firefox
+	home.packages = with pkgs; [
+		librewolf
+		firefox
+    skypeforlinux
 	];
 
 	home.sessionVariables = {
