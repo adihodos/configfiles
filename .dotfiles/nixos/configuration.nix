@@ -9,6 +9,7 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
       ./hw.nix
+      ./fonts.nix
       ./pkgs/wm/x11.nix
       ./pkgs/wm/i3.nix
       ./pkgs/direnv.nix
@@ -74,25 +75,6 @@
     file
     usbutils
   ];
-
-  fonts = {    
-    fontDir.enable = true;
-    packages = with pkgs; [
- 	    (nerdfonts.override { fonts = [ "Iosevka" "RobotoMono" "EnvyCodeR" "JetBrainsMono" "SpaceMono" "VictorMono" ]; })
-      # input-fonts
-	    roboto
-	    roboto-serif
-    ];
-
-    fontconfig = {
-      enable = true;
-	    defaultFonts = {
-        monospace = [ "Iosevka Nerd Font Mono" ];
-        sansSerif = [ "DejaVu Sans" ];
-        serif = [ "Roboto Serif" ];
-      };
-    };
-  };
   
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

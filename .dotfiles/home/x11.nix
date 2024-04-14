@@ -1,14 +1,16 @@
-{ config, pkgs, setupOptions, ... }:
-
+{ config, pkgs, osConfig, setupOptions, ... }:
+let
+  fonts = osConfig.themes.fonts;
+in
 {
   programs.urxvt = {
     enable = true;
     
     fonts = [
-      "xft:${setupOptions.user.font.mono}:style=Regular:size=14"
-      "xft:${setupOptions.user.font.mono}:style=Bold:size=14"
-      "xft:${setupOptions.user.font.mono}:style=Italic:size=14"
-      "xft:${setupOptions.user.font.mono}:style=Bold Italic:size=14"
+      "xft:${fonts.mono.family}:style=Regular:size=${toString fonts.mono.size}"
+      "xft:${fonts.mono.family}:style=Bold:size=${toString fonts.mono.size}"
+      "xft:${fonts.mono.family}:style=Italic:size=${toString fonts.mono.size}"
+      "xft:${fonts.mono.family}:style=Bold Italic:size=${toString fonts.mono.size}"
     ];
     
     extraConfig = {

@@ -1,4 +1,7 @@
-{ config, pkgs, setupOptions, ... }:
+{ config, pkgs, osConfig, ... }:
+let
+  fonts = osConfig.themes.fonts;
+in  
 {
 	programs.alacritty = {
 		enable = true;
@@ -8,10 +11,10 @@
 			window.startup_mode = "Windowed";
 			scrolling.history = 16384;
 			font.normal = {
-				family = setupOptions.user.font.mono;
+				family = fonts.mono.family;
 				style = "Regular";
 			};
-			font.size = 16.0;
+			font.size = fonts.mono.size;
 			cursor.style = {
 				shape = "Beam";
 				blinking = "On";

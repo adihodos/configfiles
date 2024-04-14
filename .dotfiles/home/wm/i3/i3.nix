@@ -1,5 +1,6 @@
-{ config, pkgs, pkgs-unstable, setupOptions, lib, ... }:
+{ config, pkgs, osConfig, pkgs-unstable, setupOptions, lib, ... }:
 let
+  fonts = osConfig.themes.fonts;
   mod = "Mod4";
 in
 {
@@ -74,7 +75,7 @@ in
       modifier = mod;
 
       fonts = {
-        names = [ setupOptions.user.font.propo ];
+        names = [ fonts.propo.family ];
         style = "Regular";
         size = 10.0;
       };
@@ -94,7 +95,7 @@ in
         # Hide the bar
         "${mod}+h" = "bar mode toggle";
 
-        "${mod}+d" = "exec ${pkgs.rlaunch}/bin/rlaunch -f \"${setupOptions.user.font.propo}\" -h 32 -t kitty";
+        "${mod}+d" = "exec ${pkgs.rlaunch}/bin/rlaunch -f \"${fonts.propo.family}\" -h 32 -t kitty";
 
         # switch to workspace
         "${mod}+1" = "workspace $terms";
@@ -186,7 +187,7 @@ in
 date.format=\"%a, %b %d %Y\" -t ${theme}";
         
           fonts = {
-            names = [ setupOptions.user.font.propo ];
+            names = [ fonts.propo.family ];
             style = "SemiBold";
             size = 10.0;
           };

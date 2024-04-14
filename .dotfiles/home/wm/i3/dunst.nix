@@ -1,25 +1,30 @@
 {
 	pkgs,
-	theme,
+  osConfig,
+  lib,
 	...
 }:
 let
-	inherit (theme) x;
-in {
+  
+  fonts = osConfig.themes.fonts;
+  colors = osConfig.themes.colors;
+in
+{
 	services.dunst = {
 		enable = true;
 		iconTheme = {
 			package = pkgs.catppuccin-papirus-folders;
 			name = "Papirus";
 		};
-		settings = with theme.colors; {
+		settings = with colors; {
 			global = {
 				frame_color = "#${pink}95";
-				separator_color = x pink;
+				separator_color = "#${pink}";
 				width = 220;
 				height = 280;
 				offset = "0x15";
-				font = "Lexend 12";
+				# font = "${fonts.main.family} ${fonts.main.size}";
+        font = "${fonts.main.family} 10";
 				corner_radius = 10;
 				origin = "top-center";
 				notification_limit = 3;
@@ -37,12 +42,12 @@ in {
 				transparency = 10;
 				progress_bar = true;
 				progress_bar_frame_width = 0;
-				highlight = x pink;
+				highlight = lib.strings.concatStrings ["#" pink];
 			};
 			fullscreen_delay_everything.fullscreen = "delay";
 			urgency_low = {
 				background = "#${base}83";
-				foreground = x text;
+				foreground = "#${text}";
 				timeout = 5;
 			};
 			urgency_normal = {
@@ -52,7 +57,7 @@ in {
 			};
 			urgency_critical = {
 				background = "#${base}83";
-				foreground = x text;
+				foreground = "#${text}";
 				frame_color = "#${red}80";
 				timeout = 0;
 			};

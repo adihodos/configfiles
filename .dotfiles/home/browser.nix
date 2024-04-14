@@ -1,5 +1,7 @@
-{ pkgs, setupOptions, ... }:
-
+{ pkgs, osConfig, setupOptions, ... }:
+let
+  fonts = osConfig.themes.fonts;
+in  
 {
 	# Module installing librewolf as default browser
 	home.packages = with pkgs; [
@@ -13,11 +15,11 @@
 	};
 
 	home.file.".librewolf/librewolf.overrides.cfg".text = ''
-		defaultPref("font.name.serif.latin","''+setupOptions.user.font.serif+''");
-		defaultPref("font.name.monospace.latin","''+setupOptions.user.font.mono+''");
+		defaultPref("font.name.serif.latin","''+fonts.serif.family+''");
+		defaultPref("font.name.monospace.latin","''+fonts.mono.family+''");
 
 
-		defaultPref("font.size.variable.latin",20);
+		defaultPref("font.size.variable.latin",${toString fonts.serif.size});
 		defaultPref("browser.toolbars.bookmarks.visibility","always");
 		defaultPref("privacy.resisttFingerprinting.letterboxing", true);
 		defaultPref("network.http.referer.XOriginPolicy",2);
@@ -26,10 +28,10 @@
 		defaultPref("privacy.clearOnShutdown.cookies",true);
 		defaultPref("gfx.webrender.software.opengl",false);
 		defaultPref("webgl.disabled",true);
-		pref("font.name.serif.latin","''+setupOptions.user.font.serif+''");
-		pref("font.name.monospace.latin","''+setupOptions.user.font.mono+''");
+		pref("font.name.serif.latin","''+fonts.serif.family+''");
+		pref("font.name.monospace.latin","''+fonts.mono.family+''");
 
-		pref("font.size.variable.latin",20);
+		pref("font.size.variable.latin",${toString fonts.serif.size});
 		pref("browser.toolbars.bookmarks.visibility","always");
 		pref("privacy.resisttFingerprinting.letterboxing", true);
 		pref("network.http.referer.XOriginPolicy",2);
