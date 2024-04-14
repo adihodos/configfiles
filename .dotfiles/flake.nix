@@ -40,7 +40,7 @@
           font = {
             serif = "Roboto";
             mono = "Iosevka Nerd Font Mono";
-            propo = "Iosevka Nerd Front Propo";
+            propo = "Iosevka Nerd Font Propo";
           };
         };
       };

@@ -22,7 +22,17 @@
       variant = "";
       options = "caps:escape";
     };
+    libinput = {
+      enable = true;
+      mouse.naturalScrolling = false;
+    };
   };
+
+  environment.systemPackages = with pkgs; [
+    xorg.xmodmap
+    xclip
+    xsel
+  ];
 
   # xdg portal is required for screenshare
   xdg.portal = {

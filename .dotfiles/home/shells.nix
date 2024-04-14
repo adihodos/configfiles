@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
 {
-  fonts.fontconfig.enable = true;
-  
   programs.bash = {
     enable = true;
     shellAliases = {

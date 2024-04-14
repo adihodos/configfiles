@@ -106,7 +106,6 @@
     # xbox-drv
     usbutils
     # vscode
-    seer
 
     # docs
     zeal-qt6

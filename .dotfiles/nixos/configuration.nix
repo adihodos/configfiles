@@ -49,9 +49,6 @@
     LC_TIME = setupOptions.system.extraLocale;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${setupOptions.user.username} = {
     isNormalUser = true;
@@ -78,16 +75,23 @@
     usbutils
   ];
 
-  fonts.fontDir.enable = true;
-  fonts.packages = with pkgs; [
- 	  (nerdfonts.override { fonts = [ "Iosevka" "RobotoMono" "EnvyCodeR" "JetBrainsMono" "SpaceMono" "VictorMono" ]; })
-    # input-fonts
-	  roboto
-	  roboto-serif
-  ];
+  fonts = {    
+    fontDir.enable = true;
+    packages = with pkgs; [
+ 	    (nerdfonts.override { fonts = [ "Iosevka" "RobotoMono" "EnvyCodeR" "JetBrainsMono" "SpaceMono" "VictorMono" ]; })
+      # input-fonts
+	    roboto
+	    roboto-serif
+    ];
 
-  fonts.fontconfig = {
-	  defaultFonts.monospace = [ "Iosevka Nerd Font Mono Medium" ];
+    fontconfig = {
+      enable = true;
+	    defaultFonts = {
+        monospace = [ "Iosevka Nerd Font Mono" ];
+        sansSerif = [ "DejaVu Sans" ];
+        serif = [ "Roboto Serif" ];
+      };
+    };
   };
   
   # Some programs need SUID wrappers, can be configured further or are
