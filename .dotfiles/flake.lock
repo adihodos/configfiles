@@ -108,12 +108,28 @@
         "type": "indirect"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1713205917,
+        "narHash": "sha256-mvzZL2OkERg0JiiFEgaDe+kLGAt9aKnqxpOzvTr1CqA=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "92e8f6959e0d8632f80c84b71849c6fe2bd610fe",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "emacs-overlay": "emacs-overlay",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs",
-        "nixpkgs-unstable": "nixpkgs-unstable"
+        "nixpkgs-unstable": "nixpkgs-unstable",
+        "nur": "nur"
       }
     },
     "systems": {

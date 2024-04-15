@@ -11,6 +11,10 @@
 		home-manager.url = "github:nix-community/home-manager/release-23.11";
 		home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
+    nur = {
+      url = github:nix-community/NUR;
+    };
+
 		emacs-overlay = {
 			url = "github:nix-community/emacs-overlay";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -92,7 +96,8 @@
 							inherit setupOptions;
 						};
 
-						modules = __attrValues self.nixosModules ++ [							 
+						modules = __attrValues self.nixosModules ++ [
+              inputs.nur.nixosModules.nur
 							./nixos/configuration.nix
 							
 							home-manager.nixosModules.home-manager {
