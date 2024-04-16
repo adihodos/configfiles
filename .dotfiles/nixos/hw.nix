@@ -22,6 +22,13 @@
     "vm.vfs_cache_pressure" = 50;             # Adjust vfs_cache_pressure (0-1000), how the kernel reclaims memory used for caching filesystem objects
   };
 
+  console = {
+    enable = true;
+    earlySetup = true;
+    packages = with pkgs; [ terminus_font tamsyn ];
+    font = "Tamsyn10x20";
+  };
+
   hardware = {
     nvidia = {
       #open = true;
@@ -62,11 +69,4 @@
     # no need to redefine it in your config for now)
     #media-session.enable = true;
   };
-
-  # console = {
-  #   enable = true;
-  #   packages = [ pkgs.terminus_font ];
-  #   earlySetup = true;
-  #   font = "TER16x32";
-  # };
 }

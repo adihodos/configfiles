@@ -54,7 +54,18 @@
   users.users.${setupOptions.user.username} = {
     isNormalUser = true;
     description = setupOptions.user.name;
-    extraGroups = [ "networkmanager" "wheel" "input" "video" ];
+    extraGroups = [
+      "networkmanager"
+      "sudo"
+      "wheel"
+      "input"
+      "video"
+      "audio"
+      "sound"
+      "pulse"
+      "disk"
+      "dbus"
+    ];
     packages = with pkgs; [];
     uid = 1024;
   };

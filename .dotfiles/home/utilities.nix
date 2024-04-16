@@ -37,5 +37,7 @@
 		far2l
 		libsForQt5.kate
 		gamepad-tool
+    mpv
+    vlc
 	];
 }
