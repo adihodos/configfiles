@@ -3,13 +3,13 @@ let
   fonts = osConfig.themes.fonts;
   thm = osConfig.themes.colors;
   nur = osConfig.nur;
-in  
+in
 {
-	# Module installing librewolf as default browser
-	home.packages = with pkgs; [
-		librewolf
+  # Module installing librewolf as default browser
+  home.packages = with pkgs; [
+    librewolf
     skypeforlinux
-	];
+  ];
 
   programs.aria2 = {
     enable = true;
@@ -37,7 +37,7 @@ in
           max-download-limit = 0;
           # Make aria2 quiet (no console output). Default: false;
           quiet = true;
-          
+
           ### Advanced ###
           # Restart download from scratch if the corresponding control file doesn't exist. Default: false
           allow-overwrite = true;
@@ -63,7 +63,7 @@ in
           # log-level=debug
           # The file name of the log file. If - is specified, log is written to stdout. If empty string("") is specified, or this option is omitted, no log is written to disk at all.
           # log=
-          
+
           ### HTTP/FTP/SFTP ###
           # The maximum number of connections to one server for each download. Default: 1
           max-connection-per-server = 16;
@@ -76,36 +76,36 @@ in
         });
   };
 
-	home.sessionVariables = {
-		DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
-	};
+  home.sessionVariables = {
+    DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+  };
 
-	home.file.".librewolf/librewolf.overrides.cfg".text = ''
-		defaultPref("font.name.serif.latin","''+fonts.serif.family+''");
-		defaultPref("font.name.monospace.latin","''+fonts.mono.family+''");
+  home.file.".librewolf/librewolf.overrides.cfg".text = ''
+    defaultPref("font.name.serif.latin","''+fonts.serif.family+''");
+    defaultPref("font.name.monospace.latin","''+fonts.mono.family+''");
 
-		defaultPref("font.size.variable.latin",${toString fonts.serif.size});
-		defaultPref("browser.toolbars.bookmarks.visibility","always");
-		defaultPref("privacy.resisttFingerprinting.letterboxing", true);
-		defaultPref("network.http.referer.XOriginPolicy",2);
-		defaultPref("privacy.clearOnShutdown.history",true);
-		defaultPref("privacy.clearOnShutdown.downloads",true);
-		defaultPref("privacy.clearOnShutdown.cookies",true);
-		defaultPref("gfx.webrender.software.opengl",false);
-		defaultPref("webgl.disabled",true);
-		pref("font.name.serif.latin","''+fonts.serif.family+''");
-		pref("font.name.monospace.latin","''+fonts.mono.family+''");
+    defaultPref("font.size.variable.latin",${toString fonts.serif.size});
+    defaultPref("browser.toolbars.bookmarks.visibility","always");
+    defaultPref("privacy.resisttFingerprinting.letterboxing", true);
+    defaultPref("network.http.referer.XOriginPolicy",2);
+    defaultPref("privacy.clearOnShutdown.history",true);
+    defaultPref("privacy.clearOnShutdown.downloads",true);
+    defaultPref("privacy.clearOnShutdown.cookies",true);
+    defaultPref("gfx.webrender.software.opengl",false);
+    defaultPref("webgl.disabled",true);
+    pref("font.name.serif.latin","''+fonts.serif.family+''");
+    pref("font.name.monospace.latin","''+fonts.mono.family+''");
 
-		pref("font.size.variable.latin",${toString fonts.serif.size});
-		pref("browser.toolbars.bookmarks.visibility","always");
-		pref("privacy.resisttFingerprinting.letterboxing", true);
-		pref("network.http.referer.XOriginPolicy",2);
-		pref("privacy.clearOnShutdown.history",true);
-		pref("privacy.clearOnShutdown.downloads",true);
-		pref("privacy.clearOnShutdown.cookies",true);
-		pref("gfx.webrender.software.opengl",false);
-		pref("webgl.disabled",true);
-		'';
+    pref("font.size.variable.latin",${toString fonts.serif.size});
+    pref("browser.toolbars.bookmarks.visibility","always");
+    pref("privacy.resisttFingerprinting.letterboxing", true);
+    pref("network.http.referer.XOriginPolicy",2);
+    pref("privacy.clearOnShutdown.history",true);
+    pref("privacy.clearOnShutdown.downloads",true);
+    pref("privacy.clearOnShutdown.cookies",true);
+    pref("gfx.webrender.software.opengl",false);
+    pref("webgl.disabled",true);
+    '';
 
   programs.firefox = {
     enable = true;
@@ -116,7 +116,6 @@ in
       DisablePocket = true;
       DisableTelemetry = true;
       DisableFirefoxAccounts = false;
-      NoDefaultBookmarks = true;
       OfferToSaveLogins = false;
       OfferToSaveLoginsDefault = false;
       PasswordManagerEnabled = false;
@@ -133,31 +132,50 @@ in
       };
     };
 
-    profiles.default = {
+    profiles.${setupOptions.user.username} = {
+      isDefault = true;
+      name = setupOptions.user.username;
+
       extensions = with nur.repos.rycee.firefox-addons; [
-        adnauseam
+        # adnauseam
         aria2-integration
         betterttv
         darkreader
-        gruvbox-dark-theme
+        dark-mode-webextension
+        # gruvbox-dark-theme
         privacy-badger
         rust-search-extension
         ublock-origin
       ];
-      
-      id = 0;
-      userChrome = ''
-          toolbar#nav-bar, nav-bar-customization-target {
-            background: ${thm.base00} !important;
-    }
-          @-moz-document url("about:newtab") {
-            * { background-color: ${thm.base00}  !important; }
-          }
-        '';
-      
+
+      search.engines = {
+        "Nix Packages" = {
+          urls = [{
+            template = "https://search.nixos.org/packages";
+            params = [
+              { name = "type"; value = "packages"; }
+              { name = "query"; value = "{searchTerms}"; }
+            ];
+          }];
+
+          icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+          definedAliases = [ "@np" ];
+        };
+
+        "NixOS Wiki" = {
+          urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
+          iconUpdateURL = "https://nixos.wiki/favicon.png";
+          updateInterval = 24 * 60 * 60 * 1000; # every day
+          definedAliases = [ "@nw" ];
+        };
+
+        "Bing".metaData.hidden = true;
+        "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
+      };
+
       settings = {
-        "general.smoothScroll" = true;
-        
+        # "general.smoothScroll" = true;
+
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
 
         "extensions.autoDisableScopes" = 0;
@@ -192,7 +210,6 @@ in
         "font.name.monospace.x-western" = "${fonts.mono.family}";
         "font.name.sans-serif.x-western" = "${fonts.main.family}";
         "font.name.serif.x-western" = "${fonts.serif.family}";
-
         # "browser.display.background_color" = thm.base00;
         # "browser.display.foreground_color" = thm.base05;
         # "browser.display.document_color_use" = 2;
@@ -226,15 +243,47 @@ in
         "experiments.supported" = false;
         "network.allow-experiments" = false;
       };
+
+      bookmarks =
+        [
+          {
+            name = "Nix sites";
+            toolbar = true;
+            bookmarks = [
+              {
+                name = "homepage";
+                url = "https://nixos.org/";
+              }
+
+              {
+                name = "wiki";
+                tags = [ "wiki" "nix" ];
+                url = "https://nixos.wiki/";
+              }
+
+              {
+                name ="NixOS Learn";
+                tags = [ "nix" "wiki"];
+                url = "https://nixos.org/learn";
+              }
+
+              {
+                name = "NixOS Guide";
+                tags = ["nix" "guide"];
+                url = "https://github.com/mikeroyal/NixOS-Guide";
+              }
+            ];
+          }
+        ];
     };
   };
-  
-  #default browser  
-	xdg.mimeApps.defaultApplications = {
-		"text/html" = "firefox.desktop";
-		"x-scheme-handler/http" = "firefox.desktop";
-		"x-scheme-handler/https" = "firefox.desktop";
-		"x-scheme-handler/about" = "firefox.desktop";
-		"x-scheme-handler/unknown" = "firefox.desktop";
-	};
+
+  #default browser
+  xdg.mimeApps.defaultApplications = {
+    "text/html" = "firefox.desktop";
+    "x-scheme-handler/http" = "firefox.desktop";
+    "x-scheme-handler/https" = "firefox.desktop";
+    "x-scheme-handler/about" = "firefox.desktop";
+    "x-scheme-handler/unknown" = "firefox.desktop";
+  };
 }

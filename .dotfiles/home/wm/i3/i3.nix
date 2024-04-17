@@ -45,12 +45,13 @@ in
 
     services = {
       # caffeine.Install.WantedBy = lib.mkForce [ "i3-session.target" ];
-      # feh = {
-      #   Unit = {
-      #     Description = "feh background";
-      #     PartOf = [ "i3-session.target" ];
-      #     # After = [ "xrandr.service" "picom.service" ];
-      #   };
+      feh = {
+        Unit = {
+          Description = "feh background";
+          PartOf = [ "i3-session.target" ];
+          # After = [ "xrandr.service" "picom.service" ];
+        };
+      };
       #
       #   Service = {
       #     ExecStart = "${pkgs.feh}/bin/feh --bg-fill ${config.xdg.dataHome}/wall.png";
@@ -94,8 +95,11 @@ in
         "${mod}+Shift+q" = "kill";
         # Hide the bar
         "${mod}+h" = "bar mode toggle";
-
+        #launcher
         "${mod}+d" = "exec ${pkgs.rlaunch}/bin/rlaunch -f \"${fonts.propo.family}\" -h 32 -t kitty";
+        #flameshot
+        "${mod}+Print" = "exec ${pkgs.flameshot}/bin/flameshot gui";
+        "${mod}+Shift+Print" = "exec ${pkgs.flameshot}/bin/flameshot launcher";
 
         # switch to workspace
         "${mod}+1" = "workspace $terms";
@@ -182,7 +186,7 @@ in
           # theme = "gruvbox-powerline";
           theme = "iceberg-rainbow";
         in
-          "${cmd} -m nic disk:root cpu memory battery date time \\
+          "${cmd} -m cpu memory disk:root nic date time \\
 -p root.path=/ time.format=\"%H:%M CW %V\" \\
 date.format=\"%a, %b %d %Y\" -t ${theme}";
         
