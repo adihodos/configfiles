@@ -4,6 +4,7 @@
     enable = true;
     userName = setupOptions.user.name;
     userEmail = setupOptions.user.email;
+    ignores = [ ".envrc" ".direnv" ];
     extraConfig = {
       init.defaultBranch = "main";
       safe.directory = "/home/" + setupOptions.user.username + "/.dotfiles";
