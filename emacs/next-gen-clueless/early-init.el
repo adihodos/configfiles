@@ -35,7 +35,6 @@ Simplified version of `add-to-list'."
 
 (setq gc-cons-threshold (* 128 1024 1024)
       read-process-output-max (* 1024 1024)
-      make-backup-files nil
       create-lockfiles nil)
 
 (add-hook 'emacs-startup-hook
@@ -69,6 +68,5 @@ New frames are instructed to call `prot-emacs-re-enable-frame-theme'."
 
 (add-hook 'after-init-hook (lambda () (set-frame-name "home")))
 
-(setq backup-directory-alist '((".*" . "~/.Trash")))
 (setq custom-file "~/.emacs.d/emacs-custom.el")
 (load custom-file t)

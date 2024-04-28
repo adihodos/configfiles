@@ -1,10 +1,11 @@
 ;; emacs-dashboard.el --- Dashboard package config file -*- lexical-binding: t -*-
 ;;; Code:
 
-(prot-emacs-package page-break-lines
-  (:install t)
-  ;; (:delay 5)
-;;   :diminish (page-break-lines-mode visual-line-mode)
+(use-package page-break-lines
+  :ensure t
+
+  :diminish (page-break-lines-mode visual-line-mode)
+  :config
   (global-page-break-lines-mode 1))
 
 (defun random-startup-banner()
@@ -12,12 +13,13 @@
 		(nth (random (length banner-list)) banner-list)))
 ;;
 ;; DASHBOARD
-(prot-emacs-package dashboard
-  (:install t)
-  ;; (:delay 5)
+(use-package dashboard
+  :ensure t
+
+  :config
   (setq initial-buffer-choice 'dashboard-open)
   (setq dashboard-banner-logo-title "Emacs Is ... Everything ??!!!!")
-    (setq dashboard-startup-banner (random-startup-banner))
+  (setq dashboard-startup-banner (random-startup-banner))
   (setq dashboard-center-content t) ;; set to 't' for centered content
   (setq dashboard-items '((recents . 5)
                           ;; (agenda . 5 )

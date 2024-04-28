@@ -1,36 +1,35 @@
 ;; emacs-icons.el --- icons config file -*- lexical-binding: t -*-
 ;;; Code:
 
-(prot-emacs-package nerd-icons
-  (:install t)
-  (:delay 5)
+(use-package nerd-icons
+  :ensure t
+  :config
   (setq nerd-icons-font-family "Symbols Nerd Font Mono"))
 
-(prot-emacs-package nerd-icons-dired
-  (:install t)
-  (:delay 5)
-  (add-hook 'dired-mode-hook #'nerd-icons-dired-mode))
+(use-package nerd-icons-dired
+  :ensure t
+  :hook (dired-mode . nerd-icons-dired-mode))
 
-(prot-emacs-package treemacs-nerd-icons
-  (:install t)
-  (:delay 5)
+(use-package treemacs-nerd-icons
+  :ensure t
+  :config
   (treemacs-load-theme "nerd-icons"))
 
-(prot-emacs-package nerd-icons-ibuffer
-  (:install t)
-  (:delay 5)
-  (add-hook 'ibuffer-mode-hook #'nerd-icons-ibuffer-mode)
+(use-package nerd-icons-ibuffer
+  :ensure t
+  :hook (ibuffer-mode . nerd-icons-ibuffer-mode)
+  :config
   ;; Use human readable file size in ibuffer.
   (setq  nerd-icons-ibuffer-human-readable-size t))
 
-(with-eval-after-load 'marginalia
-  (prot-emacs-package nerd-icons-completion
-    (:install t)
-	(:delay 5)
-        (nerd-icons-completion-mode)
-        (add-hook 'marginalia-mode-hook #'nerd-icons-completion-marginalia-setup)))
+(use-package nerd-icons-completion
+  :after marginalia
+  :ensure t
+  :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+  :config
+  (nerd-icons-completion-mode))
 
-(prot-emacs-package all-the-icons (:install t) (:delay 5))
+(use-package all-the-icons :ensure t)
 
 (provide 'emacs-icons)
 ;; emacs-icons.el ends here

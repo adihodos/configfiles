@@ -24,10 +24,15 @@ before all other modules of my setup."
   :group 'prot-emacs
   :type '(repeat symbol))
 
+(setq backup-directory-alist
+      `(("." . ,(expand-file-name
+                 (concat user-emacs-directory "backups")))))
+(setq backup-bycopying t)
+(setq version-control nil)
+(setq delete-old-versions t)
 (setq make-backup-files nil)
 (setq backup-inhibited nil) ; Not sure if needed, given `make-backup-files'
 (setq create-lockfiles nil)
-
 ;; Make native compilation silent and prune its cache.
 (when (native-comp-available-p)
   (setq native-comp-async-report-warnings-errors 'silent) ; Emacs 28 with native compilation
@@ -35,6 +40,19 @@ before all other modules of my setup."
 
 ;; Disable the damn thing by making it disposable.
 (setq custom-file (make-temp-file "emacs-custom-"))
+
+;; Enable these
+(mapc
+ (lambda (command)
+   (put command 'disabled nil))
+ '(list-timers narrow-to-region narrow-to-page upcase-region downcase-region))
+
+;; And disable these
+(mapc
+ (lambda (command)
+   (put command 'disabled t))
+ '(eshell project-eshell overwrite-mode iconify-frame diary))
+
 
 (mapc
  (lambda (string)
@@ -63,102 +81,6 @@ before all other modules of my setup."
         ("nongnu" . 1)))
 
 (setq custom-safe-themes t)
-
-(defmacro prot-emacs-configure (&rest body)
-  "Evaluate BODY as a `progn'.
-BODY consists of ordinary Lisp expressions.  The sole exception
-is an unquoted plist of the form (:delay NUMBER) which evaluates
-BODY with NUMBER seconds of `run-with-timer'.
-
-Note that `prot-emacs-configure' does not try to autoload
-anything.  Use it only for forms that evaluate regardless.
-
-Also see `prot-emacs-package'."
-  (declare (indent 0))
-  (let (delay)
-    (dolist (element body)
-      (when (plistp element)
-        (pcase (car element)
-          (:delay (setq delay (cadr element)
-                        body (delq element body))))))
-    (if delay
-        `(run-with-timer ,delay nil (lambda () ,@body))
-      `(progn ,@body))))
-
-(defun prot-emacs-package-install (package &optional method)
-  "Install PACKAGE with optional METHOD.
-
-If METHOD is nil or the `builtin' symbol, PACKAGE is not
-installed as it is considered part of Emacs.
-
-If METHOD is a string, it must be a URL pointing to the version
-controlled repository of PACKAGE.  Installation is done with
-`package-vc-install'.
-
-If METHOD is a quoted list, it must have a form accepted by
-`package-vc-install' such as:
-
-\\='(denote :url \"https://github.com/protesilaos/denote\" :branch \"main\")
-
-If METHOD is any other non-nil value, install PACKAGE using
-`package-install'."
-  (unless (or (eq method 'builtin) (null method))
-    (unless (package-installed-p package)
-      (when (or (stringp method) (listp method))
-        (package-vc-install method))
-      (unless package-archive-contents
-        (package-refresh-contents))
-      (package-install package))))
-
-(defvar prot-emacs-loaded-packages nil)
-
-(defmacro prot-emacs-package (package &rest body)
-  "Require PACKAGE with BODY configurations.
-
-PACKAGE is an unquoted symbol that is passed to `require'.  It
-thus conforms with `featurep'.
-
-BODY consists of ordinary Lisp expressions.  There are,
-nevertheless, two unquoted plists that are treated specially:
-
-1. (:install METHOD)
-2. (:delay NUMBER)
-
-These plists can be anywhere in BODY and are not part of its
-final expansion.
-
-The :install property is the argument passed to
-`prot-emacs-package-install' and has the meaning of METHOD
-described therein.
-
-The :delay property makes the evaluation of PACKAGE with the
-expanded BODY happen with `run-with-timer'.
-
-Also see `prot-emacs-configure'."
-  (declare (indent defun))
-  (unless (memq package prot-emacs-omit-packages)
-    (let (install delay)
-      (dolist (element body)
-        (when (plistp element)
-          (pcase (car element)
-            (:install (setq install (cdr element)
-                            body (delq element body)))
-            (:delay (setq delay (cadr element)
-                          body (delq element body))))))
-      (let ((common `(,(when install
-                         `(prot-emacs-package-install ',package ,@install))
-                      (require ',package)
-                      (add-to-list 'prot-emacs-loaded-packages ',package)
-                      ,@body
-                      ;; (message "Prot Emacs loaded package: %s" ',package)
-                      )))
-        (cond
-         ((featurep package)
-          `(progn ,@body))
-         (delay
-          `(run-with-timer ,delay nil (lambda () ,@(delq nil common))))
-         (t
-          `(progn ,@(delq nil common))))))))
 
 
 (defmacro prot-emacs-keybind (keymap &rest definitions)
@@ -191,45 +113,18 @@ DEFINITIONS is a sequence of string and command pairs."
   (file-name-directory (or load-file-name (buffer-file-name)))
   "Directory where this config is loaded from")
 
-(require 'emacs-essentials)
-(require 'emacs-sys)
 (require 'emacs-themes)
-(require 'emacs-icons)
 (require 'emacs-dashboard)
+(require 'emacs-essentials)
+(require 'emacs-completion)
+(require 'emacs-icons)
+(require 'emacs-lsp)
+
 (require 'emacs-modeline)
 (require 'emacs-which-key)
 (require 'emacs-window)
-(require 'emacs-completion)
 (require 'emacs-langs)
-(require 'emacs-lsp)
 (require 'emacs-search)
 (require 'emacs-explorer)
 
-;; ;; A few more useful configurations...
-;; (use-package emacs
-;;   :init
-;;   ;; Add prompt indicator to `completing-read-multiple'.
-;;   ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-;;   (defun crm-indicator (args)
-;;     (cons (format "[CRM%s] %s"
-;;                   (replace-regexp-in-string
-;;                    "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-;;                    crm-separator)
-;;                   (car args))
-;;           (cdr args)))
-;;   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
-;;   ;; Do not allow the cursor in the minibuffer prompt
-;;   (setq minibuffer-prompt-properties
-;;         '(read-only t cursor-intangible t face minibuffer-prompt))
-;;   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
-;;   ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-;;   ;; Vertico commands are hidden in normal buffers.
-;;   ;; (setq read-extended-command-predicate
-;;   ;;       #'command-completion-default-include-p)
-
-;;   ;; Enable recursive minibuffers
-;;   (setq enable-recursive-minibuffers t))
-
-;; ;;; init.el ends here
+;;; init.el ends here

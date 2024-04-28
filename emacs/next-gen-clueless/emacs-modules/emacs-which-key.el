@@ -1,12 +1,11 @@
 ;; emacs-which-key.el --- which-key package config file -*- lexical-binding: t -*-
 ;;; Code:
 
-(prot-emacs-package which-key
-  (:install t)
-  (:delay 10)
-  
+(use-package which-key
+  :ensure t
+  :config
   (setq which-key-separator "  ")
-  (setq which-key-prefix-prefix "... ")
+  (setq which-key-prefix-prefix "-> ")
   (setq which-key-max-display-columns 3)
   
   (setq which-key-idle-secondary-delay 0.25)
@@ -35,17 +34,16 @@
 
 ;;
 ;; better help
-(prot-emacs-package helpful
-  (:install t)
-  (:delay 10)
+(use-package helpful
+  :ensure t
+  :bind (:map global-map
   ;; Note that the built-in `describe-function' includes both functions
   ;; and macros. `helpful-function' is functions only, so we provide
   ;; `helpful-callable' as a drop-in replacement.
-    (prot-emacs-keybind global-map
-        [remap describe-function]  #'helpful-callable
-        [remap describe-command]  #'helpful-command
-        [remap describe-variable]  #'helpful-variable
-        [remap describe-key]  #'helpful-key))
+        ([remap describe-function]  . helpful-callable)
+        ([remap describe-command]  . helpful-command)
+        ([remap describe-variable]  . helpful-variable)
+        ([remap describe-key]  . helpful-key)))
 
 (provide 'emacs-which-key)
 

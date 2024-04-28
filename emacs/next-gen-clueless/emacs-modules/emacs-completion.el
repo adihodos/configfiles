@@ -1,8 +1,10 @@
 ;; emacs-completion.el --- completion config file -*- lexical-binding: t -*-
 ;;; Code:
 
-(prot-emacs-configure
-  (:delay 1)
+(use-package minibuffer
+  :ensure nil
+  :config
+  
 ;;;; Minibuffer configurations
   (setq completion-styles '(basic substring initials flex orderless)) ; also see `completion-category-overrides'
   (setq completion-category-defaults nil)
@@ -136,27 +138,32 @@
   ;; do I want it.
   (remove-hook 'save-some-buffers-functions #'abbrev--possibly-save))
 
-
 ;;; yasnippet
-(prot-emacs-package yasnippet
-  (:install t)
-  (:delay 5)
+(use-package yasnippet
+  :ensure t
+  :config
   (yas-global-mode 1)
   ;; (yas-reload-all)
   ;; (add-hook 'prog-mode-hook 'yas-minor-mode)
   ;; (add-hook 'text-mode-hook 'yas-minor-mode)
   )
 
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(prot-emacs-package savehist
-  (:install t)
-  (:delay 5)
-  (savehist-mode))
+;;;; `savehist' (minibuffer and related histories)
+(use-package savehist
+  :ensure t
+  :hook (after-init . savehist-mode)
+  :config
+  (setq savehist-file (locate-user-emacs-file "savehist"))
+  (setq history-length 100)
+  (setq history-delete-duplicates t)
+  (setq savehist-save-minibuffer-history t)
+  (add-to-list 'savehist-additional-variables 'kill-ring))
 
 ;;; Orderless completion style (and prot-orderless.el)
-(prot-emacs-package orderless
-  (:install t)
-  (:delay 5)
+(use-package orderless
+  :ensure t
+  :after minibuffer
+  :config
   ;; Remember to check my `completion-styles' and the
   ;; `completion-category-overrides'.
   (setq orderless-matching-styles
@@ -164,26 +171,111 @@
 
   ;; SPC should never complete: use it for `orderless' groups.
   ;; The `?' is a regexp construct.
-  (prot-emacs-keybind minibuffer-local-completion-map
-    "SPC" nil
-    "?" nil))
+  :bind (:map minibuffer-local-completion-map
+          ("SPC" . nil)
+          ("?" . nil)))
 
-(prot-emacs-package prot-orderless
+(use-package prot-orderless
+  :ensure nil
+  :config
   (setq orderless-style-dispatchers
         '(prot-orderless-literal
           prot-orderless-file-ext
           prot-orderless-beg-or-end)))
 
+(use-package rfn-eshadow
+  :ensure nil
+  :hook (minibuffer-setup . cursor-intangible-mode)
+  :config
+  ;; Not everything here comes from rfn-eshadow.el, but this is fine.
+
+  (setq resize-mini-windows t)
+  (setq read-answer-short t) ; also check `use-short-answers' for Emacs28
+  (setq echo-keystrokes 0.25)
+  (setq kill-ring-max 60) ; Keep it small
+
+  ;; Do not allow the cursor to move inside the minibuffer prompt.  I
+  ;; got this from the documentation of Daniel Mendler's Vertico
+  ;; package: <https://github.com/minad/vertico>.
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+
+
+    ;; Add prompt indicator to `completing-read-multiple'.  We display
+    ;; [`completing-read-multiple': <separator>], e.g.,
+    ;; [`completing-read-multiple': ,] if the separator is a comma.  This
+    ;; is adapted from the README of the `vertico' package by Daniel
+    ;; Mendler.  I made some small tweaks to propertize the segments of
+    ;; the prompt.
+    (defun crm-indicator (args)
+      (cons (format "[`completing-read-multiple': %s]  %s"
+                    (propertize
+                     (replace-regexp-in-string
+                      "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                      crm-separator)
+                     'face 'error)
+                    (car args))
+            (cdr args)))
+
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  (file-name-shadow-mode 1))
+
+  (use-package consult
+    :ensure t
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    :bind
+    (:map global-map
+      ("M-g M-g" . consult-goto-line)
+      ("M-K" . consult-keep-lines) ; M-S-k is similar to M-S-5 (M-%)
+      ("M-F" . consult-focus-lines) ; same principle
+      ("M-s M-b" . consult-buffer)
+      ("M-s M-f" . consult-find)
+      ("M-s M-g" . consult-grep)
+      ("M-s M-h" . consult-history)
+      ("M-s M-i" . consult-imenu)
+      ("M-s M-l" . consult-line)
+      ("M-s M-m" . consult-mark)
+      ("M-s M-y" . consult-yank-pop)
+      ("M-s M-s" . consult-outline)
+      :map consult-narrow-map
+      ("?" . consult-narrow-help))
+    :config
+    (setq consult-line-numbers-widen t)
+    ;; (setq completion-in-region-function #'consult-completion-in-region)
+    (setq consult-async-min-input 3)
+    (setq consult-async-input-debounce 0.5)
+    (setq consult-async-input-throttle 0.8)
+    (setq consult-narrow-key nil)
+    (setq consult-find-args
+          (concat "find . -not ( "
+                  "-path */.git* -prune "
+                  "-or -path */.cache* -prune )"))
+    (setq consult-preview-key 'any)
+
+    (add-to-list 'consult-mode-histories '(vc-git-log-edit-mode . log-edit-comment-ring))
+
+    (require 'consult-imenu) ; the `imenu' extension is in its own file
+
+    (with-eval-after-load 'pulsar
+      ;; see my `pulsar' package: <https://protesilaos.com/emacs/pulsar>
+      (setq consult-after-jump-hook nil) ; reset it to avoid conflicts with my function
+      (dolist (fn '(pulsar-recenter-top pulsar-reveal-entry))
+        (add-hook 'consult-after-jump-hook fn))))
+
 ;;; Detailed completion annotations (marginalia.el)
-(prot-emacs-package marginalia
-  (:install t)
-  (:delay 5)
+(use-package marginalia
+  :ensure t
+  :defer 1
+  :config
   (setq marginalia-max-relative-age 0) ; absolute time
   (marginalia-mode 1))
 
 ;;;; Custom completion annotations
-(prot-emacs-package prot-marginalia
-  (:delay 5)
+(use-package prot-marginalia
+  :ensure nil
+  :after marginalia
+  :config
   (setq marginalia-annotator-registry
         '((bookmark prot-marginalia-bookmark)
           (buffer prot-marginalia-buffer)
@@ -197,25 +289,25 @@
           (unicode-name marginalia-annotate-char))))
 
 ;;; Vertical completion layout
-(prot-emacs-package vertico
-  (:install t)
-  (:delay 5)
+(use-package vertico
+  :ensure t
+  :config
   (setq vertico-scroll-margin 0)
   (setq vertico-count 5)
   (setq vertico-resize nil)
   (setq vertico-cycle t)
-
   (vertico-mode 1)
 
   ;; This works with `file-name-shadow-mode' enabled.  When you are in
   ;; a sub-directory and use, say, `find-file' to go to your home '~/'
   ;; or root '/' directory, Vertico will clear the old path to keep
   ;; only your current input.
-  (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy))
+  :hook (rfn-eshadow-update-overlay  . vertico-directory-tidy))
 
 ;;; Custom tweaks for vertico (prot-vertico.el)
-(prot-emacs-package prot-vertico
-  (:delay 5)
+(use-package prot-vertico
+  :ensure nil
+  :config
   (setq vertico-multiform-categories
         `(;; Maximal
           (embark-keybinding ,@prot-vertico-multiform-maximal)
@@ -230,56 +322,42 @@
           (t ,@prot-vertico-multiform-minimal)))
 
   (vertico-multiform-mode 1)
+  :bind (:map vertico-map
+			  ("<left>" . backward-char)
+			  ("<right>" . forward-char)
+			  ("TAB" . prot-vertico-private-complete)
+			  ("DEL" . vertico-directory-delete-char)
+			  ("M-DEL" . vertico-directory-delete-word)
+			  ("M-," . vertico-quick-insert)
+			  ("M-." . vertico-quick-exit)
 
-  (prot-emacs-keybind vertico-map
-    "<left>" #'backward-char
-    "<right>" #'forward-char
-    "TAB" #'prot-vertico-private-complete
-    "DEL" #'vertico-directory-delete-char
-    "M-DEL" #'vertico-directory-delete-word
-    "M-," #'vertico-quick-insert
-    "M-." #'vertico-quick-exit)
+  :map vertico-multiform-map
+  ("C-n" . prot-vertico-private-next)
+  ("<down>" . prot-vertico-private-next)
+  ("C-p" . prot-vertico-private-previous)
+  ("<up>" . prot-vertico-private-previous)
+  ("C-l" . vertico-multiform-vertical)))
 
-  (prot-emacs-keybind vertico-multiform-map
-    "C-n" #'prot-vertico-private-next
-    "<down>" #'prot-vertico-private-next
-    "C-p" #'prot-vertico-private-previous
-    "<up>" #'prot-vertico-private-previous
-    "C-l" #'vertico-multiform-vertical))
-
-
-(prot-emacs-package company
-  (:install t)
-  (:delay 5)
-  
-  ;; Trigger completion immediately.
+(use-package company
+  :ensure t
+  :hook ((prog-mode text-mode) . company-mode)
+  :config
   (setq company-idle-delay 0)
-
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
+  (setq company-minimum-prefix-length 2)
   (setq company-show-numbers t)
-  ;; (company-begin-commands nil) ;; uncomment to disable popup
-  (setq company-tooltip-align-annotations 't)
-  (setq global-company-mode t)
+  :bind ([C-tab] . company-complete))
 
-  (prot-emacs-keybind company-active-map
-    "C-n" #'company-select-next
-    "C-p" #'company-select-previous
-    "M-<" #'company-select-first
-    "M->" #'company-select-last)
-  
-  (prot-emacs-keybind global-map 
-    "<C-tab>" #'company-complete))
-
-(prot-emacs-package company-prescient
-  (:install t)
-  (:delay 5)
+(use-package company-prescient
+  :ensure t
+  :after (company)
+  :config
   (company-prescient-mode 1))
 
-(prot-emacs-package company-box
-  (:install t)
-  (:delay 5)
-  (add-hook 'company-mode #'company-box-mode)
-  
+(use-package company-box
+  :ensure t
+  :after (company all-the-icons)
+  :hook (company-mode . company-box-mode)
+  :config
   (setq company-box-icons-alist 'company-box-icons-all-the-icons)
 	(setq company-box-backends-colors nil)
 	(setq company-box-backends-colors nil)

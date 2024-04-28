@@ -69,13 +69,14 @@ Used by `prot-simple-inset-date'."
 Repeat to extend the region forward to the next symbolic
 expression."
   (interactive)
-  (if (eq last-command this-command)
+  (if (and (region-active-p)
+           (eq last-command this-command))
       (ignore-errors (forward-sexp 1))
     (when-let ((thing (cond
                        ((thing-at-point 'url) 'url)
                        ((thing-at-point 'sexp) 'sexp)
                        ((thing-at-point 'string) 'string)
-                       (t 'word))))
+                       ((thing-at-point 'word) 'word))))
       (prot-simple--mark (bounds-of-thing-at-point thing)))))
 
 ;;;###autoload
@@ -588,6 +589,19 @@ paragraph.  The idea is to produce the opposite effect of both
 ;;;; Commands for windows and pages
 
 ;;;###autoload
+(defun prot-simple-other-window ()
+  "Wrapper for `other-window' and `next-multiframe-window'.
+If there is only one window and multiple frames, call
+`next-multiframe-window'.  Otherwise, call `other-window'."
+  (interactive)
+  (if (and (one-window-p) (length> (frame-list) 1))
+      (progn
+        (call-interactively #'next-multiframe-window)
+        (setq this-command #'next-multiframe-window))
+    (call-interactively #'other-window)
+    (setq this-command #'other-window)))
+
+;;;###autoload
 (defun prot-simple-narrow-visible-window ()
   "Narrow buffer to wisible window area.
 Also check `prot-simple-narrow-dwim'."
@@ -696,6 +710,41 @@ Name the buffer after the defun's symbol."
 
 ;;;; Commands for buffers
 
+(defun prot-simple--display-unsaved-buffers (buffers buffer-menu-name)
+  "Produce buffer menu listing BUFFERS called BUFFER-MENU-NAME."
+  (let ((old-buf (current-buffer))
+        (buf (get-buffer-create buffer-menu-name)))
+    (with-current-buffer buf
+      (Buffer-menu-mode)
+      (setq-local Buffer-menu-files-only nil
+                  Buffer-menu-buffer-list buffers
+                  Buffer-menu-filter-predicate nil)
+      (list-buffers--refresh buffers old-buf)
+      (tabulated-list-print))
+    (display-buffer buf)))
+
+(defun prot-simple--get-unsaved-buffers ()
+  "Get list of unsaved buffers."
+  (seq-filter
+   (lambda (buffer)
+     (and (buffer-file-name buffer)
+          (buffer-modified-p buffer)))
+   (buffer-list)))
+
+;;;###autoload
+(defun prot-simple-display-unsaved-buffers ()
+  "Produce buffer menu listing unsaved file-visiting buffers."
+  (interactive)
+  (if-let ((unsaved-buffers (prot-simple--get-unsaved-buffers)))
+      (prot-simple--display-unsaved-buffers unsaved-buffers "*Unsaved buffers*")
+    (message "No unsaved buffers")))
+
+(defun prot-simple-display-unsaved-buffers-on-exit (&rest _)
+  "Produce buffer menu listing unsaved file-visiting buffers.
+Add this as :before advice to `save-buffers-kill-emacs'."
+  (when-let ((unsaved-buffers (prot-simple--get-unsaved-buffers)))
+    (prot-simple--display-unsaved-buffers unsaved-buffers "*Unsaved buffers*")))
+
 ;;;###autoload
 (defun prot-simple-copy-current-buffer-name ()
   "Add the current buffer's name to the `kill-ring'."
@@ -799,6 +848,38 @@ counter-clockwise."
               ((> wincount 1)))
     (dotimes (i (- wincount 1))
       (window-swap-states (elt winlist i) (elt winlist (+ i 1))))))
+
+;;;; Commands for files
+
+(cl-defmethod register--type ((_regval vector)) 'vector)
+
+(cl-defmethod register-val-describe ((val vector) _verbose)
+  (if-let ((pos (aref val 2))
+           (file (aref val 1)))
+      (princ (format "%s at position %s" file pos))
+    (princ "Garbage data")))
+
+;;;###autoload
+(defun prot-simple-file-to-register (register)
+  "Store current location of file's point in REGISTER."
+  (interactive (list (register-read-with-preview "File with point to register: ")))
+  (set-register register (vector 'file-with-point (buffer-file-name) (point))))
+
+(defvar prot-simple-file-to-register-jump-hook nil
+  "Normal hook called after jumping to a file register.
+See `prot-simple-file-to-register'.")
+
+;;;###autoload
+(cl-defmethod register-val-jump-to ((val vector) delete)
+  "Handle how to jump to a location register.
+This is like the default, but does not ask to visit a file: it does it
+outright."
+  (cond
+   ((eq (aref val 0) 'file-with-point)
+    (find-file (aref val 1))
+    (goto-char (aref val 2))
+    (run-hooks 'prot-simple-file-to-register-jump-hook))
+   (t (cl-call-next-method val delete))))
 
 ;;;; Commands of a general nature
 

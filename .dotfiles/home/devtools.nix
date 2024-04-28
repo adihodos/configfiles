@@ -8,5 +8,9 @@
   };
   
   home.packages = with pkgs; [
+    clang-tools
+    man-pages
+    man-pages-posix
+    stdman
   ];
 }
