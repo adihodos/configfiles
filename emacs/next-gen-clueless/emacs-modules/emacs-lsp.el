@@ -14,30 +14,31 @@
   :hook (((c++-mode c-mode) . eglot-ensure)
          (eglot-managed-mode-hook . company-mode))
   :bind (:map eglot-mode-map
-	("C-c l =" . eglot-format-buffer)
-	("C-c l a" . eglot-code-actions)
-	("C-c l h" . eldoc)
-	("C-c l i" . eglot-code-action-organize-imports)
-	("C-c l q" . eglot-code-action-quickfix)
-	("C-c l e" . eglot-code-action-extract)
-	("C-c l I" . eglot-code-action-inline)
-	("C-c l R" . eglot-code-action-rewrite)
-	("C-c l r" . eglot-rename))
-	:config
-    (setq eglot-autoshutdown t)
-    (with-eval-after-load 'eglot
-;;       (add-to-list 'eglot-ignored-server-capabilites :hoverProvider)
-      (add-to-list 'eglot-server-programs
-  '(c++-mode . ("clangd"
-                "--background-index"
-                "--clang-tidy"
-                "--pch-storage=memory"
-                "--header-insertion=never"
-                "--header-insertion-decorators"
-                "--all-scopes-completion"
-                "--completion-style=detailed"
-                "-j=4"
-                "--log=verbose")))))
+			  ("C-c l =" . eglot-format-buffer)
+			  ("C-c l a" . eglot-code-actions)
+;; 			  ("C-c l h" . eldoc-box-eglot-help-at-point)
+              ("C-c l h" . eldoc)
+			  ("C-c l i" . eglot-code-action-organize-imports)
+			  ("C-c l q" . eglot-code-action-quickfix)
+			  ("C-c l e" . eglot-code-action-extract)
+			  ("C-c l I" . eglot-code-action-inline)
+			  ("C-c l R" . eglot-code-action-rewrite)
+			  ("C-c l r" . eglot-rename))
+  :config
+  (setq eglot-autoshutdown t)
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-ignored-server-capabilites :hoverProvider)
+    (add-to-list 'eglot-server-programs
+				 '(c++-mode . ("clangd"
+							   "--background-index"
+							   "--clang-tidy"
+							   "--pch-storage=memory"
+							   "--header-insertion=never"
+							   "--header-insertion-decorators"
+							   "--all-scopes-completion"
+							   "--completion-style=detailed"
+							   "-j=4"
+							   "--log=verbose")))))
 
 (use-package eldoc
   :preface
@@ -46,13 +47,16 @@
             'eldoc-documentation-compose-eagerly))
   :ensure t
   :hook ((eglot-managed-mode emacs-lisp-mode lisp-interaction-mode) . mp-eglot-eldoc)
+;;     (prog-mode . mp-eglot-eldoc))
   :config
-  (setq eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit))
+  ;; (setq eldoc-echo-area-use-multiline-p 'truncate-sym-name-if-fit)
+  (setq eldoc-echo-area-use-multiline-p nil))
 
-;; (use-package eldoc-box
-;;   :after eldoc
-;;   :ensure t
-;;   :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode))
+(use-package eldoc-box
+  :after eldoc
+  :ensure t
+  ;; :hook (eglot-managed-mode . eldoc-box-hover-at-point-mode)
+  :hook (eldoc-mode . eldoc-box-hover-mode))
 
 ;; (use-package rust-mode
 ;;   :ensure t)

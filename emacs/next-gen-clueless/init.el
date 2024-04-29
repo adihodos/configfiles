@@ -64,8 +64,11 @@ before all other modules of my setup."
 (require 'package)
 
 (setq package-vc-register-as-project nil) ; Emacs 30
-
 (add-hook 'package-menu-mode-hook #'hl-line-mode)
+
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+(require 'vc-use-package)
 
 ;; Also read: <https://protesilaos.com/codelog/2022-05-13-emacs-elpa-devel/>
 (setq package-archives
@@ -117,8 +120,10 @@ DEFINITIONS is a sequence of string and command pairs."
 (require 'emacs-dashboard)
 (require 'emacs-essentials)
 (require 'emacs-completion)
+(require 'emacs-vertico)
 (require 'emacs-icons)
 (require 'emacs-lsp)
+;; (require 'emacs-peek)
 
 (require 'emacs-modeline)
 (require 'emacs-which-key)

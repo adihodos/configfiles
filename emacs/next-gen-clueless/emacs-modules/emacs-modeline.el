@@ -27,7 +27,7 @@
   :ensure t
   :config
   (doom-modeline-mode 1)
-  (setq doom-modeline-height 35      ;; sets modeline height
+  (setq doom-modeline-height 24      ;; sets modeline height
         doom-modeline-bar-width 5    ;; sets right bar width
         doom-modeline-persp-name t   ;; adds perspective name to modeline
         doom-modeline-persp-icon t
