@@ -13,5 +13,7 @@
     texturepacker
     rucksack
     awesomebump
+    # pdfstudioviewer
+    libsForQt5.okular
 	];
 }

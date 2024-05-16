@@ -45,13 +45,14 @@ in
 
     services = {
       # caffeine.Install.WantedBy = lib.mkForce [ "i3-session.target" ];
-      feh = {
-        Unit = {
-          Description = "feh background";
-          PartOf = [ "i3-session.target" ];
-          # After = [ "xrandr.service" "picom.service" ];
-        };
-      };
+      # feh = {
+      #   Unit = {
+      #     Description = "feh background";
+      #     PartOf = [ "i3-session.target" ];
+      #     # After = [ "xrandr.service" "picom.service" ];
+      #   };
+      # };
+      
       #
       #   Service = {
       #     ExecStart = "${pkgs.feh}/bin/feh --bg-fill ${config.xdg.dataHome}/wall.png";
@@ -85,6 +86,7 @@ in
         # { command = "systemctl --user restart polybar"; always = true; notification = false; }
         { command = "dunst"; always = true; notification = false; }
         { command = "numlockx on"; always = true; notification = false; }
+        { command = "nitrogen --restore"; always = true; notification = false; }
       ];
 
       keybindings = lib.mkOptionDefault {

@@ -7,7 +7,7 @@ in
 {
   # Module installing librewolf as default browser
   home.packages = with pkgs; [
-    librewolf
+    # librewolf
     skypeforlinux
   ];
 
@@ -77,35 +77,35 @@ in
   };
 
   home.sessionVariables = {
-    DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+    # DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
   };
 
-  home.file.".librewolf/librewolf.overrides.cfg".text = ''
-    defaultPref("font.name.serif.latin","''+fonts.serif.family+''");
-    defaultPref("font.name.monospace.latin","''+fonts.mono.family+''");
-
-    defaultPref("font.size.variable.latin",${toString fonts.serif.size});
-    defaultPref("browser.toolbars.bookmarks.visibility","always");
-    defaultPref("privacy.resisttFingerprinting.letterboxing", true);
-    defaultPref("network.http.referer.XOriginPolicy",2);
-    defaultPref("privacy.clearOnShutdown.history",true);
-    defaultPref("privacy.clearOnShutdown.downloads",true);
-    defaultPref("privacy.clearOnShutdown.cookies",true);
-    defaultPref("gfx.webrender.software.opengl",false);
-    defaultPref("webgl.disabled",true);
-    pref("font.name.serif.latin","''+fonts.serif.family+''");
-    pref("font.name.monospace.latin","''+fonts.mono.family+''");
-
-    pref("font.size.variable.latin",${toString fonts.serif.size});
-    pref("browser.toolbars.bookmarks.visibility","always");
-    pref("privacy.resisttFingerprinting.letterboxing", true);
-    pref("network.http.referer.XOriginPolicy",2);
-    pref("privacy.clearOnShutdown.history",true);
-    pref("privacy.clearOnShutdown.downloads",true);
-    pref("privacy.clearOnShutdown.cookies",true);
-    pref("gfx.webrender.software.opengl",false);
-    pref("webgl.disabled",true);
-    '';
+  # home.file.".librewolf/librewolf.overrides.cfg".text = ''
+  #   defaultPref("font.name.serif.latin","''+fonts.serif.family+''");
+  #   defaultPref("font.name.monospace.latin","''+fonts.mono.family+''");
+  # 
+  #   defaultPref("font.size.variable.latin",${toString fonts.serif.size});
+  #   defaultPref("browser.toolbars.bookmarks.visibility","always");
+  #   defaultPref("privacy.resisttFingerprinting.letterboxing", true);
+  #   defaultPref("network.http.referer.XOriginPolicy",2);
+  #   defaultPref("privacy.clearOnShutdown.history",true);
+  #   defaultPref("privacy.clearOnShutdown.downloads",true);
+  #   defaultPref("privacy.clearOnShutdown.cookies",true);
+  #   defaultPref("gfx.webrender.software.opengl",false);
+  #   defaultPref("webgl.disabled",true);
+  #   pref("font.name.serif.latin","''+fonts.serif.family+''");
+  #   pref("font.name.monospace.latin","''+fonts.mono.family+''");
+  # 
+  #   pref("font.size.variable.latin",${toString fonts.serif.size});
+  #   pref("browser.toolbars.bookmarks.visibility","always");
+  #   pref("privacy.resisttFingerprinting.letterboxing", true);
+  #   pref("network.http.referer.XOriginPolicy",2);
+  #   pref("privacy.clearOnShutdown.history",true);
+  #   pref("privacy.clearOnShutdown.downloads",true);
+  #   pref("privacy.clearOnShutdown.cookies",true);
+  #   pref("gfx.webrender.software.opengl",false);
+  #   pref("webgl.disabled",true);
+  #   '';
 
   programs.firefox = {
     enable = true;
@@ -119,6 +119,7 @@ in
       OfferToSaveLogins = false;
       OfferToSaveLoginsDefault = false;
       PasswordManagerEnabled = false;
+      NoDefaultBoomarks = true;
       FirefoxHome = {
         Search = true;
         Pocket = false;
@@ -174,10 +175,8 @@ in
       };
 
       settings = {
-        # "general.smoothScroll" = true;
-
+        "general.smoothScroll" = true;
         "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-
         "extensions.autoDisableScopes" = 0;
 
         # "browser.startup.homepage" = "https://duckduckgo.com";
@@ -210,11 +209,6 @@ in
         "font.name.monospace.x-western" = "${fonts.mono.family}";
         "font.name.sans-serif.x-western" = "${fonts.main.family}";
         "font.name.serif.x-western" = "${fonts.serif.family}";
-        # "browser.display.background_color" = thm.base00;
-        # "browser.display.foreground_color" = thm.base05;
-        # "browser.display.document_color_use" = 2;
-        # "browser.anchor_color" = thm.base0D;
-        # "browser.visited_color" = thm.base0C;
         "browser.display.use_document_fonts" = true;
         "pdfjs.disabled" = true;
         "media.videocontrols.picture-in-picture.enabled" = true;
@@ -285,5 +279,7 @@ in
     "x-scheme-handler/https" = "firefox.desktop";
     "x-scheme-handler/about" = "firefox.desktop";
     "x-scheme-handler/unknown" = "firefox.desktop";
+    "application/xhtml+xml" = "firefox.desktop";
+    "application/xhtml_xml" = "firefox.desktop";
   };
 }

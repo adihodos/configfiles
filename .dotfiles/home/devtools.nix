@@ -8,9 +8,15 @@
   };
   
   home.packages = with pkgs; [
-    clang-tools
+    clang-tools_17
     man-pages
     man-pages-posix
     stdman
+    kdiff3
+    helix
+    neovim
+    lunarvim
+    neovide
+    gnvim
   ];
 }

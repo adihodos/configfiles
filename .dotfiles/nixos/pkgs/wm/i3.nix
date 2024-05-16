@@ -2,14 +2,16 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, pkgs-unstable, setupOptions, ... }:
+{ config, pkgs, lib, pkgs-unstable, setupOptions, ... }:
 
 {
   services.xserver.desktopManager.xterm.enable = false;
   
   services.xserver.displayManager = {
-    lightdm.enable = true;
-    defaultSession = "none+i3";
+    # lightdm.enable = true;
+    # defaultSession = "none+i3";
+    sddm.enable = true;
+    sddm.theme = "${import ./sddm-theme.nix { inherit pkgs; inherit lib; }}";
   };
   
   services.xserver.windowManager.i3 = {
@@ -20,6 +22,7 @@
       i3blocks 
       clipmenu
       rlaunch
+      nitrogen
     ];
   };
 
