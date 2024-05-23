@@ -4,7 +4,7 @@
 	imports = [
 		./x11.nix
 		./wm/i3/i3.nix
-    ./wm/i3/dunst.nix
+	    ./wm/i3/dunst.nix
 		./shells.nix
 		./terminals/alacritty.nix
 		./terminals/kitty.nix
@@ -81,4 +81,8 @@
 
 	# Let Home Manager install and manage itself.
 	programs.home-manager.enable = true;
+	#programs.bemenu = {
+	#	enable = false;
+	#};
+	#stylix.targets.bemenu.enable = false; 
 }
