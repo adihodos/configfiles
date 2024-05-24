@@ -12,6 +12,7 @@
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
     ./hw.nix
+    ./common-config.nix
     ./fonts.nix
     ./pkgs/wm/x11.nix
     ./pkgs/wm/i3.nix
@@ -130,7 +131,7 @@
     fonts = with config; {
       monospace = {
         name = themes.fonts.mono.family;
-        package = (nerdfonts.override { fonts = [ "Iosevka" ]; });
+        package = nerdfonts.override {fonts = ["Iosevka"];};
       };
 
       sansSerif = {
@@ -154,5 +155,13 @@
         terminal = 18;
       };
     };
+  };
+
+  services.logind = {
+    powerKey = "ignore";
+    extraConfig = ''
+      IdleAction=hibernate
+      IdleActionSec=90m
+    '';
   };
 }

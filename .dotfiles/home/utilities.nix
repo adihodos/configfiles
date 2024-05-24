@@ -43,5 +43,7 @@
     gamepad-tool
     mpv
     vlc
+    chafa
+    viu
   ];
 }
