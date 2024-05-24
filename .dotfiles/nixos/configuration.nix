@@ -1,26 +1,28 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, setupOptions, ... }:
-
 {
-  imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./hw.nix
-      ./fonts.nix
-      ./pkgs/wm/x11.nix
-      ./pkgs/wm/i3.nix
-      ./pkgs/direnv.nix
-      ./pkgs/emacs.nix
-    ];
+  config,
+  pkgs,
+  setupOptions,
+  stylix,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    ./hardware-configuration.nix
+    ./hw.nix
+    ./fonts.nix
+    ./pkgs/wm/x11.nix
+    ./pkgs/wm/i3.nix
+    ./pkgs/direnv.nix
+    ./pkgs/emacs.nix
+  ];
 
   nix.package = pkgs.nixFlakes;
   nix.extraOptions = ''
-                   experimental-features = nix-command flakes
-             '';
-
+    experimental-features = nix-command flakes
+  '';
 
   networking.hostName = setupOptions.system.hostname; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -119,9 +121,38 @@
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = ["nix-command" "flakes"];
 
-  #stylix.base16scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml";
-  stylix.image = ./themes/wallpapers/w12.jpg;
-  #stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+  stylix = with pkgs; {
+    image = ./themes/wallpapers/w7.jpg;
+    #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
+    fonts = with config; {
+      monospace = {
+        name = themes.fonts.mono.family;
+        package = (nerdfonts.override { fonts = [ "Iosevka" ]; });
+      };
+
+      sansSerif = {
+        #name = themes.fonts.main.family;
+        #package = pkgs.ibm-plex;
+        name = "Iosevka Comfy";
+        package = iosevka-comfy.comfy;
+      };
+
+      serif = {
+        #name = themes.fonts.serif.family;
+        #package = pkgs.ibm-plex;
+        name = "Iosevka Comfy";
+        package = iosevka-comfy.comfy;
+      };
+
+      sizes = {
+        applications = 10;
+        desktop = 10;
+        popups = 10;
+        terminal = 18;
+      };
+    };
+  };
 }

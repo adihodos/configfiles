@@ -1,75 +1,79 @@
-{ config, lib, pkgs, inputs, ... }:
-with lib;
-let
+{
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib; let
   colorType =
     types.addCheck types.str (x: !isNull (builtins.match "[0-9a-fA-F]{6}" x));
-  color = mkOption { type = colorType; };
+  color = mkOption {type = colorType;};
 
   font = {
-    family = mkOption { type = types.str; };
-    size = mkOption { type = types.int; };
+    family = mkOption {type = types.str;};
+    size = mkOption {type = types.int;};
   };
 
   fromYAML = yaml:
     builtins.fromJSON (builtins.readFile (pkgs.stdenv.mkDerivation {
       name = "fromYAML";
-      phases = [ "buildPhase" ];
+      phases = ["buildPhase"];
       buildPhase = "echo '${yaml}' | ${pkgs.yaml2json}/bin/yaml2json > $out";
     }));
 in {
   # x = c: "#${c}";
-  
+
   options = {
     themes = {
       colors = builtins.listToAttrs (map (name: {
-        inherit name;
-        value = color;
-      }) [
-        "base00"
-        "base01"
-        "base02"
-        "base03"
-        "base04"
-        "base05"
-        "base06"
-        "base07"
-        "base08"
-        "base09"
-        "base0A"
-        "base0B"
-        "base0C"
-        "base0D"
-        "base0E"
-        "base0F"
-        "rosewater"
-        "flamingo"
-        "pink"
-        "mauve"
-        "red"
-        "maroon"
-        "peach"
-        "yellow"
-        "green"
-        "teal"
-        "sky"
-        "sapphire"
-        "blue"
-        "lavender"
-        "text"
-        "subtext1"
-        "subtext0"
-        "overlay2"
-        "overlay1"
-        "overlay0"
-        "surface2"
-        "surface1"
-        "surface0"
-        "base"
-        "mantle"
-        "crust"
-        "accent" 
-        
-      ]);
+          inherit name;
+          value = color;
+        }) [
+          "base00"
+          "base01"
+          "base02"
+          "base03"
+          "base04"
+          "base05"
+          "base06"
+          "base07"
+          "base08"
+          "base09"
+          "base0A"
+          "base0B"
+          "base0C"
+          "base0D"
+          "base0E"
+          "base0F"
+          "rosewater"
+          "flamingo"
+          "pink"
+          "mauve"
+          "red"
+          "maroon"
+          "peach"
+          "yellow"
+          "green"
+          "teal"
+          "sky"
+          "sapphire"
+          "blue"
+          "lavender"
+          "text"
+          "subtext1"
+          "subtext0"
+          "overlay2"
+          "overlay1"
+          "overlay0"
+          "surface2"
+          "surface1"
+          "surface0"
+          "base"
+          "mantle"
+          "crust"
+          "accent"
+        ]);
       fonts = {
         main = font;
         serif = font;
@@ -99,7 +103,7 @@ in {
       base0D = "407fbf"; # H = 210  BLUE
       base0E = "7f40bf"; # H = 270  PURPLE
       base0F = "bf40bf"; # H = 300  MAGENTA
-      
+
       rosewater = "f2d5cf";
       flamingo = "eebebe";
       pink = "f4b8e4";
@@ -126,7 +130,7 @@ in {
       base = "303446";
       mantle = "292c3c";
       crust = "232634";
-      accent = pink;  
+      accent = pink;
     };
   };
 }

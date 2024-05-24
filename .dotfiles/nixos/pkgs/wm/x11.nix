@@ -1,9 +1,12 @@
-{ config, pkgs, setupOptions, ... }:
-
 {
+  config,
+  pkgs,
+  setupOptions,
+  ...
+}: {
   services.dbus = {
     enable = true;
-    packages = [ pkgs.dconf ];
+    packages = [pkgs.dconf];
   };
 
   programs.dconf = {

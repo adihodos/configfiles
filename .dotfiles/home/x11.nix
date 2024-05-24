@@ -1,18 +1,22 @@
-{ config, pkgs, osConfig, setupOptions, ... }:
-let
-  fonts = osConfig.themes.fonts;
-in
 {
+  config,
+  pkgs,
+  osConfig,
+  setupOptions,
+  ...
+}: let
+  fonts = osConfig.themes.fonts;
+in {
   programs.urxvt = {
     enable = true;
-    
+
     fonts = [
       "xft:${fonts.mono.family}:style=Regular:size=${toString fonts.mono.size}"
       "xft:${fonts.mono.family}:style=Bold:size=${toString fonts.mono.size}"
       "xft:${fonts.mono.family}:style=Italic:size=${toString fonts.mono.size}"
       "xft:${fonts.mono.family}:style=Bold Italic:size=${toString fonts.mono.size}"
     ];
-    
+
     extraConfig = {
       "foreground" = "#93a1a1";
       "background" = "#141c21";

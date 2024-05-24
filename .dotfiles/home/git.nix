@@ -1,10 +1,14 @@
-{ config, pkgs, setupOptions, ... }:
 {
+  config,
+  pkgs,
+  setupOptions,
+  ...
+}: {
   programs.git = {
     enable = true;
     userName = setupOptions.user.name;
     userEmail = setupOptions.user.email;
-    ignores = [ ".envrc" ".direnv" ];
+    ignores = [".envrc" ".direnv"];
     extraConfig = {
       init.defaultBranch = "main";
       safe.directory = "/home/" + setupOptions.user.username + "/.dotfiles";
@@ -27,7 +31,7 @@
       color.diff.frag = "magenta bold";
       color.diff.func = "146 bold";
       color.diff.commit = "yellow bold";
-      color.diff.old  = "red bold";
+      color.diff.old = "red bold";
       color.diff.new = "green bold";
       color.diff.whitespace = "red reverse";
 
@@ -37,7 +41,7 @@
         keepBackup = false;
         trustExitCode = false;
       };
-      
+
       merge.tool = "kdiff3";
       mergetool = {
         prompt = false;
@@ -52,6 +56,6 @@
   };
 
   home.packages = [
-  	pkgs.lazygit
+    pkgs.lazygit
   ];
 }

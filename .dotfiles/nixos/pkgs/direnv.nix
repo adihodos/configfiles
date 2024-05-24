@@ -1,6 +1,9 @@
-{ config, pkgs, setupOptions, ... }:
-
 {
+  config,
+  pkgs,
+  setupOptions,
+  ...
+}: {
   programs.direnv = {
     enable = true;
     nix-direnv = {

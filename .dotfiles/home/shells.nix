@@ -1,9 +1,13 @@
-{ config, lib, pkgs, ... }:
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
   programs.bash = {
     enable = true;
     shellAliases = {
-	    ll = "eza";
+      ll = "eza";
       cat = "bat";
     };
   };

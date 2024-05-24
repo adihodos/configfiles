@@ -1,9 +1,15 @@
-{ config, pkgs, osConfig, pkgs-unstable, setupOptions, lib, ... }:
-let
+{
+  config,
+  pkgs,
+  osConfig,
+  pkgs-unstable,
+  setupOptions,
+  lib,
+  ...
+}: let
   fonts = osConfig.themes.fonts;
   mod = "Mod4";
-in
-{
+in {
   programs.feh.enable = true;
 
   xdg.mimeApps.defaultApplications = {
@@ -36,10 +42,10 @@ in
     targets.i3-session = {
       Unit = {
         Description = "i3 session";
-        Documentation = [ "man:systemd.special(7)" ];
-        BindsTo = [ "graphical-session.target" ];
-        Wants = [ "graphical-session-pre.target" ];
-        After = [ "graphical-session-pre.target" ];
+        Documentation = ["man:systemd.special(7)"];
+        BindsTo = ["graphical-session.target"];
+        Wants = ["graphical-session-pre.target"];
+        After = ["graphical-session-pre.target"];
       };
     };
 
@@ -52,7 +58,7 @@ in
       #     # After = [ "xrandr.service" "picom.service" ];
       #   };
       # };
-      
+
       #
       #   Service = {
       #     ExecStart = "${pkgs.feh}/bin/feh --bg-fill ${config.xdg.dataHome}/wall.png";
@@ -62,7 +68,7 @@ in
       #   Install.WantedBy = [ "i3-session.target" ];
       # };
 
-      flameshot.Install.WantedBy = lib.mkForce [ "i3-session.target" ];
+      flameshot.Install.WantedBy = lib.mkForce ["i3-session.target"];
     };
   };
 
@@ -76,17 +82,29 @@ in
     config = {
       modifier = mod;
 
-      fonts = {
-        names = [ fonts.propo.family ];
-        style = "Regular";
-        size = 10.0;
-      };
-
+      # fonts = {
+      #   names = [fonts.propo.family];
+      #   style = "Regular";
+      #   size = 10.0;
+      # };
+      #
       startup = [
         # { command = "systemctl --user restart polybar"; always = true; notification = false; }
-        { command = "dunst"; always = true; notification = false; }
-        { command = "numlockx on"; always = true; notification = false; }
-        { command = "nitrogen --restore"; always = true; notification = false; }
+        {
+          command = "dunst";
+          always = true;
+          notification = false;
+        }
+        {
+          command = "numlockx on";
+          always = true;
+          notification = false;
+        }
+        # {
+        #   command = "nitrogen --restore";
+        #   always = true;
+        #   notification = false;
+        # }
       ];
 
       keybindings = lib.mkOptionDefault {
@@ -182,22 +200,20 @@ in
 
       bars = [
         {
-          statusCommand = 
-        let
-          cmd = "${pkgs-unstable.bumblebee-status}/bin/bumblebee-status";
-          # theme = "gruvbox-powerline";
-          theme = "iceberg-rainbow";
-        in
-          "${cmd} -m cpu memory disk:root nic date time \\
+          statusCommand = let
+            cmd = "${pkgs-unstable.bumblebee-status}/bin/bumblebee-status";
+            # theme = "gruvbox-powerline";
+            theme = "iceberg-rainbow";
+          in "${cmd} -m cpu memory disk:root nic date time \\
 -p root.path=/ time.format=\"%H:%M CW %V\" \\
 date.format=\"%a, %b %d %Y\" -t ${theme}";
-        
-          fonts = {
-            names = [ fonts.propo.family ];
+
+          fonts = lib.mkForce {
+            names = [fonts.propo.family];
             style = "SemiBold";
             size = 10.0;
           };
-        
+
           mode = "dock";
           position = "bottom";
           trayOutput = null;

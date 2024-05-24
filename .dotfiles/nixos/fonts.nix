@@ -1,40 +1,46 @@
-{ pkgs, config, lib, ... }:
 {
+  pkgs,
+  config,
+  lib,
+  ...
+}: {
   fonts = {
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [
-                              "Iosevka"
-                              "RobotoMono"
-                              "EnvyCodeR"
-                              "JetBrainsMono"
-                              "SpaceMono"
-                              "VictorMono"
-                            ]; })
+      (nerdfonts.override {
+        fonts = [
+          "Iosevka"
+          "RobotoMono"
+          "EnvyCodeR"
+          "JetBrainsMono"
+          "SpaceMono"
+          "VictorMono"
+        ];
+      })
       # input-fonts
-	    roboto
-	    roboto-serif
+      roboto
+      roboto-serif
       ibm-plex
       nerdfonts
       material-design-icons
       material-icons
       fira-code
       fira-code-symbols
+      iosevka-comfy.comfy
     ];
-    
-    fontconfig =
-      let
-        fonts = config.themes.fonts;
-      in {
-        enable = lib.mkForce true;
-        defaultFonts = {
-          monospace = [ "${fonts.mono.family} ${toString fonts.mono.size}" ];
-          sansSerif = [ "${fonts.main.family} ${toString fonts.main.size}" ];
-          serif = [ "${fonts.serif.family} ${toString fonts.serif.size}" ];
-        };
+
+    fontconfig = let
+      fonts = config.themes.fonts;
+    in {
+      enable = lib.mkForce true;
+      defaultFonts = {
+        monospace = ["${fonts.mono.family} ${toString fonts.mono.size}"];
+        sansSerif = ["${fonts.main.family} ${toString fonts.main.size}"];
+        serif = ["${fonts.serif.family} ${toString fonts.serif.size}"];
       };
+    };
     enableDefaultPackages = true;
   };
-  
+
   themes.fonts = {
     main = {
       family = "IBM Plex Sans";

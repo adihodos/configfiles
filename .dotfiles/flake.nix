@@ -2,7 +2,7 @@
   description = "My (surely/clueless) epic NIX flake";
 
   inputs = {
-    nixpkgs = { url = "github:NixOS/nixpkgs/nixos-23.11"; };
+    nixpkgs = {url = "github:NixOS/nixpkgs/nixos-23.11";};
 
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
@@ -11,10 +11,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur = { url = "github:nix-community/NUR"; };
+    nur = {
+      url = "github:nix-community/NUR";
+    };
 
     stylix = {
-      url = "github:danth/stylix";
+      url = "github:danth/stylix/release-23.11";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
@@ -27,79 +29,91 @@
     };
   };
 
-  outputs = { self, nixpkgs, home-manager, stylix, ... }@inputs:
-    let
-      lib = nixpkgs.lib;
-      setupOptions = {
-        system = {
-          compositor = "x11";
-          systemType = "x86_64-linux";
-          hostname = "B5X64-NIX-EE-VM";
-          profile = "personal";
-          timezone = "Europe/Bucharest";
-          locale = "en_US.UTF-8";
-          extraLocale = "ro_RO.UTF-8";
-          editor = "emacs";
-        };
-
-        user = {
-          username = "adi";
-          name = "Adi Hodos";
-          description = "Just me I guess";
-          email = "adi.hodos@gmail.com";
-          editor = "emacsclient";
-          spawnEditor = "emacsclient -c -a 'emacs'";
-        };
+  outputs = {
+    self,
+    nixpkgs,
+    home-manager,
+    ...
+  } @ inputs: let
+    lib = nixpkgs.lib;
+    setupOptions = {
+      system = {
+        compositor = "x11";
+        systemType = "x86_64-linux";
+        hostname = "B5X64-NIX-EE-VM";
+        profile = "personal";
+        timezone = "Europe/Bucharest";
+        locale = "en_US.UTF-8";
+        extraLocale = "ro_RO.UTF-8";
+        editor = "emacs";
       };
 
-      pkgs = import nixpkgs {
-        system = setupOptions.system.systemType;
-        config = {
-          allowUnfree = true;
-          allowUnfreePredicate = (_: true);
-        };
+      user = {
+        username = "adi";
+        name = "Adi Hodos";
+        description = "Just me I guess";
+        email = "adi.hodos@gmail.com";
+        editor = "emacsclient";
+        spawnEditor = "emacsclient -c -a 'emacs'";
+      };
+    };
 
-        overlays = [ (import self.inputs.emacs-overlay) ];
+    pkgs = import nixpkgs {
+      system = setupOptions.system.systemType;
+      config = {
+        allowUnfree = true;
+        allowUnfreePredicate = _: true;
       };
 
-      pkgs-unstable = import inputs.nixpkgs-unstable {
-        system = setupOptions.system.systemType;
-        config = {
-          allowUnfree = true;
-          allowUnfreePredicate = (_: true);
-        };
-      };
+      overlays = [(import self.inputs.emacs-overlay)];
+    };
 
-      findModules = dir:
-        builtins.concatLists (builtins.attrValues (builtins.mapAttrs
-          (name: type:
-            if type == "regular" then [{
+    pkgs-unstable = import inputs.nixpkgs-unstable {
+      system = setupOptions.system.systemType;
+      config = {
+        allowUnfree = true;
+        allowUnfreePredicate = _: true;
+      };
+    };
+
+    findModules = dir:
+      builtins.concatLists (builtins.attrValues (builtins.mapAttrs
+        (name: type:
+          if type == "regular"
+          then [
+            {
               name = builtins.elemAt (builtins.match "(.*)\\.nix" name) 0;
               value = dir + "/${name}";
-            }] else if (builtins.readDir (dir + "/${name}"))
-            ? "default.nix" then [{
+            }
+          ]
+          else if
+            (builtins.readDir (dir + "/${name}"))
+            ? "default.nix"
+          then [
+            {
               inherit name;
               value = dir + "/${name}";
-            }] else
-              findModules (dir + "/${name}")) (builtins.readDir dir)));
+            }
+          ]
+          else findModules (dir + "/${name}")) (builtins.readDir dir)));
+  in {
+    nixosModules = builtins.listToAttrs (findModules ./modules);
 
-    in {
-      nixosModules = builtins.listToAttrs (findModules ./modules);
+    nixosConfigurations = {
+      ${setupOptions.system.hostname} = lib.nixosSystem {
+        system = setupOptions.system.systemType;
 
-      nixosConfigurations = {
-        ${setupOptions.system.hostname} = lib.nixosSystem {
-          system = setupOptions.system.systemType;
+        specialArgs = {
+          inherit inputs;
+          inherit pkgs;
+          inherit pkgs-unstable;
+          inherit setupOptions;
+        };
 
-          specialArgs = {
-            inherit inputs;
-            inherit pkgs;
-            inherit pkgs-unstable;
-            inherit setupOptions;
-          };
-
-          modules = __attrValues self.nixosModules ++ [
-
-            stylix.nixosModules.stylix
+        modules =
+          __attrValues self.nixosModules
+          ++ [
+            inputs.stylix.nixosModules.stylix
             inputs.nur.nixosModules.nur
             ./nixos/configuration.nix
 
@@ -116,12 +130,12 @@
                 };
 
                 users.${setupOptions.user.username} = {
-                  imports = [ inputs.stylix.homeManagerModules.stylix ./home/home.nix ];
+                  imports = [./home/home.nix];
                 };
               };
             }
           ];
-        };
       };
     };
-} 
+  };
+}

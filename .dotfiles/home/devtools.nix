@@ -1,13 +1,18 @@
-{ config, pkgs, setupOptions, ... }:
 {
+  config,
+  pkgs,
+  setupOptions,
+  ...
+}: {
   programs.direnv = {
     enable = true;
     nix-direnv = {
       enable = true;
     };
   };
-  
+
   home.packages = with pkgs; [
+    alejandra
     clang-tools_17
     man-pages
     man-pages-posix
@@ -15,8 +20,9 @@
     kdiff3
     helix
     neovim
-    lunarvim
+    #lunarvim
     neovide
     gnvim
+    luaformatter
   ];
 }
