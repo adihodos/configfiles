@@ -9,13 +9,13 @@
 }: {
   boot = {
     # See console messages during early boot.
-    initrd.kernelModules = ["fbcon"];
+    #initrd.kernelModules = ["fbcon"];
 
     # Disable console blanking after being idle.
     kernelParams = ["consoleblank=0"];
 
     # Clean /tmp on boot
-    cleanTmpDir = true;
+    tmp.cleanOnBoot = true;
   };
 
   # Increase the amount of inotify watchers
@@ -29,7 +29,7 @@
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     earlySetup = true;
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-132n.psf.gz";
+    font = "${pkgs.terminus_font}/share/consolefonts/ter-v16n.psf.gz";
     packages = with pkgs; [terminus_font];
     keyMap = "us";
   };

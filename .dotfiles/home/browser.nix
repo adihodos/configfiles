@@ -9,11 +9,21 @@
   thm = osConfig.themes.colors;
   nur = osConfig.nur;
 in {
-  # Module installing librewolf as default browser
   home.packages = with pkgs; [
-    # librewolf
     skypeforlinux
   ];
+
+  programs.librewolf = {
+    enable = true;
+    # Enable WebGL, cookies and history
+    settings = {
+      "webgl.disabled" = false;
+      "privacy.resistFingerprinting" = false;
+      "privacy.clearOnShutdown.history" = false;
+      "privacy.clearOnShutdown.cookies" = false;
+      "network.cookie.lifetimePolicy" = 0;
+    };
+  };
 
   programs.aria2 = {
     enable = true;
@@ -84,33 +94,6 @@ in {
     # DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
   };
 
-  # home.file.".librewolf/librewolf.overrides.cfg".text = ''
-  #   defaultPref("font.name.serif.latin","''+fonts.serif.family+''");
-  #   defaultPref("font.name.monospace.latin","''+fonts.mono.family+''");
-  #
-  #   defaultPref("font.size.variable.latin",${toString fonts.serif.size});
-  #   defaultPref("browser.toolbars.bookmarks.visibility","always");
-  #   defaultPref("privacy.resisttFingerprinting.letterboxing", true);
-  #   defaultPref("network.http.referer.XOriginPolicy",2);
-  #   defaultPref("privacy.clearOnShutdown.history",true);
-  #   defaultPref("privacy.clearOnShutdown.downloads",true);
-  #   defaultPref("privacy.clearOnShutdown.cookies",true);
-  #   defaultPref("gfx.webrender.software.opengl",false);
-  #   defaultPref("webgl.disabled",true);
-  #   pref("font.name.serif.latin","''+fonts.serif.family+''");
-  #   pref("font.name.monospace.latin","''+fonts.mono.family+''");
-  #
-  #   pref("font.size.variable.latin",${toString fonts.serif.size});
-  #   pref("browser.toolbars.bookmarks.visibility","always");
-  #   pref("privacy.resisttFingerprinting.letterboxing", true);
-  #   pref("network.http.referer.XOriginPolicy",2);
-  #   pref("privacy.clearOnShutdown.history",true);
-  #   pref("privacy.clearOnShutdown.downloads",true);
-  #   pref("privacy.clearOnShutdown.cookies",true);
-  #   pref("gfx.webrender.software.opengl",false);
-  #   pref("webgl.disabled",true);
-  #   '';
-
   programs.firefox = {
     enable = true;
 
@@ -137,9 +120,10 @@ in {
       };
     };
 
-    profiles.${setupOptions.user.username} = {
+    profiles.default = {
+      id = 0;
+      name = "Default";
       isDefault = true;
-      name = setupOptions.user.username;
 
       extensions = with nur.repos.rycee.firefox-addons; [
         # adnauseam
@@ -153,101 +137,162 @@ in {
         ublock-origin
       ];
 
-      search.engines = {
-        "Nix Packages" = {
-          urls = [
-            {
-              template = "https://search.nixos.org/packages";
-              params = [
-                {
-                  name = "type";
-                  value = "packages";
-                }
-                {
-                  name = "query";
-                  value = "{searchTerms}";
-                }
-              ];
-            }
-          ];
+      search = {
+        force = true;
+        engines = {
+          "Nix Packages" = {
+            urls = [
+              {
+                template = "https://search.nixos.org/packages";
+                params = [
+                  {
+                    name = "type";
+                    value = "packages";
+                  }
+                  {
+                    name = "query";
+                    value = "{searchTerms}";
+                  }
+                ];
+              }
+            ];
 
-          icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
-          definedAliases = ["@np"];
+            icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+            definedAliases = ["@np"];
+          };
+
+          "NixOS Wiki" = {
+            urls = [{template = "https://nixos.wiki/index.php?search={searchTerms}";}];
+            iconUpdateURL = "https://nixos.wiki/favicon.png";
+            updateInterval = 24 * 60 * 60 * 1000; # every day
+            definedAliases = ["@nw"];
+          };
+
+          "Bing".metaData.hidden = true;
+          "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
         };
-
-        "NixOS Wiki" = {
-          urls = [{template = "https://nixos.wiki/index.php?search={searchTerms}";}];
-          iconUpdateURL = "https://nixos.wiki/favicon.png";
-          updateInterval = 24 * 60 * 60 * 1000; # every day
-          definedAliases = ["@nw"];
-        };
-
-        "Bing".metaData.hidden = true;
-        "Google".metaData.alias = "@g"; # builtin engines only support specifying one additional alias
       };
 
+      # - https://arkenfox.github.io/gui/
       settings = {
         "general.smoothScroll" = true;
-        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-        "extensions.autoDisableScopes" = 0;
 
-        # "browser.startup.homepage" = "https://duckduckgo.com";
-
-        "signon.rememberSignons" = false;
-        "widget.use-xdg-desktop-portal.file-picker" = 1;
-
-        "mousewheel.default.delta_multiplier_x" = 20;
-        "mousewheel.default.delta_multiplier_y" = 20;
-        "mousewheel.default.delta_multiplier_z" = 20;
-
-        # Firefox 75+ remembers the last workspace it was opened on as part of its session management.
-        # This is annoying, because I can have a blank workspace, click Firefox from the launcher, and
-        # then have Firefox open on some other workspace.
-        "widget.disable-workspace-management" = true;
-
-        "browser.aboutConfig.showWarning" = false;
-        "browser.compactmode.show" = true;
-        "browser.cache.disk.enable" = false; # Be kind to hard drive
-        "browser.search.defaultenginename" = "Google";
-        "browser.search.selectedEngine" = "Google";
-        "browser.urlbar.placeholderName" = "Google";
-        "browser.search.region" = "US";
-
-        "browser.uidensity" = 1;
-        "browser.search.openintab" = true;
-        "xpinstall.signatures.required" = false;
-        "extensions.update.enabled" = false;
-
-        "font.name.monospace.x-western" = "${fonts.mono.family}";
-        "font.name.sans-serif.x-western" = "${fonts.main.family}";
-        "font.name.serif.x-western" = "${fonts.serif.family}";
-        "browser.display.use_document_fonts" = true;
-        "pdfjs.disabled" = true;
-        "media.videocontrols.picture-in-picture.enabled" = true;
-
-        "widget.non-native-theme.enabled" = false;
-
-        "browser.newtabpage.enabled" = false;
+        "browser.startup.page" = 0;
         "browser.startup.homepage" = "about:blank";
+        "browser.newtabpage.enabled" = false;
+        "browser.newtabpage.activity-stream.showSponsored" = false;
+        "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
+        "browser.newtabpage.activity-stream.default.sites" = "";
 
+        "browser.discovery.enabled" = false;
+        "browser.shopping.experience2023.enabled" = false;
+        "datareporting.policy.dataSubmissionEnabled" = false;
+        "datareporting.healthreport.uploadEnabled" = false;
+        "toolkit.telemetry.unified" = false;
+        "toolkit.telemetry.enabled" = false;
+        "toolkit.telemetry.server" = "data:,";
+        "toolkit.telemetry.archive.enabled" = false;
+        "toolkit.telemetry.newProfilePing.enabled" = false;
+        "toolkit.telemetry.shutdownPingSender.enabled" = false;
+        "toolkit.telemetry.updatePing.enabled" = false;
+        "toolkit.telemetry.bhrPing.enabled" = false;
+        "toolkit.telemetry.firstShutdownPing.enabled" = false;
+        "toolkit.telemetry.coverage.opt-out" = true;
+        "toolkit.coverage.opt-out" = true;
+        "toolkit.coverage.endpoint.base" = "";
+        "browser.ping-centre.telemetry" = false;
         "browser.newtabpage.activity-stream.feeds.telemetry" = false;
         "browser.newtabpage.activity-stream.telemetry" = false;
-        "browser.ping-centre.telemetry" = false;
-        "toolkit.telemetry.archive.enabled" = false;
-        "toolkit.telemetry.bhrPing.enabled" = false;
-        "toolkit.telemetry.enabled" = false;
-        "toolkit.telemetry.firstShutdownPing.enabled" = false;
-        "toolkit.telemetry.hybridContent.enabled" = false;
-        "toolkit.telemetry.newProfilePing.enabled" = false;
-        "toolkit.telemetry.reportingpolicy.firstRun" = false;
-        "toolkit.telemetry.shutdownPingSender.enabled" = false;
-        "toolkit.telemetry.unified" = false;
-        "toolkit.telemetry.updatePing.enabled" = false;
+        "app.shield.optoutstudies.enabled" = false;
+        "app.normandy.enabled" = false;
+        "app.normandy.api_url" = "";
+        "breakpad.reportURL" = "";
+        "browser.tabs.crashReporting.sendReport" = false;
+        "browser.crashReports.unsubmittedCheck.enabled" = false;
+        "browser.crashReports.unsubmittedCheck.autoSubmit2" = false;
 
-        "experiments.activeExperiment" = false;
-        "experiments.enabled" = false;
-        "experiments.supported" = false;
-        "network.allow-experiments" = false;
+        "browser.urlbar.suggest.quicksuggest.nonsponsored" = false;
+        "browser.urlbar.suggest.quicksuggest.sponsored" = false;
+        "browser.search.suggest.enabled" = false;
+        "browser.urlbar.suggest.searches" = false;
+        "browser.urlbar.trending.featureGate" = false;
+        "browser.urlbar.addons.featureGate" = false;
+        "browser.urlbar.mdn.featureGate" = false;
+        "browser.urlbar.pocket.featureGate" = false;
+        "browser.urlbar.weather.featureGate" = false;
+        "browser.urlbar.clipboard.featureGate" = false;
+        "browser.formfill.enable" = false;
+        "browser.urlbar.suggest.engines" = false;
+        "layout.css.visited_links_enabled" = false;
+        "browser.search.separatePrivateDefault" = true;
+        "browser.search.separatePrivateDefault.ui.enabled" = true;
+
+        "signon.autofillForms" = false;
+        "signon.formlessCapture.enabled" = false;
+        "network.auth.subresource-http-auth-allow" = 1;
+        "network.http.windows-sso.enabled" = false;
+
+        # disk avoidance
+        "browser.cache.disk.enable" = false;
+        "browser.privatebrowsing.forceMediaMemoryCache" = true;
+        "media.memory_cache_max_size" = 65536;
+        "browser.sessionstore.privacy_level" = 2;
+        "toolkit.winRegisterApplicationRestart" = false;
+        "browser.shell.shortcutFavicons" = false;
+
+        # misc
+        "browser.download.start_downloads_in_tmp_dir" = true;
+        "browser.helperApps.deleteTempFileOnExit" = true;
+        "browser.uitour.enabled" = false;
+        "browser.uitour.url" = "";
+        "devtools.debugger.remote-enabled" = false;
+        "permissions.default.shortcuts" = 2;
+        "permissions.manager.defaultsUrl" = "";
+        "webchannel.allowObject.urlWhitelist" = "";
+        "network.IDN_show_punycode" = true;
+        "pdfjs.disabled" = false;
+        "pdfjs.enableScripting" = false;
+        "browser.tabs.searchclipboardfor.middleclick" = false;
+        "browser.download.useDownloadDir" = false;
+        "browser.download.alwaysOpenPanel" = false;
+        "browser.download.manager.addToRecentDocs" = false;
+        "browser.download.always_ask_before_handling_new_types" = true;
+        "extensions.enabledScopes" = 5;
+        "extensions.autoDisableScopes" = 15;
+        "extensions.postDownloadThirdPartyPrompt" = false;
+        "extensions.webextensions.restrictedDomains" = "";
+
+        "browser.cache.memory.enable" = false;
+        "browser.cache.memory.capacity" = 0;
+        "signon.rememberSignons" = false;
+        "permissions.memory_only" = true;
+        "security.nocertdb" = true;
+        "browser.chrome.site_icons" = false;
+        "browser.sessionstore.max_tabs_undo" = 0;
+        "browser.sessionstore.resume_from_crash" = false;
+        "browser.download.forbid_open_with" = true;
+        "browser.urlbar.suggest.history" = false;
+        "browser.urlbar.suggest.bookmark" = false;
+        "browser.urlbar.suggest.openpage" = false;
+        "browser.urlbar.suggest.topsites" = false;
+        "browser.urlbar.maxRichResults" = 0;
+        "browser.urlbar.autoFill" = false;
+        "places.history.enabled" = false;
+        "browser.taskbar.lists.enabled" = false;
+        "browser.taskbar.lists.frequent.enabled" = false;
+        "browser.taskbar.lists.recent.enabled" = false;
+        "browser.taskbar.lists.tasks.enabled" = false;
+        "browser.download.folderList" = 2;
+        "extensions.formautofill.addresses.enabled" = false;
+        "extensions.formautofill.creditCards.enabled" = false;
+        "dom.popup_allowed_events" = "click dblclick mousedownpointerdown";
+        "browser.pagethumbnails.capturing_disabled" = true;
+        "alerts.useSystemBackend.windows.notificationserver.enabled" = false;
+        "keyword.enabled" = false;
+
+        #"mousewheel.default.delta_multiplier_x" = 20;
+        #"mousewheel.default.delta_multiplier_y" = 20;
+        #"mousewheel.default.delta_multiplier_z" = 20;
       };
 
       bookmarks = [
