@@ -154,6 +154,9 @@ vim.opt.cursorline = true
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
 
+-- Log level
+vim.log.level = vim.log.levels.INFO
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -328,6 +331,8 @@ require('lazy').setup({
         end,
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      -- { 'nvim-telescope/telescope-media-files.nvim' },
+      { 'dharmx/telescope-media.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
       { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
@@ -368,12 +373,24 @@ require('lazy').setup({
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
+          media = {
+            backend = 'viu', -- image/gif backend
+            flags = {
+              viu = {
+                move = true, -- GIF preview
+              },
+            },
+            --on_confirm_single = canned.single.copy_path,
+            --on_confirm_muliple = canned.multiple.bulk_copy,
+            cache_path = vim.fn.stdpath 'cache' .. '/media',
+          },
         },
       }
 
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'media')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -559,14 +576,15 @@ require('lazy').setup({
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      vim.lsp.set_log_level 'off'
 
       local root_files = {
-          '.clangd',
-          '.clang-tidy',
-          '.clang-format',
-          'compile_commands.json',
-          'compile_flags.txt',
-          'configure.ac', -- AutoTools
+        '.clangd',
+        '.clang-tidy',
+        '.clang-format',
+        'compile_commands.json',
+        'compile_flags.txt',
+        'configure.ac', -- AutoTools
       }
 
       local default_capabilities = {
@@ -591,7 +609,7 @@ require('lazy').setup({
         -- clangd = {},
         -- gopls = {},
         -- pyright = {},
-        -- rust_analyzer = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -603,15 +621,15 @@ require('lazy').setup({
 
         clangd = {
           cmd = {
-            "clangd",
-            "--background-index",
---             "--clang-tidy",
-            "--header-insertion=never",
-            "--completion-style=detailed",
-            "--function-arg-placeholders",
-            "--fallback-style=mozilla",
-            "-j=2",
-            "--log=verbose",
+            'clangd',
+            '--background-index',
+            --             "--clang-tidy",
+            '--header-insertion=never',
+            '--completion-style=detailed',
+            '--function-arg-placeholders',
+            '--fallback-style=mozilla',
+            '-j=2',
+            --"--log=verbose",
           },
 
           init_options = {
@@ -631,8 +649,7 @@ require('lazy').setup({
 
           commands = {
             ClangdSwitchSourceHeader = {
-              function()
-              end,
+              function() end,
               description = 'Switch between source/header',
             },
           },
@@ -670,10 +687,10 @@ require('lazy').setup({
       })
       --require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      local lspconfig = require("lspconfig")
+      local lspconfig = require 'lspconfig'
       lspconfig.clangd.setup(servers['clangd'])
---       lspconfig.lua_ls.setup(servers['lua_ls'])
-
+      lspconfig.rust_analyzer.setup(servers['rust_analyzer'])
+      --       lspconfig.lua_ls.setup(servers['lua_ls'])
     end,
   },
 
@@ -704,6 +721,8 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        cmake = { 'cmake_format' },
+        nix = { 'alejandra' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -836,7 +855,7 @@ require('lazy').setup({
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+      --[[ vim.cmd.colorscheme 'tokyonight-night' ]]
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
@@ -844,59 +863,68 @@ require('lazy').setup({
   },
 
   {
-    "EdenEast/nightfox.nvim",
+    'EdenEast/nightfox.nvim',
     lazy = false,
     priority = 999,
-    config = function ()
-      vim.cmd('colorscheme nightfox')
-    end
+    --   init = function ()
+    --     vim.cmd('colorscheme nightfox')
+    --   end
+  },
+
+  {
+    'blazkowolf/gruber-darker.nvim',
+    lazy = false,
+    priority = 998,
+    init = function()
+      vim.cmd.colorscheme 'gruber-darker'
+    end,
   },
 
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   {
-  	"folke/noice.nvim",
-	event = "VeryLazy",
-	opts = {
-		routes = {
-			{
-				view = "notify",
-				filter = { event = "msg_showmode" },
-			},
-		},
-		lsp = {
-			-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-			override = {
-				["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-				["vim.lsp.util.stylize_markdown"] = true,
-				["cmp.entry.get_documentation"] = true,
-			},
-		},
-		-- you can enable a preset for easier configuration
-		presets = {
-			bottom_search = true, -- use a classic bottom cmdline for search
-			-- command_palette = true, -- position the cmdline and popupmenu together
-			long_message_to_split = true, -- long messages will be sent to a split
-			inc_rename = false, -- enables an input dialog for inc-rename.nvim
-			lsp_doc_border = false, -- add a border to hover docs and signature help
-		},
-	},
-	dependencies = {
-		-- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
-		"MunifTanjim/nui.nvim",
-		-- OPTIONAL:
-		--   `nvim-notify` is only needed, if you want to use the notification view.
-		--   If not available, we use `mini` as the fallback
-		-- {
-		-- 	"rcarriga/nvim-notify",
-		-- 	config = function()
-		-- 		require("notify").setup({
-		-- 			background_colour = "#000000",
-		-- 		})
-		-- 	end,
-		-- },
-	},
+    'folke/noice.nvim',
+    event = 'VeryLazy',
+    opts = {
+      routes = {
+        {
+          view = 'notify',
+          filter = { event = 'msg_showmode' },
+        },
+      },
+      lsp = {
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
+          ['vim.lsp.util.stylize_markdown'] = true,
+          ['cmp.entry.get_documentation'] = true,
+        },
+      },
+      -- you can enable a preset for easier configuration
+      presets = {
+        bottom_search = true, -- use a classic bottom cmdline for search
+        -- command_palette = true, -- position the cmdline and popupmenu together
+        long_message_to_split = true, -- long messages will be sent to a split
+        inc_rename = false, -- enables an input dialog for inc-rename.nvim
+        lsp_doc_border = false, -- add a border to hover docs and signature help
+      },
+    },
+    dependencies = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      'MunifTanjim/nui.nvim',
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      -- {
+      -- 	"rcarriga/nvim-notify",
+      -- 	config = function()
+      -- 		require("notify").setup({
+      -- 			background_colour = "#000000",
+      -- 		})
+      -- 	end,
+      -- },
+    },
   },
 
   { -- Collection of various small independent plugins/modules
@@ -952,10 +980,10 @@ require('lazy').setup({
       },
       indent = { enable = false, disable = { 'ruby' } },
       rainbow = {
-		enable = true,
-		extended_mode = true,
-		max_file_lines = nil,
-      }
+        enable = true,
+        extended_mode = true,
+        max_file_lines = nil,
+      },
     },
     config = function(_, opts)
       -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
@@ -987,7 +1015,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  --[[ require 'kickstart.plugins.neo-tree', ]]
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   require 'kickstart.plugins.clangd-extensions',
 

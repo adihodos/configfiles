@@ -295,36 +295,36 @@ in {
         #"mousewheel.default.delta_multiplier_z" = 20;
       };
 
-      bookmarks = [
-        {
-          name = "Nix sites";
-          toolbar = true;
-          bookmarks = [
-            {
-              name = "homepage";
-              url = "https://nixos.org/";
-            }
-
-            {
-              name = "wiki";
-              tags = ["wiki" "nix"];
-              url = "https://nixos.wiki/";
-            }
-
-            {
-              name = "NixOS Learn";
-              tags = ["nix" "wiki"];
-              url = "https://nixos.org/learn";
-            }
-
-            {
-              name = "NixOS Guide";
-              tags = ["nix" "guide"];
-              url = "https://github.com/mikeroyal/NixOS-Guide";
-            }
-          ];
-        }
-      ];
+      # bookmarks = [
+      #   {
+      #     name = "Nix sites";
+      #     toolbar = true;
+      #     bookmarks = [
+      #       {
+      #         name = "homepage";
+      #         url = "https://nixos.org/";
+      #       }
+      #
+      #       {
+      #         name = "wiki";
+      #         tags = ["wiki" "nix"];
+      #         url = "https://nixos.wiki/";
+      #       }
+      #
+      #       {
+      #         name = "NixOS Learn";
+      #         tags = ["nix" "wiki"];
+      #         url = "https://nixos.org/learn";
+      #       }
+      #
+      #       {
+      #         name = "NixOS Guide";
+      #         tags = ["nix" "guide"];
+      #         url = "https://github.com/mikeroyal/NixOS-Guide";
+      #       }
+      #     ];
+      #   }
+      # ];
     };
   };
 
