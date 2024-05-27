@@ -20,9 +20,8 @@
     kdiff3
     helix
     neovim
-    #lunarvim
     neovide
-    gnvim
     luaformatter
+    stylua
   ];
 }

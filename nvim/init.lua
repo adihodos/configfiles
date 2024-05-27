@@ -221,6 +221,34 @@ if vim.g.neovide then
   vim.g.neovide_cursor_animation_length = 0.0
 end
 
+local kind_icons = {
+  Text = '',
+  Method = '󰆧',
+  Function = '󰊕',
+  Constructor = '',
+  Field = '󰇽',
+  Variable = '󰂡',
+  Class = '󰠱',
+  Interface = '',
+  Module = '',
+  Property = '󰜢',
+  Unit = '',
+  Value = '󰎠',
+  Enum = '',
+  Keyword = '󰌋',
+  Snippet = '',
+  Color = '󰏘',
+  File = '󰈙',
+  Reference = '',
+  Folder = '󰉋',
+  EnumMember = '',
+  Constant = '󰏿',
+  Struct = '',
+  Event = '',
+  Operator = '󰆕',
+  TypeParameter = '󰅲',
+}
+
 -- [[ Configure and install plugins ]]
 --
 --  To check the current status of your plugins, run
@@ -769,6 +797,7 @@ require('lazy').setup({
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
     },
+
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
@@ -782,6 +811,31 @@ require('lazy').setup({
           end,
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
+        window = {
+          documentation = cmp.config.window.bordered(),
+          completion = cmp.config.window.bordered(),
+          -- completion = {
+          --   --winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+          --   -- col_offset = -3,
+          --   -- side_padding = 0,
+          -- },
+        },
+        view = {
+          docs = {
+            auto_open = false,
+          },
+          --   entries = {name = 'custom', selection_order = 'near_cursor' }
+        },
+        formatting = {
+          fields = { 'kind', 'abbr' },
+          format = function(_, vim_item)
+            vim_item.kind = kind_icons[vim_item.kind] or ''
+            if vim_item.abbr:len() > 61 then
+              vim_item.abbr = vim_item.abbr:sub(1, 61) .. ' ...'
+            end
+            return vim_item
+          end,
+        },
 
         -- For an understanding of why these mappings were
         -- chosen, you will need to read `:help ins-completion`
