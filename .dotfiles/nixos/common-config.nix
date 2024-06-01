@@ -29,8 +29,9 @@
   i18n.defaultLocale = "en_US.UTF-8";
   console = {
     earlySetup = true;
-    font = "${pkgs.terminus_font}/share/consolefonts/ter-v16n.psf.gz";
-    packages = with pkgs; [terminus_font];
+    #font = "${pkgs.terminus_font}/share/consolefonts/ter-v16n.psf.gz";
+    font = "${pkgs.tamsyn}/share/consolefonts/Tamsyn10x20r.psf.gz";
+    packages = with pkgs; [terminus_font tamsyn];
     keyMap = "us";
   };
 }

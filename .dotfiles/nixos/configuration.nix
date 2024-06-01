@@ -128,7 +128,8 @@
     image = ./themes/wallpapers/w7.jpg;
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-dark.yaml";
+    #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-dark.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/ia-dark.yaml";
     fonts = with config; {
       monospace = {
         name = themes.fonts.mono.family;

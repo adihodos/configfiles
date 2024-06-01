@@ -35,6 +35,7 @@
     xorg.xmodmap
     xclip
     xsel
+    xdg-utils
   ];
 
   # xdg portal is required for screenshare
