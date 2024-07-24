@@ -28,14 +28,15 @@
       i3lock
       i3blocks
       clipmenu
-      rlaunch
+      #rlaunch
       nitrogen
+      python311Packages.py3status
     ];
   };
 
-  environment.systemPackages = with pkgs-unstable;
+  environment.systemPackages = with pkgs;
     [
       (bumblebee-status.override {plugins = p: [p.cpu p.nic p.load p.dunstctl];})
     ]
-    ++ [pkgs.iw];
+    ++ [pkgs.iw pkgs.python311Packages.psutil];
 }

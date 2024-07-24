@@ -9,7 +9,7 @@
 }: {
   boot = {
     # See console messages during early boot.
-    #initrd.kernelModules = ["fbcon"];
+    initrd.kernelModules = ["amdgpu"];
 
     # Disable console blanking after being idle.
     kernelParams = ["consoleblank=0"];

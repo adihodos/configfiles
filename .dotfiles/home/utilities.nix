@@ -45,5 +45,14 @@
     vlc
     chafa
     viu
+    pdfgrep
+    pdf4qt
+    zathura
+    sioyek
+    nvimpager
   ];
+
+  home.sessionVariables = {
+    PAGER = "nvimpager";
+  };
 }

@@ -100,6 +100,7 @@ vim.g.have_nerd_font = true
 
 -- Make line numbers default
 vim.opt.number = true
+vim.wo.relativenumber = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 -- vim.opt.relativenumber = true
@@ -153,6 +154,8 @@ vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
+-- 24 bit colors
+vim.opt.termguicolors = true
 
 -- Log level
 vim.log.level = vim.log.levels.INFO
@@ -419,6 +422,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(require('telescope').load_extension, 'media')
+      pcall(require('telescope').load_extension, 'notify')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -432,6 +436,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+
+      vim.keymap.set('n', '<leader>sH', require('telescope').extensions.notify.notify, { desc = '[S]earch [History]' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -718,6 +724,7 @@ require('lazy').setup({
       local lspconfig = require 'lspconfig'
       lspconfig.clangd.setup(servers['clangd'])
       lspconfig.rust_analyzer.setup(servers['rust_analyzer'])
+      lspconfig.zls.setup {}
       --       lspconfig.lua_ls.setup(servers['lua_ls'])
     end,
   },
@@ -893,6 +900,10 @@ require('lazy').setup({
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
           { name = 'path' },
+          -- { name = 'nvim_lsp_signature_help' },
+        },
+        performance = {
+          max_view_entries = 8,
         },
       }
     end,
@@ -970,14 +981,14 @@ require('lazy').setup({
       -- OPTIONAL:
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
-      -- {
-      -- 	"rcarriga/nvim-notify",
-      -- 	config = function()
-      -- 		require("notify").setup({
-      -- 			background_colour = "#000000",
-      -- 		})
-      -- 	end,
-      -- },
+      {
+        'rcarriga/nvim-notify',
+        config = function()
+          require('notify').setup {
+            background_colour = '#000000',
+          }
+        end,
+      },
     },
   },
 
@@ -1065,7 +1076,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',

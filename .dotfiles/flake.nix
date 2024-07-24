@@ -2,12 +2,14 @@
   description = "My (surely/clueless) epic NIX flake";
 
   inputs = {
-    nixpkgs = {url = "github:NixOS/nixpkgs/nixos-23.11";};
+    #nixpkgs = {url = "github:NixOS/nixpkgs/nixos-23.11";};
+    nixpkgs = {url = "github:NixOS/nixpkgs/nixos-24.05";};
 
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      #url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager/release-24.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -16,7 +18,7 @@
     };
 
     stylix = {
-      url = "github:danth/stylix/release-23.11";
+      url = "github:danth/stylix/release-24.05";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
@@ -26,6 +28,11 @@
     emacs-overlay = {
       url = "github:nix-community/emacs-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    neovim-nightly-overlay = {
+      url = "github:nix-community/neovim-nightly-overlay";
+      #inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -65,7 +72,9 @@
         allowUnfreePredicate = _: true;
       };
 
-      overlays = [(import self.inputs.emacs-overlay)];
+      overlays = [
+        (import self.inputs.emacs-overlay)
+      ];
     };
 
     pkgs-unstable = import inputs.nixpkgs-unstable {

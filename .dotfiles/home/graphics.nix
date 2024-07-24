@@ -15,7 +15,7 @@
     flameshot
     pastel
     texturepacker
-    rucksack
+    #rucksack
     awesomebump
     # pdfstudioviewer
     libsForQt5.okular

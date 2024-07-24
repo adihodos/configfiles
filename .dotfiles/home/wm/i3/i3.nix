@@ -7,10 +7,27 @@
   lib,
   ...
 }: let
-  fonts = osConfig.themes.fonts;
   mod = "Mod4";
 in {
   programs.feh.enable = true;
+
+  programs.rofi = {
+    enable = true;
+
+    plugins = with pkgs; [
+      rofi-calc
+      rofi-emoji
+      rofi-power-menu
+    ];
+
+    location = "top";
+    extraConfig = {
+      modi = "calc,combi,drun,emoji,run,ssh,power-menu";
+      show-icons = true;
+      sort = true;
+      kb-cancel = "Escape,Super+space";
+    };
+  };
 
   xdg.mimeApps.defaultApplications = {
     "image/bmp" = lib.mkForce "feh.desktop";
@@ -82,12 +99,6 @@ in {
     config = {
       modifier = mod;
 
-      # fonts = {
-      #   names = [fonts.propo.family];
-      #   style = "Regular";
-      #   size = 10.0;
-      # };
-      #
       startup = [
         # { command = "systemctl --user restart polybar"; always = true; notification = false; }
         {
@@ -100,11 +111,11 @@ in {
           always = true;
           notification = false;
         }
-        # {
-        #   command = "nitrogen --restore";
-        #   always = true;
-        #   notification = false;
-        # }
+        {
+          command = "redshift";
+          always = true;
+          notification = false;
+        }
       ];
 
       keybindings = lib.mkOptionDefault {
@@ -116,8 +127,10 @@ in {
         # Hide the bar
         "${mod}+h" = "bar mode toggle";
         #launcher
-        "${mod}+d" = "exec ${pkgs.rlaunch}/bin/rlaunch -f \"${fonts.propo.family}\" -h 32 -t kitty";
+        #"${mod}+d" = "exec ${pkgs.rlaunch}/bin/rlaunch -h 32 -t kitty";
         #flameshot
+        "${mod}+d" = "exec ${pkgs.rofi}/bin/rofi -modi drun -show drun";
+        #"${mod}+Shift+e" = "exec ${pkgs.rofi-power-menu}/bin/rofi-power-menu -show power-menu -modi power-menu:rofi-power-menu";
         "${mod}+Print" = "exec ${pkgs.flameshot}/bin/flameshot gui";
         "${mod}+Shift+Print" = "exec ${pkgs.flameshot}/bin/flameshot launcher";
 
@@ -201,17 +214,17 @@ in {
       bars = [
         {
           statusCommand = let
-            cmd = "${pkgs-unstable.bumblebee-status}/bin/bumblebee-status";
+            cmd = "${pkgs.bumblebee-status}/bin/bumblebee-status";
             # theme = "gruvbox-powerline";
             theme = "iceberg-rainbow";
           in "${cmd} -m cpu memory disk:root nic date time \\
--p root.path=/ time.format=\"%H:%M CW %V\" \\
-date.format=\"%a, %b %d %Y\" -t ${theme}";
+      -p root.path=/ time.format=\"%H:%M CW %V\" \\
+      date.format=\"%a, %b %d %Y\" -t ${theme}";
 
           fonts = lib.mkForce {
-            names = [fonts.propo.family];
+            names = ["Iosevka Comfy"];
             style = "SemiBold";
-            size = 10.0;
+            size = 14.0;
           };
 
           mode = "dock";

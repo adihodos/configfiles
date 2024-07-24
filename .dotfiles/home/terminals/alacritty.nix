@@ -13,11 +13,6 @@ in {
       window.decorations = "none";
       window.startup_mode = "Windowed";
       scrolling.history = 16384;
-      # font.normal = {
-      #   family = fonts.mono.family;
-      #   style = "Regular";
-      # };
-      # font.size = fonts.mono.size;
       cursor.style = {
         shape = "Beam";
         blinking = "On";

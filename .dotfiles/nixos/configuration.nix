@@ -6,6 +6,7 @@
   pkgs,
   setupOptions,
   stylix,
+  inputs,
   ...
 }: {
   imports = [
@@ -90,9 +91,20 @@
     usbutils
     ntfs3g
     nix-output-monitor
+    nix-tree
+    nix-init
+    nix-info
+    nix-diff
+    nix-health
+    nix-inspect
+    nix-visualize
     nvd
     libsForQt5.qt5.qtquickcontrols2
     libsForQt5.qt5.qtgraphicaleffects
+    lm_sensors
+
+    pavucontrol
+    ncpamixer
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -120,16 +132,20 @@
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "23.11"; # Did you read the comment?
+  system.stateVersion = "24.05"; # Did you read the comment?
 
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   stylix = with pkgs; {
-    image = ./themes/wallpapers/w7.jpg;
-    #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+    enable = true;
+
+    image = ./themes/wallpapers/w8.jpg;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-dark.yaml";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/ia-dark.yaml";
+    #base16Scheme = "${pkgs.base16-schemes}/share/themes/ia-dark.yaml";
+    #base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-terminal-dark.yaml";
+    #base16Scheme = "${pkgs.base16-schemes}/share/themes/papercolor-dark.yaml";
     fonts = with config; {
       monospace = {
         name = themes.fonts.mono.family;
@@ -147,9 +163,9 @@
       };
 
       sizes = {
-        applications = 10;
-        desktop = 10;
-        popups = 10;
+        applications = 12;
+        desktop = 12;
+        popups = 12;
         terminal = 16;
       };
     };

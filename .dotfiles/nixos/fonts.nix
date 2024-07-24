@@ -52,7 +52,7 @@
     };
     mono = {
       family = "Iosevka Nerd Font Mono";
-      size = lib.mkDefault 14;
+      size = lib.mkDefault 16;
     };
     propo = {
       family = "Iosevka Nerd Font Propo";

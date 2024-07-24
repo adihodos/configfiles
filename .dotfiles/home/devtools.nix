@@ -2,6 +2,7 @@
   config,
   pkgs,
   setupOptions,
+  inputs,
   ...
 }: {
   programs.direnv = {
@@ -19,9 +20,12 @@
     stdman
     kdiff3
     helix
-    neovim
+    inputs.neovim-nightly-overlay.packages.${pkgs.system}.default
     neovide
     luaformatter
     stylua
+    qemu_full
+    quickemu
+    virt-manager
   ];
 }

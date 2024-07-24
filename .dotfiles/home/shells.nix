@@ -12,10 +12,6 @@
     };
   };
 
-  home.sessionVariables = {
-    PAGER = "most";
-  };
-
   programs.starship = {
     enable = true;
     enableBashIntegration = true;

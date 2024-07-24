@@ -13,6 +13,39 @@ in {
     skypeforlinux
   ];
 
+  programs.chromium = {
+    enable = true;
+    package = pkgs.brave;
+
+    #extraOpts = {
+    #  "BrowserSignin" = 0;
+    #  "SyncDisabled" = true;
+    #  "PasswordManagerEnabled" = false;
+    #  "SpellcheckEnabled" = true;
+    #  "SpellcheckLanguage" = [
+    #    "en-US"
+    #  ];
+    #};
+
+    #defaultSearchProviderSearchURL = "https://google.com";
+    #defaultSearchProviderSuggestURL = "https://google.com";
+
+    extensions = [
+      "gcbommkclmclpchllfjekcdonpmejbdp" # HTTPS Everywhere
+      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+      "lckanjgmijmafbedllaakclkaicjfmnk" # ClearURLs
+      "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
+      "eimadpbcbfnmbkopoojfekhnkhdbieeh" # Dark Reader
+      "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+      "pmcmeagblkinmogikoikkdjiligflglb" # Privacy Redirect
+      "fihnjjcciajhdojfnbdddfaoknhalnja" # I don't care about cookies
+      "nomnklagbgmgghhjidfhnoelnjfndfpd" # Canvas Blocker - Fingerprint Protect
+    ];
+
+    commandLineArgs = [
+    ];
+  };
+
   programs.librewolf = {
     enable = true;
     # Enable WebGL, cookies and history
