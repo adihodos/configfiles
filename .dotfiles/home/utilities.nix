@@ -50,6 +50,9 @@
     zathura
     sioyek
     nvimpager
+    hwinfo
+    pkgtop
+    uroboros
   ];
 
   home.sessionVariables = {

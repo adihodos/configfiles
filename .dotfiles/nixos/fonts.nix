@@ -14,6 +14,7 @@
           "JetBrainsMono"
           "SpaceMono"
           "VictorMono"
+          "ZedMono"
         ];
       })
       # input-fonts

@@ -15,7 +15,7 @@ in {
 
   programs.chromium = {
     enable = true;
-    package = pkgs.brave;
+    #package = pkgs.brave;
 
     #extraOpts = {
     #  "BrowserSignin" = 0;
@@ -30,24 +30,24 @@ in {
     #defaultSearchProviderSearchURL = "https://google.com";
     #defaultSearchProviderSuggestURL = "https://google.com";
 
-    extensions = [
-      "gcbommkclmclpchllfjekcdonpmejbdp" # HTTPS Everywhere
-      "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
-      "lckanjgmijmafbedllaakclkaicjfmnk" # ClearURLs
-      "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
-      "eimadpbcbfnmbkopoojfekhnkhdbieeh" # Dark Reader
-      "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
-      "pmcmeagblkinmogikoikkdjiligflglb" # Privacy Redirect
-      "fihnjjcciajhdojfnbdddfaoknhalnja" # I don't care about cookies
-      "nomnklagbgmgghhjidfhnoelnjfndfpd" # Canvas Blocker - Fingerprint Protect
-    ];
+    # extensions = [
+    #   "gcbommkclmclpchllfjekcdonpmejbdp" # HTTPS Everywhere
+    #   "cjpalhdlnbpafiamejdnhcphjbkeiagm" # uBlock Origin
+    #   "lckanjgmijmafbedllaakclkaicjfmnk" # ClearURLs
+    #   "ldpochfccmkkmhdbclfhpagapcfdljkj" # Decentraleyes
+    #   "eimadpbcbfnmbkopoojfekhnkhdbieeh" # Dark Reader
+    #   "nngceckbapebfimnlniiiahkandclblb" # Bitwarden
+    #   "pmcmeagblkinmogikoikkdjiligflglb" # Privacy Redirect
+    #   "fihnjjcciajhdojfnbdddfaoknhalnja" # I don't care about cookies
+    #   "nomnklagbgmgghhjidfhnoelnjfndfpd" # Canvas Blocker - Fingerprint Protect
+    # ];
 
     commandLineArgs = [
     ];
   };
 
   programs.librewolf = {
-    enable = true;
+    #enable = true;
     # Enable WebGL, cookies and history
     settings = {
       "webgl.disabled" = false;
@@ -160,7 +160,7 @@ in {
 
       extensions = with nur.repos.rycee.firefox-addons; [
         # adnauseam
-        aria2-integration
+        # aria2-integration
         betterttv
         darkreader
         dark-mode-webextension

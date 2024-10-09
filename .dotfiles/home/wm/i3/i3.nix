@@ -125,7 +125,7 @@ in {
         "${mod}+Return" = "exec kitty";
         "${mod}+Shift+q" = "kill";
         # Hide the bar
-        "${mod}+h" = "bar mode toggle";
+        "${mod}+Shift+t" = "bar mode toggle";
         #launcher
         #"${mod}+d" = "exec ${pkgs.rlaunch}/bin/rlaunch -h 32 -t kitty";
         #flameshot
@@ -181,10 +181,9 @@ in {
         "${mod}+Shift+Right" = "move right";
 
         # split in horizontal orientation
-        "${mod}+Alt+v" = "split v";
-
+        "${mod}+v" = "split v";
         # split in vertical orientation
-        "${mod}+Alt+h" = "split h";
+        "${mod}+h" = "split h";
 
         # enter fullscreen mode for the focused container
         "${mod}+f" = "fullscreen toggle";
@@ -234,6 +233,68 @@ in {
       ];
     };
 
-    extraConfig = builtins.readFile ./../../dotfiles/.config/i3/config;
+    extraConfig = ''
+      gaps inner 2
+      gaps outer 2
+
+      set $terms "1: terms"
+      set $web "2: web"
+      set $multimedia "3: multi"
+      set $design "4: design"
+      set $office "5: office"
+      set $knowledge "6: knowledge"
+      set $games "7: Games"
+
+      assign [class="firefox" instance="Navigator"] → $web
+      assign [class="Brave-browser" instance="brave-browser"] → $web
+      assign [class="Min" instance="min"] → $web
+      assign [class="Chromium" instance="chromium"] → $web
+      assign [class="Slack" instance="slack"] → $web
+      assign [class="mpv" instance="gl"] → $multimedia
+      assign [class="Easytag" instance="easytag"] → $multimedia
+      assign [class="Deadbeef" instance="deadbeef"] → $multimedia
+      assign [class="Lutris" instance="lutris"] → $games
+      assign [class="Steam" instance="Steam"] → $games
+      assign [class="Thunderbird" instance="Mail"] → $office
+      assign [class="Thunderbird" instance="Msgcompose"] → $office
+      assign [class="Nextcloud" instance="nextcloud"] → $office
+      assign [class="digikam" instance="digikam"] → $design
+      assign [class="Darktable" instance="darktable"] → $design
+      assign [class="Gimp" instance="gimp"] → $design
+      assign [class="Pinta" instance="pinta"] → $design
+      assign [class="scribus" instance="scribus"] → $design
+      assign [class="Inkscape" instance="org.inkscape.Inkscape"] → $design
+      assign [class="Joplin" instance="joplin"] → $office
+      assign [class="calibre" instance="calibre-gui"] → $office
+      assign [instance="FreeMind"] → $knowledge
+      assign [instance="libreoffice-calc"] → $knowledge
+      assign [class="VirtualBox Manager" instance="virtualBox Manager"] → $vm
+      assign [class="VirtualBox Machine" instance="virtualBox Machine"] → $vm
+
+      mode "resize" {
+
+        # Pressing left will shrink the window’s width.
+        # Pressing right will grow the window’s width.
+        # Pressing up will shrink the window’s height.
+        # Pressing down will grow the window’s height.
+        bindsym h resize shrink width 4 px or 4 ppt
+        bindsym j resize grow height 4 px or 4 ppt
+        bindsym k resize shrink height 4 px or 4 ppt
+        bindsym l resize grow width 4 px or 4 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 4 px or 4 ppt
+        bindsym Down resize grow height 4 px or 4 ppt
+        bindsym Up resize shrink height 4 px or 4 ppt
+        bindsym Right resize grow width 4 px or 4 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+      }
+
+    '';
+
+    #extraConfig = builtins.readFile ./../../dotfiles/.config/i3/config;
   };
 }

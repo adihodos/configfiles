@@ -69,6 +69,7 @@
       "pulse"
       "disk"
       "dbus"
+      "vboxusers"
     ];
     packages = with pkgs; [];
     uid = 1024;
@@ -107,6 +108,20 @@
     ncpamixer
   ];
 
+  virtualisation = {
+    virtualbox = {
+      host = {
+        enable = true;
+        enableExtensionPack = true;
+      };
+
+      guest = {
+        enable = true;
+        draganddrop = true;
+      };
+    };
+  };
+
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
@@ -140,8 +155,8 @@
     enable = true;
 
     image = ./themes/wallpapers/w8.jpg;
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-    #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
+    #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-dark.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ia-dark.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-terminal-dark.yaml";
@@ -166,7 +181,7 @@
         applications = 12;
         desktop = 12;
         popups = 12;
-        terminal = 16;
+        terminal = 20;
       };
     };
   };

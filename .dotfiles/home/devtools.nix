@@ -27,5 +27,6 @@
     qemu_full
     quickemu
     virt-manager
+    procps
   ];
 }

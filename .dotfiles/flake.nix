@@ -47,7 +47,7 @@
       system = {
         compositor = "x11";
         systemType = "x86_64-linux";
-        hostname = "B5X64-NIX-EE-VM";
+        hostname = "B5X64-NIX-EE-XEON";
         profile = "personal";
         timezone = "Europe/Bucharest";
         locale = "en_US.UTF-8";
@@ -131,6 +131,7 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
+		backupFileExtension = "hmbkp";
 
                 extraSpecialArgs = {
                   inherit inputs;
