@@ -20,8 +20,8 @@
   services.xserver = {
     enable = true;
     videoDrivers = [
-      #"nvidia"
-      "amdgpu"
+      "nvidia"
+      #"amdgpu"
     ];
     xkb = {
       layout = "us";
