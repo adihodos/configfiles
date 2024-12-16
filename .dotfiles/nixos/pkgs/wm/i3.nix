@@ -11,7 +11,7 @@
 }: {
   services.xserver.desktopManager.xterm.enable = false;
 
-  services.xserver.displayManager = {
+  services.displayManager = {
     # lightdm.enable = true;
     # defaultSession = "none+i3";
     sddm.enable = true;

@@ -220,7 +220,9 @@ end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
 if vim.g.neovide then
-  vim.o.guifont = 'Iosevka Nerd Font:h16'
+  -- vim.o.guifont = 'Iosevka Nerd Font:h16'
+  -- vim.o.guifont = 'GeistMono Nerd Font:h16'
+  vim.o.guifont = 'ZedMono Nerd Font:h16'
   vim.g.neovide_cursor_animation_length = 0.0
 end
 
@@ -654,6 +656,13 @@ require('lazy').setup({
         --
 
         clangd = {
+          on_new_config = function(new_config, new_cwd)
+            local status, cmake = pcall(require, 'cmake-tools')
+            if status then
+              cmake.clangd_on_new_config(new_config)
+            end
+          end,
+
           cmd = {
             'clangd',
             '--background-index',
@@ -972,7 +981,7 @@ require('lazy').setup({
         -- command_palette = true, -- position the cmdline and popupmenu together
         long_message_to_split = true, -- long messages will be sent to a split
         inc_rename = false, -- enables an input dialog for inc-rename.nvim
-        lsp_doc_border = false, -- add a border to hover docs and signature help
+        lsp_doc_border = true, -- add a border to hover docs and signature help
       },
     },
     dependencies = {
@@ -1033,7 +1042,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'cmake', 'diff', 'glsl', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {

@@ -47,25 +47,18 @@
   boot.blacklistedKernelModules = ["snd_pcsp"];
 
   hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-      version = "560.35.03";
-      sha256_64bit = "sha256-8pMskvrdQ8WyNBvkU/xPc/CtcYXCa7ekP73oGuKfH+M=";
-      sha256_aarch64 = "";
-      openSha256 = "";
-      settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
-      persistencedSha256 = "";
-    };
-    #package = config.boot.kernelPackages.nvidiaPackages.latest;
-    #
-    #   #package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-    #   #  version = "555.58.02";
-    #   #  sha256_64bit = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-    #   #  sha256_aarch64 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
-    #   #  openSha256 = "sha256-8hyRiGB+m2hL3c9MDA/Pon+Xl6E788MZ50WrrAGUVuY=";
-    #   #  settingsSha256 = "sha256-ZpuVZybW6CFN/gz9rx+UJvQ715FZnAOYfHn5jt5Z2C8=";
-    #   #  persistencedSha256 = "sha256-xctt4TPRlOJ6r5S54h5W6PT6/3Zy2R4ASNFPu8TSHKM=";
-    #   #};
-    #
+    # works
+    # package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+    #   version = "560.35.03";
+    #   sha256_64bit = "sha256-8pMskvrdQ8WyNBvkU/xPc/CtcYXCa7ekP73oGuKfH+M=";
+    #   sha256_aarch64 = "";
+    #   openSha256 = "";
+    #   settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
+    #   persistencedSha256 = "";
+    # };
+
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
+
     # Modesetting is required.
     modesetting.enable = true;
     powerManagement.enable = false;
@@ -75,10 +68,8 @@
   };
   #
   hardware = {
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
       extraPackages = with pkgs; [
         vaapiVdpau
         libvdpau-va-gl
@@ -96,7 +87,6 @@
   hardware.uinput.enable = true;
 
   # Enable sound with pipewire.
-  sound.enable = true;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;

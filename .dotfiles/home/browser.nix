@@ -7,7 +7,6 @@
 }: let
   fonts = osConfig.themes.fonts;
   thm = osConfig.themes.colors;
-  nur = osConfig.nur;
 in {
   home.packages = with pkgs; [
     skypeforlinux
@@ -158,18 +157,18 @@ in {
       name = "Default";
       isDefault = true;
 
-      extensions = with nur.repos.rycee.firefox-addons; [
-        # adnauseam
-        # aria2-integration
-        betterttv
-        darkreader
-        dark-mode-webextension
-        # gruvbox-dark-theme
-        privacy-badger
-        rust-search-extension
-        ublock-origin
-      ];
-
+      # extensions = with nur.repos.rycee.firefox-addons; [
+      #   # adnauseam
+      #   # aria2-integration
+      #   betterttv
+      #   darkreader
+      #   dark-mode-webextension
+      #   # gruvbox-dark-theme
+      #   privacy-badger
+      #   rust-search-extension
+      #   ublock-origin
+      # ];
+      #
       search = {
         force = true;
         engines = {

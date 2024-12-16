@@ -28,10 +28,11 @@
       variant = "";
       options = "caps:escape";
     };
-    libinput = {
-      enable = true;
-      mouse.naturalScrolling = false;
-    };
+  };
+
+  services.libinput = {
+    enable = true;
+    mouse.naturalScrolling = false;
   };
 
   environment.systemPackages = with pkgs; [

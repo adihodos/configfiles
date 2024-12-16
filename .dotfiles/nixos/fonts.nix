@@ -15,6 +15,7 @@
           "SpaceMono"
           "VictorMono"
           "ZedMono"
+          "GeistMono"
         ];
       })
       # input-fonts

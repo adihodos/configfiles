@@ -23,7 +23,8 @@
   home.packages = with pkgs; [
     btop
     bitwise
-    neofetch
+    #neofetch
+    fastfetch
     du-dust
     tlrc
     ripgrep

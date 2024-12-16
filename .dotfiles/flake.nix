@@ -3,22 +3,23 @@
 
   inputs = {
     #nixpkgs = {url = "github:NixOS/nixpkgs/nixos-23.11";};
-    nixpkgs = {url = "github:NixOS/nixpkgs/nixos-24.05";};
+    nixpkgs = {url = "github:NixOS/nixpkgs/nixos-24.11";};
 
     nixpkgs-unstable.url = "nixpkgs/nixos-unstable";
 
     home-manager = {
       #url = "github:nix-community/home-manager/release-23.11";
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager/release-24.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    nur = {
-      url = "github:nix-community/NUR";
-    };
+    # nur = {
+    #   url = "github:nix-community/NUR";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     stylix = {
-      url = "github:danth/stylix/release-24.05";
+      url = "github:danth/stylix/release-24.11";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         home-manager.follows = "home-manager";
@@ -123,7 +124,6 @@
           __attrValues self.nixosModules
           ++ [
             inputs.stylix.nixosModules.stylix
-            inputs.nur.nixosModules.nur
             ./nixos/configuration.nix
 
             home-manager.nixosModules.home-manager
@@ -131,10 +131,10 @@
               home-manager = {
                 useGlobalPkgs = true;
                 useUserPackages = true;
-		backupFileExtension = "hmbkp";
+                backupFileExtension = "hmbkp";
 
                 extraSpecialArgs = {
-                  inherit inputs;
+                  inherit inputs pkgs;
                   inherit pkgs-unstable;
                   inherit setupOptions;
                 };
