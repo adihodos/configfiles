@@ -1,4 +1,5 @@
 {
+  lib,
   config,
   pkgs,
   setupOptions,
@@ -80,8 +81,14 @@
   #
   home.sessionVariables = {
     EDITOR = setupOptions.system.editor;
+    CPM_SOURCE_CACHE = "$HOME/.cache/CPM";
   };
 
+  home.file."./.cache/CPM/.keep" = {
+    force = true;
+    recursive = true;
+    text = "monkaS";
+  };
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 }
