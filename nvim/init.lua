@@ -219,9 +219,9 @@ if not vim.loop.fs_stat(lazypath) then
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
 
--- vim.o.guifont = 'ZedMono Nerd Font:h16'
+vim.o.guifont = 'ZedMono Nerd Font:h16'
 -- vim.o.guifont = 'Iosevka Nerd Font:h16'
-vim.o.guifont = 'GeistMono Nerd Font:h16'
+-- vim.o.guifont = 'GeistMono Nerd Font:h16'
 
 if vim.g.neovide then
   vim.g.neovide_cursor_animation_length = 0.0
@@ -233,30 +233,30 @@ end
 
 local kind_icons = {
   Text = '',
-  Method = '?',
-  Function = '?',
+  Method = '󰆧',
+  Function = '󰊕',
   Constructor = '',
-  Field = '?',
-  Variable = '?',
-  Class = '?',
+  Field = '󰇽',
+  Variable = '󰂡',
+  Class = '󰠱',
   Interface = '',
   Module = '',
-  Property = '?',
+  Property = '󰜢',
   Unit = '',
-  Value = '?',
+  Value = '󰎠',
   Enum = '',
-  Keyword = '?',
+  Keyword = '󰌋',
   Snippet = '',
-  Color = '?',
-  File = '?',
+  Color = '󰏘',
+  File = '󰈙',
   Reference = '',
-  Folder = '?',
+  Folder = '󰉋',
   EnumMember = '',
-  Constant = '?',
+  Constant = '󰏿',
   Struct = '',
   Event = '',
-  Operator = '?',
-  TypeParameter = '?',
+  Operator = '󰆕',
+  TypeParameter = '󰅲',
 }
 
 -- [[ Configure and install plugins ]]
@@ -1110,18 +1110,18 @@ require('lazy').setup({
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
     icons = vim.g.have_nerd_font and {} or {
       cmd = '⌘',
-      config = '?',
-      event = '?',
-      ft = '?',
+      config = '🛠',
+      event = '📅',
+      ft = '📂',
       init = '⚙',
-      keys = '?',
-      plugin = '?',
-      runtime = '?',
-      require = '?',
-      source = '?',
-      start = '?',
-      task = '?',
-      lazy = '? ',
+      keys = '🗝',
+      plugin = '🔌',
+      runtime = '💻',
+      require = '🌙',
+      source = '📄',
+      start = '🚀',
+      task = '📌',
+      lazy = '💤 ',
     },
   },
 })

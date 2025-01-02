@@ -159,10 +159,10 @@
 
     image = ./themes/wallpapers/w8.jpg;
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-hard.yaml";
-    base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
+    # base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-dark.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/ia-dark.yaml";
-    #base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-terminal-dark.yaml";
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/tokyo-city-terminal-dark.yaml";
     #base16Scheme = "${pkgs.base16-schemes}/share/themes/papercolor-dark.yaml";
     fonts = with config; {
       monospace = {

@@ -3,6 +3,64 @@
 --
 -- See the kickstart.nvim README for more information
 return {
+  -- Lua
+  {
+    'folke/zen-mode.nvim',
+    opts = {
+      -- your configuration comes here
+      -- or leave it empty to use the default settings
+      -- refer to the configuration section below
+    },
+    config = function(_, opts)
+      vim.keymap.set('n', '<leader>zm', function()
+        require('zen-mode').toggle {
+          window = {
+            width = 0.80, -- width will be 85% of the editor width
+          },
+        }
+      end, { noremap = true, silent = true, desc = 'Toggle Zen-mode editing.' })
+    end,
+  },
+  {
+    'nvimdev/dashboard-nvim',
+    event = 'VimEnter',
+    config = function()
+      require('dashboard').setup {
+        -- theme = 'doom',
+        -- config
+      }
+    end,
+    dependencies = { { 'nvim-tree/nvim-web-devicons' } },
+  },
+  {
+    'uga-rosa/ccc.nvim',
+    opts = {
+      -- Your preferred settings
+      -- Example: enable highlighter
+      highlighter = {
+        auto_enable = true,
+        lsp = true,
+      },
+    },
+  },
+  {
+    'MagicDuck/grug-far.nvim',
+    config = function()
+      require('grug-far').setup {
+        -- options, see Configuration section below
+        -- there are no required options atm
+        -- engine = 'ripgrep' is default, but 'astgrep' can be specified
+      }
+
+      vim.keymap.set('n', '<leader>Gwg', function()
+        require('grug-far').open { prefills = { search = vim.fn.expand '<cword>' } }
+      end, { noremap = true, silent = true, desc = 'Global search/replace for word under cursor.' })
+
+      vim.keymap.set('n', '<leader>Gwf', function()
+        require('grug-far').open { prefills = { paths = vim.fn.expand '%' } }
+      end, { noremap = true, silent = true, desc = 'Local search/replace for word under cursor.' })
+    end,
+  },
   {
     'direnv/direnv.vim',
     opts = {},
@@ -21,7 +79,7 @@ return {
   },
   {
     'nvim-telescope/telescope-file-browser.nvim',
-    dependencies = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    nvim = { 'dependencies-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
     config = function()
       local builtin = require 'telescope'
       builtin.load_extension 'file_browser'

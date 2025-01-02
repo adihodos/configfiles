@@ -9,6 +9,7 @@
     shellAliases = {
       ll = "eza";
       cat = "bat";
+      nvimgui = "neovide --frame none --fork --maximized";
     };
   };
 

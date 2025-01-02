@@ -82,6 +82,7 @@
   home.sessionVariables = {
     EDITOR = setupOptions.system.editor;
     CPM_SOURCE_CACHE = "$HOME/.cache/CPM";
+    PAGER = "nvimpager";
   };
 
   home.file."./.cache/CPM/.keep" = {

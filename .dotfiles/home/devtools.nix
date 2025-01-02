@@ -17,7 +17,7 @@
     clang-tools_17
     man-pages
     man-pages-posix
-    stdman
+    stdmanpages
     kdiff3
     helix
     inputs.neovim-nightly-overlay.packages.${pkgs.system}.default
@@ -28,5 +28,6 @@
     quickemu
     virt-manager
     procps
+    calibre
   ];
 }

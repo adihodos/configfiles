@@ -23,6 +23,7 @@
   home.packages = with pkgs; [
     btop
     bitwise
+    base16-shell-preview
     #neofetch
     fastfetch
     du-dust
@@ -32,12 +33,9 @@
     dfc
     bandwhich
     procs
-    most
     dua
     fzf
-    bitwise
     skim
-    gf
     fd
     far2l
     libsForQt5.kate
@@ -48,15 +46,10 @@
     viu
     pdfgrep
     pdf4qt
-    zathura
     sioyek
     nvimpager
     hwinfo
     pkgtop
     uroboros
   ];
-
-  home.sessionVariables = {
-    PAGER = "nvimpager";
-  };
 }
