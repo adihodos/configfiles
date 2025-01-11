@@ -21,6 +21,8 @@
     ./pkgs/emacs.nix
   ];
 
+  nix.settings.max-jobs = 4;
+  nix.settings.cores = 4;
   nix.package = pkgs.nixVersions.stable;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
