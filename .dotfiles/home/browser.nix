@@ -9,12 +9,13 @@
   thm = osConfig.themes.colors;
 in {
   home.packages = with pkgs; [
-    skypeforlinux
+    # skypeforlinux
+    # teams
   ];
 
   programs.chromium = {
     enable = true;
-    #package = pkgs.brave;
+    package = pkgs.ungoogled-chromium;
 
     #extraOpts = {
     #  "BrowserSignin" = 0;
@@ -123,7 +124,7 @@ in {
   };
 
   home.sessionVariables = {
-    # DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
+    DEFAULT_BROWSER = "${pkgs.firefox}/bin/firefox";
   };
 
   programs.firefox = {

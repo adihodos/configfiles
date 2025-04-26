@@ -21,8 +21,8 @@
     ./pkgs/emacs.nix
   ];
 
-  nix.settings.max-jobs = 4;
-  nix.settings.cores = 4;
+  nix.settings.max-jobs = 16;
+  nix.settings.cores = 8;
   nix.package = pkgs.nixVersions.stable;
   nix.extraOptions = ''
     experimental-features = nix-command flakes
@@ -72,6 +72,7 @@
       "disk"
       "dbus"
       "vboxusers"
+      "libvirtd"
     ];
     packages = with pkgs; [];
     uid = 1024;
@@ -114,17 +115,19 @@
   ];
 
   virtualisation = {
-    virtualbox = {
-      host = {
-        enable = true;
-        enableExtensionPack = true;
-      };
-
-      guest = {
-        enable = true;
-        dragAndDrop = true;
-      };
-    };
+    libvirtd.enable = true;
+    spiceUSBRedirection.enable = true;
+    # virtualbox = {
+    #   host = {
+    #     enable = true;
+    #     enableExtensionPack = true;
+    #   };
+    #
+    #   guest = {
+    #     enable = true;
+    #     dragAndDrop = true;
+    #   };
+    # };
   };
 
   # Some programs need SUID wrappers, can be configured further or are

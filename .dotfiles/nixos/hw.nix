@@ -4,17 +4,39 @@
   setupOptions,
   ...
 }: {
-  swapDevices = [
-    {
-      label = "nixos_swap";
-    }
-  ];
   # Bootloader.
   #boot.kernelPackages = pkgs.linuxPackages_latest;
   boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
   #pkgs.linuxPackages_zen;
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # boot.loader.systemd-boot.enable = true;
+  # boot.loader.efi.canTouchEfiVariables = true;
+
+  # boot.loader.systemd-boot = {
+  #   enable = true;
+  #   editor = false;
+  # };
+  boot.loader.efi = {
+    canTouchEfiVariables = false;
+  };
+  boot.loader.grub = {
+    enable = true;
+    copyKernels = true;
+    # efiInstallAsRemovable = true;
+    # efiSupport = true;
+    fsIdentifier = "uuid";
+    splashMode = "stretch";
+    # version = 2;
+    device = "nodev";
+    extraEntries = ''
+      menuentry "Reboot" {
+        reboot
+      }
+      menuentry "Poweroff" {
+        halt
+      }
+    '';
+  };
+
   boot.supportedFilesystems = ["ntfs"];
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = 0;
 
@@ -56,8 +78,14 @@
     #   settingsSha256 = "sha256-kQsvDgnxis9ANFmwIwB7HX5MkIAcpEEAHc8IBOLdXvk=";
     #   persistencedSha256 = "";
     # };
-
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
+      version = "570.86.16"; # use new 570 drivers
+      sha256_64bit = "sha256-RWPqS7ZUJH9JEAWlfHLGdqrNlavhaR1xMyzs8lJhy9U=";
+      openSha256 = "sha256-DuVNA63+pJ8IB7Tw2gM4HbwlOh1bcDg2AN2mbEU9VPE=";
+      settingsSha256 = "sha256-9rtqh64TyhDF5fFAYiWl3oDHzKJqyOW3abpcf2iNRT8=";
+      usePersistenced = false;
+    };
+    # package = config.boot.kernelPackages.nvidiaPackages.latest;
 
     # Modesetting is required.
     modesetting.enable = true;
