@@ -131,5 +131,6 @@ DEFINITIONS is a sequence of string and command pairs."
 (require 'emacs-langs)
 (require 'emacs-search)
 (require 'emacs-explorer)
-
+(require 'no-easy-keys)
+(no-easy-keys 1)
 ;;; init.el ends here

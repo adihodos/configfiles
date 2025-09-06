@@ -11,7 +11,7 @@
     # See console messages during early boot.
     #initrd.kernelModules = ["amdgpu"];
     initrd.kernelModules = ["nvidia"];
-    #extraModulePackages = [config.boot.kernelPackages.nvidia_x11];
+    # extraModulePackages = [config.boot.kernelPackages.nvidia_x11];
 
     # Disable console blanking after being idle.
     kernelParams = ["consoleblank=0"];

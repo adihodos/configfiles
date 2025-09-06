@@ -21,7 +21,7 @@
 ;; 				  (make-local-variable 'auto-hscroll-mode)
 ;; 				  (setq auto-hscroll-mode nil)))))
 
-(use-package dired-single :ensure t)
+;; (use-package dired-single :ensure t)
 
 (use-package emacs
   :ensure nil

@@ -172,6 +172,7 @@
       (delete-other-windows)))
 
   (defun adi/kill-buffer-current (&optional arg)
+
     "Kill current buffer or abort recursion when in minibuffer."
     (interactive "P")
     (if (minibufferp)

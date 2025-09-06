@@ -133,6 +133,13 @@
   ('rustic-mode . rainbow-delimiters-mode)
   ('c++-mode . rainbow-delimiters-mode)))
 
+(use-package rust-mode
+  :ensure t
+  :hook ('rust-mode-hook .
+						 (lambda () (setq indent-tabs-mode nil)))
+  :config
+  (setq rust-format-on-save t)
+  )
 ;; (use-package rustic
 ;;   (:install t)
 ;;   (:delay 5)
