@@ -31,8 +31,9 @@
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
   (setq delete-by-moving-to-trash t)
+  (setq dired-kill-when-opening-new-dired-buffer t)
   (setq dired-listing-switches
-		"-AGFhlv --group-directories-first --time-style=long-iso")
+		"-AGFhlv --all --all --group-directories-first --time-style=long-iso")
   (setq dired-dwim-target t)
   (setq dired-auto-revert-buffer #'dired-directory-changed-p) ; also see `dired-do-revert-buffer'
   (setq dired-make-directory-clickable t) ; Emacs 29.1

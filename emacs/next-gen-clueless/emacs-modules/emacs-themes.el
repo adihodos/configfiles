@@ -123,8 +123,8 @@
 (use-package emacs
   :ensure nil
   :config
-  (load-theme 'modus-operandi-tinted t)
-  ;; (load-theme 'gruber-darker)
+  ;; (load-theme 'modus-operandi-tinted t)
+  (load-theme 'gruber-darker)
   (defvar adi/default-font "Iosevka NFM")
   (defvar adi/font-variable-pitch "Iosevka NFP")
   (defvar adi/default-font-size 160 "Size of the default font.")

@@ -25,6 +25,7 @@
 			  ("C-c l R" . eglot-code-action-rewrite)
 			  ("C-c l r" . eglot-rename))
   :config
+  (setq eglot-inlay-hints-mode nil)
   (setq eglot-autoshutdown t)
   (with-eval-after-load 'eglot
     (add-to-list 'eglot-ignored-server-capabilites :hoverProvider)
