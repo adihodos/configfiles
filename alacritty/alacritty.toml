@@ -1,0 +1,19 @@
+[window]
+decorations = "Full"
+startup_mode = "Maximized"
+
+[scrolling]
+history = 100000
+
+[font]
+normal = { family = "ZedMono NF", style = "Regular" }
+size = 20.0
+
+[selection]
+save_to_clipboard = true 
+
+[cursor]
+style = { shape = "Beam", blinking = "On" }
+
+[terminal]
+shell = { program  = "pwsh.exe", args = ["-NoLogo"] }
